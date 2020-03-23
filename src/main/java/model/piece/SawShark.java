@@ -1,4 +1,4 @@
-package main.java.model;
+package main.java.model.piece;
 
 public class SawShark extends Shark{
 }
