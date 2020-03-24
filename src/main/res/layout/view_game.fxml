@@ -1,8 +1,5 @@
-<?import javafx.scene.layout.GridPane?>
 <?import main.java.view.BoardView?>
-<GridPane fx:controller="main.java.controller.GameViewController"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-
-    <BoardView/>
-
-</GridPane>
+<BoardView fx:controller="main.java.controller.GameViewController"
+           fx:id="boardView"
+           xmlns:fx="http://javafx.com/fxml">
+</BoardView>
