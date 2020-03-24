@@ -31,7 +31,7 @@ public class Game
         primaryStage.setTitle(APP_NAME);
 
         FXMLLoader boardViewLoader =
-                new FXMLLoader(getClass().getClassLoader().getResource(ResPath.SAMPLE));
+                new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
         primaryStage.setScene(new Scene(boardViewLoader.load()));
     }
 
