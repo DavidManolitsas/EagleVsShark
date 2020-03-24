@@ -14,8 +14,8 @@ import java.io.IOException;
 public class Game
         extends Application {
 
-    private static final int WINDOW_WIDTH = 1300;
-    private static final int WINDOW_HEIGHT = 900;
+    public static final int WINDOW_WIDTH = 900;
+    public static final int WINDOW_HEIGHT = 900;
     private static final String APP_NAME = "Eagle vs Shark";
 
     @Override
