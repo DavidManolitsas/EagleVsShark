@@ -5,6 +5,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.layout.*;
+import main.java.model.Board.BoardModelEventListener;
 
 import java.util.Objects;
 
@@ -12,24 +13,34 @@ import static main.java.model.Board.COLUMN;
 import static main.java.model.Board.ROW;
 
 public class BoardView
-        extends GridPane {
+        extends GridPane
+        implements BoardModelEventListener {
 
-    public interface BoardViewListener {
-        void onSquareClick(int row, int col);
+    public interface BoardViewEventListener {
+        void onPieceChosen(int row, int col);
     }
 
-    private BoardViewListener boardViewListener;
+    private BoardViewEventListener boardViewEventListener;
 
     public BoardView() {
         super();
         drawBoard();
     }
 
-    // Just testing
+    //region public BoardView methods
     public void changeSquareColor(int row, int col) {
         getSquareAt(row, col).setStyle("-fx-background-color: red;");
     }
+    //endregion
 
+    //region BoardModelEvent methods
+    @Override
+    public void onDataChanged() {
+
+    }
+    //endregion
+
+    //region private methods
     private void drawBoard() {
         for (int row = 0; row < ROW; row++) {
             for (int col = 0; col < COLUMN; col++) {
@@ -67,7 +78,7 @@ public class BoardView
             color = "black";
         }
         square.setStyle("-fx-background-color: " + color + ";");
-        square.setOnMouseClicked(event -> getBoardViewListener().onSquareClick(row, col));
+        square.setOnMouseClicked(event -> getBoardViewEventListener().onPieceChosen(row, col));
         return square;
     }
 
@@ -79,16 +90,17 @@ public class BoardView
         }
         return null;
     }
+    //endregion
 
-    public BoardViewListener getBoardViewListener() {
-        return Objects.requireNonNull(boardViewListener);
+    public BoardViewEventListener getBoardViewEventListener() {
+        return Objects.requireNonNull(boardViewEventListener);
     }
 
-    public void setBoardViewListener(BoardViewListener boardViewListener) {
-        if (boardViewListener == null) {
+    public void setBoardViewEventListener(BoardViewEventListener boardViewEventListener) {
+        if (boardViewEventListener == null) {
             throw new NullPointerException("Must provide a non-null listener.");
         }
 
-        this.boardViewListener = boardViewListener;
+        this.boardViewEventListener = boardViewEventListener;
     }
 }
