@@ -1,5 +1,15 @@
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
 <?import main.java.view.BoardView?>
-<BoardView fx:controller="main.java.controller.GameViewController"
-           fx:id="boardView"
-           xmlns:fx="http://javafx.com/fxml">
-</BoardView>
+<BorderPane fx:controller="main.java.controller.GameViewController"
+            xmlns:fx="http://javafx.com/fxml">
+
+    <center>
+        <BoardView fx:id="boardView"/>
+    </center>
+
+    <right>
+        <Label text="GameInfoView"/>
+    </right>
+
+</BorderPane>

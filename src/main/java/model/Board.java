@@ -6,7 +6,8 @@ package main.java.model;
  */
 public class Board {
 
-    public static final int ROW = 10;
+    public static final int ROW = 15;
+    public static final int COLUMN = 10;
 
     private Square[] squares = new Square[ROW * ROW];
 
