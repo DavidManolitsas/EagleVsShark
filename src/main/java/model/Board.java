@@ -1,5 +1,7 @@
 package main.java.model;
 
+import main.java.model.piece.Piece;
+
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
@@ -17,12 +19,17 @@ public class Board {
 
     private Square[] squares = new Square[ROW * ROW];
 
+    private Piece chosenPiece = null;
+
     public Board(BoardModelEventListener listener) {
         eventListener = listener;
         initSquare();
     }
 
     //region public Board methods
+    public Piece getPiece(int row, int col) {
+        return getSquareAt(row, col).getPiece();
+    }
     //endregion
 
     //region private methods

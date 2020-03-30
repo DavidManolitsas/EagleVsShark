@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.model.Board;
+import main.java.model.piece.Piece;
 import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
 
@@ -20,7 +21,8 @@ public class BoardViewController
     }
 
     @Override
-    public void onPieceChosen(int row, int col) {
-        boardView.changeSquareColor(row, col);
+    public void onSquareClicked(int row, int col) {
+        Piece piece = board.getPiece(row, col);
+        boardView.showValidMoves(row, col);
     }
 }

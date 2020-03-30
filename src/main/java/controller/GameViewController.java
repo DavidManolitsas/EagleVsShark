@@ -18,6 +18,8 @@ public class GameViewController {
     @FXML
     public void initialize() {
         board = new Board(boardView);
+
+        // Propagate BoardView event into BoardViewController
         boardView.setBoardViewEventListener(new BoardViewController(board, boardView));
     }
 }

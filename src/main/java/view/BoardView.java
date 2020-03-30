@@ -17,7 +17,7 @@ public class BoardView
         implements BoardModelEventListener {
 
     public interface BoardViewEventListener {
-        void onPieceChosen(int row, int col);
+        void onSquareClicked(int row, int col);
     }
 
     private BoardViewEventListener boardViewEventListener;
@@ -29,7 +29,18 @@ public class BoardView
 
     //region public BoardView methods
     public void changeSquareColor(int row, int col) {
-        getSquareAt(row, col).setStyle("-fx-background-color: red;");
+        Node square = getSquareAt(row, col);
+        if (square != null) {
+            square.setStyle("-fx-background-color: red;");
+        }
+    }
+
+    public void showValidMoves(int row, int col) {
+        changeSquareColor(row - 1, col);
+        changeSquareColor(row - 2, col);
+        changeSquareColor(row - 3, col);
+        changeSquareColor(row - 3, col + 1);
+        changeSquareColor(row - 3, col - 1);
     }
     //endregion
 
@@ -78,7 +89,7 @@ public class BoardView
             color = "black";
         }
         square.setStyle("-fx-background-color: " + color + ";");
-        square.setOnMouseClicked(event -> getBoardViewEventListener().onPieceChosen(row, col));
+        square.setOnMouseClicked(event -> getBoardViewEventListener().onSquareClicked(row, col));
         return square;
     }
 
