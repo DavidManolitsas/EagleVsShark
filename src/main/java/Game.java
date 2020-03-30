@@ -3,9 +3,8 @@ package main.java;
 import java.io.IOException;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.java.util.SceneManager;
 
 /**
  * @author WeiYi Yu
@@ -30,9 +29,9 @@ public class Game
         primaryStage.setHeight(WINDOW_HEIGHT);
         primaryStage.setTitle(APP_NAME);
 
-        FXMLLoader startMenuLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.START_MENU));
-        primaryStage.setScene(new Scene(startMenuLoader.load()));
-
+        SceneManager sceneManager = SceneManager.getInstance();
+        sceneManager.init(primaryStage);
+        sceneManager.showStartMenu();
     }
 
     public static void main(String[] args) {
