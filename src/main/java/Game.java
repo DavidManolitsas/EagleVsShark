@@ -1,11 +1,11 @@
 package main.java;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * @author WeiYi Yu
@@ -30,13 +30,13 @@ public class Game
         primaryStage.setHeight(WINDOW_HEIGHT);
         primaryStage.setTitle(APP_NAME);
 
-        FXMLLoader boardViewLoader =
-                new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
-        primaryStage.setScene(new Scene(boardViewLoader.load()));
-    }
+        FXMLLoader startMenuLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.START_MENU));
+        primaryStage.setScene(new Scene(startMenuLoader.load()));
 
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }
