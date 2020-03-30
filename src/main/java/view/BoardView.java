@@ -3,13 +3,13 @@ package main.java.view;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.layout.*;
-import main.java.model.Board;
 
 import java.util.Objects;
 
-import static main.java.Game.WINDOW_HEIGHT;
-import static main.java.Game.WINDOW_WIDTH;
+import static main.java.model.Board.COLUMN;
+import static main.java.model.Board.ROW;
 
 public class BoardView
         extends GridPane {
@@ -22,7 +22,7 @@ public class BoardView
 
     public BoardView() {
         super();
-        drawBoard(Board.ROW);
+        drawBoard();
     }
 
     // Just testing
@@ -30,23 +30,27 @@ public class BoardView
         getSquareAt(row, col).setStyle("-fx-background-color: red;");
     }
 
-    private void drawBoard(int boardSize) {
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
+    private void drawBoard() {
+        for (int row = 0; row < ROW; row++) {
+            for (int col = 0; col < COLUMN; col++) {
                 StackPane square = getSquare(row, col);
                 add(square, col, row);
             }
         }
 
-        for (int i = 0; i < boardSize; i++) {
-            getColumnConstraints().add(new ColumnConstraints(50,
-                                                             WINDOW_WIDTH,
+        for (int i = 0; i < COLUMN; i++) {
+            getColumnConstraints().add(new ColumnConstraints(10,
+                                                             Control.USE_COMPUTED_SIZE,
                                                              Double.POSITIVE_INFINITY,
                                                              Priority.ALWAYS,
                                                              HPos.CENTER,
                                                              true));
-            getRowConstraints().add(new RowConstraints(50,
-                                                       WINDOW_HEIGHT,
+        }
+
+
+        for (int i = 0; i < ROW; i++) {
+            getRowConstraints().add(new RowConstraints(10,
+                                                       Control.USE_COMPUTED_SIZE,
                                                        Double.POSITIVE_INFINITY,
                                                        Priority.ALWAYS,
                                                        VPos.CENTER,

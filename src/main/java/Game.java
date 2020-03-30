@@ -30,9 +30,9 @@ public class Game
         primaryStage.setHeight(WINDOW_HEIGHT);
         primaryStage.setTitle(APP_NAME);
 
-        FXMLLoader boardViewLoader =
+        FXMLLoader gameViewLoader =
                 new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
-        primaryStage.setScene(new Scene(boardViewLoader.load()));
+        primaryStage.setScene(new Scene(gameViewLoader.load()));
     }
 
 
