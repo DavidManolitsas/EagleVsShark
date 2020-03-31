@@ -33,7 +33,7 @@ public class HowToPlay extends Stage {
         BorderPane root = new BorderPane();
 
         //Text area
-        String howTo = "EAGLE VS. SHARK\n\nHow to play:\n\nCapture more territory than the other team before the number of turns equals 20\n\nblah blah blah blah";
+        String howTo = "EAGLE VS. SHARK\n\nHow to play:\n\nCapture more territory than the other team to win\n\nblah blah blah blah";
         TextArea textArea = new TextArea(howTo);
         textArea.setFont(Font.font("Helvetica", 14));
         textArea.setPrefWidth(WIDTH - 12);
