@@ -1,7 +1,5 @@
 package main.java;
 
-import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.java.util.SceneManager;
@@ -24,7 +22,7 @@ public class Game
         primaryStage.show();
     }
 
-    private void initGameWindow(Stage primaryStage) throws IOException {
+    private void initGameWindow(Stage primaryStage) {
         primaryStage.setWidth(WINDOW_WIDTH);
         primaryStage.setHeight(WINDOW_HEIGHT);
         primaryStage.setTitle(APP_NAME);

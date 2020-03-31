@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import main.java.util.SceneManager;
 
 /**
  * @author David Manolitsas
@@ -34,7 +35,6 @@ public class StartMenu extends BorderPane {
     private static final Font BODY = Font.font("Helvetica", 14);
 
     public StartMenu(){
-        drawMenu();
         setCenter(drawMenu());
     }
 
@@ -79,10 +79,8 @@ public class StartMenu extends BorderPane {
         return root;
     }
 
-    public void startGame() throws IOException {
-        System.out.println("game started...");
-        //        FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
-//        primaryStage.setScene(new Scene(gameLoader.load()));
+    public void startGame() {
+        SceneManager.getInstance().showGameView();
     }
 
     public StartMenuListener getStartMenuListener(){
