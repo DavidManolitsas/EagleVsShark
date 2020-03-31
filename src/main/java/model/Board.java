@@ -2,6 +2,9 @@ package main.java.model;
 
 import main.java.model.piece.Piece;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
@@ -17,7 +20,8 @@ public class Board {
 
     private BoardModelEventListener eventListener;
 
-    private Square[] squares = new Square[ROW * ROW];
+    private Square[] squares = new Square[ROW * COLUMN];
+    private Map<Piece, Square> pieceSquareMap = new HashMap<>();
 
     private Piece chosenPiece = null;
 
@@ -35,7 +39,7 @@ public class Board {
     //region private methods
     private void initSquare() {
         for (int row = 0; row < ROW; row++) {
-            for (int col = 0; col < ROW; col++) {
+            for (int col = 0; col < COLUMN; col++) {
                 Square square = new Square();
                 squares[row * ROW + col] = square;
             }
