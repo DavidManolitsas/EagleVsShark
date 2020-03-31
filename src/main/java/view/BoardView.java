@@ -4,6 +4,8 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.model.Board.BoardModelEventListener;
 
@@ -93,13 +95,25 @@ public class BoardView
         return square;
     }
 
-    private Node getSquareAt(int row, int col) {
+    private StackPane getSquareAt(int row, int col) {
         for (Node child : getChildren()) {
             if (GridPane.getRowIndex(child) == row && GridPane.getColumnIndex(child) == col) {
-                return child;
+                return (StackPane) child;
             }
         }
         return null;
+    }
+
+    private void addPiece(int row, int col, String pieceImgPath) {
+        StackPane square = getSquareAt(row, col);
+
+        if (square == null) {
+            return;
+        }
+
+        Image image = new Image(pieceImgPath, 50, 50, true, false);
+        ImageView imageView = new ImageView(image);
+        square.getChildren().add(imageView);
     }
     //endregion
 
