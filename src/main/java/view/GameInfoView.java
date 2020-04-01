@@ -19,7 +19,8 @@ import javafx.scene.text.Text;
  * @project OOSD-A1
  * @date 2020-03-31
  */
-public class GameInfoView extends BorderPane {
+public class GameInfoView
+        extends BorderPane {
 
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
@@ -31,11 +32,11 @@ public class GameInfoView extends BorderPane {
     private int turnCount = 1;
 
 
-    public GameInfoView(){
+    public GameInfoView() {
         setCenter(drawGameInfo());
     }
 
-    public BorderPane drawGameInfo(){
+    public BorderPane drawGameInfo() {
         BorderPane root = new BorderPane();
 
         VBox gameInfo = new VBox();
@@ -63,7 +64,8 @@ public class GameInfoView extends BorderPane {
         Text eagleScoreText = new Text("Eagle Score: " + eaglePlayerScore);
         eagleScoreText.setFont(BODY);
 
-        gameInfo.getChildren().addAll(title, sharkPlayer, eaglePlayer, playersTurn, turnCountText, sharkScoreText, eagleScoreText);
+        gameInfo.getChildren()
+                .addAll(title, sharkPlayer, eaglePlayer, playersTurn, turnCountText, sharkScoreText, eagleScoreText);
         root.setTop(gameInfo);
 
         //TODO: PLACEHOLDER this is for testing change to a new type (not string)
@@ -71,9 +73,9 @@ public class GameInfoView extends BorderPane {
         String[] moves = {"Move 1", "Move 2", "Move 3", "Move 4", "Move 5", "Move 6", "Move 7"};
         ArrayList<BorderPane> moveList = new ArrayList<>();
 
-        for (int i = 0; i < moves.length; i++){
+        for (int i = 0; i < moves.length; i++) {
             BorderPane pane = new BorderPane();
-            pane.setPadding(new Insets(30,20,30,20));
+            pane.setPadding(new Insets(30, 20, 30, 20));
             Text text = new Text(moves[i]);
             pane.setCenter(text);
             moveList.add(pane);
@@ -93,12 +95,11 @@ public class GameInfoView extends BorderPane {
         return root;
     }
 
-    public String setPlayerTurnText(){
+    public String setPlayerTurnText() {
         int x = 1;
-        if(x == 1){
+        if (x == 1) {
             return "It's " + sharkPlayerName + "'s turn!";
-        }
-        else {
+        } else {
             return "It's" + eaglePlayerName + "'s turn!";
         }
     }

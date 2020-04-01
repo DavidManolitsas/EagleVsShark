@@ -11,7 +11,8 @@ import main.java.view.StartMenu.StartMenuListener;
  * @project OOSD-A1
  * @date 2020-03-30
  */
-public class StartMenuController implements StartMenuListener {
+public class StartMenuController
+        implements StartMenuListener {
 
     @FXML
     private StartMenu startMenu;

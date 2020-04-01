@@ -15,17 +15,18 @@ import javafx.stage.Stage;
  * @project OOSD-A1
  * @date 2020-03-31
  */
-public class HowToPlay extends Stage {
+public class HowToPlay
+        extends Stage {
 
     private final static int WIDTH = 500;
     private final static int HEIGHT = 700;
     private final static String STAGE_NAME = "How to play: Eagle vs. Shark";
 
-    public HowToPlay(){
+    public HowToPlay() {
         draw();
     }
 
-    private void draw(){
+    private void draw() {
         this.setWidth(WIDTH);
         this.setHeight(HEIGHT);
         this.setTitle(STAGE_NAME);
@@ -33,7 +34,9 @@ public class HowToPlay extends Stage {
         BorderPane root = new BorderPane();
 
         //Text area
-        String howTo = "EAGLE VS. SHARK\n\nHow to play:\n\nCapture more territory than the other team to win\n\nblah blah blah blah";
+        String howTo =
+                "EAGLE VS. SHARK\n\nHow to play:\n\nCapture more territory than the other team to win\n\nblah blah " +
+                        "blah blah";
         TextArea textArea = new TextArea(howTo);
         textArea.setFont(Font.font("Helvetica", 14));
         textArea.setPrefWidth(WIDTH - 12);
