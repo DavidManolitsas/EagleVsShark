@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GoldenEagle extends Eagle {
     //    private final int NUM_SQUARES_MOVED;
-    private ArrayList<Shark> sharkList;
+    private ArrayList<Shark> sharkPosList;
     // flies to behind any shark
     // 3 movements then
 
@@ -14,8 +14,8 @@ public class GoldenEagle extends Eagle {
     // assume shark pos = [i,j]
     // move behind shark [i-1,j]
 
-    public GoldenEagle(int startRow, int startCol) {
-        super(startRow, startCol);
+    public GoldenEagle() {
+        super();
 //        this.moveList = getMoveList();
     }
 
@@ -35,14 +35,14 @@ public class GoldenEagle extends Eagle {
         return moveList;
     }
 
-    private List getSharkPos() {
-        for (Shark shark : sharkList) {
-
+    private void getSharkPos() {
+        for (Shark shark : sharkPosList) {
+            //
         }
     }
 
-    private void setSharkList(LinkedList sharks) {
-        this.sharkList = sharkList;
+    public void setSharkList(List<int[]> sharksPos) {
+        this.sharkPosList = sharksPos;
     }
 
 

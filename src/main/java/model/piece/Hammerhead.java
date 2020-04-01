@@ -3,8 +3,8 @@ package main.java.model.piece;
 import java.util.List;
 
 public class Hammerhead extends Shark {
-    public Hammerhead(int startRow, int startCol) {
-        super(startRow, startCol);
+    public Hammerhead() {
+        super();
 //        this.moveList = getMoveList();
     }
 

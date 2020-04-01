@@ -3,8 +3,8 @@ package main.java.model.piece;
 import java.util.List;
 
 public class SawShark extends Shark {
-    public SawShark(int startRow, int startCol) {
-        super(startRow, startCol);
+    public SawShark() {
+        super();
 //        this.moveList = getMoveList();
     }
 

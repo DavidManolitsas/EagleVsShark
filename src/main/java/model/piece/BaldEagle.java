@@ -13,8 +13,8 @@ public class BaldEagle extends Eagle {
     // move 2 - [6,4], [2,4], [4,6], [4,2]
     // move 3 - [7,4], [1,4], [4,7], [4,1]
 
-    public BaldEagle(int startRow, int startCol) {
-        super(startRow, startCol);
+    public BaldEagle() {
+        super();
 //        this.moveList = getMoveList();
     }
 

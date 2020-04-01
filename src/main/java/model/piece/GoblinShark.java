@@ -3,8 +3,8 @@ package main.java.model.piece;
 import java.util.List;
 
 public class GoblinShark extends Shark {
-    public GoblinShark(int startRow, int startCol) {
-        super(startRow, startCol);
+    public GoblinShark() {
+        super();
 //        this.moveList = getMoveList();
     }
 

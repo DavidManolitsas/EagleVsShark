@@ -14,8 +14,8 @@ public class HarpyEagle extends Eagle {
     // move 3 = [4, 7],
     // move 4 = [4,1]
 
-    public HarpyEagle(int startRow, int startCol) {
-        super(startRow, startCol);
+    public HarpyEagle() {
+        super();
 //        this.moveList = getMoveList();
     }
 
