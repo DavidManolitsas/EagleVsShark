@@ -4,7 +4,10 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import main.java.model.Board.BoardModelEventListener;
 
 import java.util.Objects;
 
@@ -12,24 +15,45 @@ import static main.java.model.Board.COLUMN;
 import static main.java.model.Board.ROW;
 
 public class BoardView
-        extends GridPane {
+        extends GridPane
+        implements BoardModelEventListener {
 
-    public interface BoardViewListener {
-        void onSquareClick(int row, int col);
+    public interface BoardViewEventListener {
+        void onSquareClicked(int row, int col);
     }
 
-    private BoardViewListener boardViewListener;
+    private BoardViewEventListener boardViewEventListener;
 
     public BoardView() {
         super();
         drawBoard();
     }
 
-    // Just testing
+    //region public BoardView methods
     public void changeSquareColor(int row, int col) {
-        getSquareAt(row, col).setStyle("-fx-background-color: red;");
+        Node square = getSquareAt(row, col);
+        if (square != null) {
+            square.setStyle("-fx-background-color: red;");
+        }
     }
 
+    public void showValidMoves(int row, int col) {
+        changeSquareColor(row - 1, col);
+        changeSquareColor(row - 2, col);
+        changeSquareColor(row - 3, col);
+        changeSquareColor(row - 3, col + 1);
+        changeSquareColor(row - 3, col - 1);
+    }
+    //endregion
+
+    //region BoardModelEvent methods
+    @Override
+    public void onDataChanged() {
+
+    }
+    //endregion
+
+    //region private methods
     private void drawBoard() {
         for (int row = 0; row < ROW; row++) {
             for (int col = 0; col < COLUMN; col++) {
@@ -67,28 +91,41 @@ public class BoardView
             color = "black";
         }
         square.setStyle("-fx-background-color: " + color + ";");
-        square.setOnMouseClicked(event -> getBoardViewListener().onSquareClick(row, col));
+        square.setOnMouseClicked(event -> getBoardViewEventListener().onSquareClicked(row, col));
         return square;
     }
 
-    private Node getSquareAt(int row, int col) {
+    private StackPane getSquareAt(int row, int col) {
         for (Node child : getChildren()) {
             if (GridPane.getRowIndex(child) == row && GridPane.getColumnIndex(child) == col) {
-                return child;
+                return (StackPane) child;
             }
         }
         return null;
     }
 
-    public BoardViewListener getBoardViewListener() {
-        return Objects.requireNonNull(boardViewListener);
+    private void addPiece(int row, int col, String pieceImgPath) {
+        StackPane square = getSquareAt(row, col);
+
+        if (square == null) {
+            return;
+        }
+
+        Image image = new Image(pieceImgPath, 50, 50, true, false);
+        ImageView imageView = new ImageView(image);
+        square.getChildren().add(imageView);
+    }
+    //endregion
+
+    public BoardViewEventListener getBoardViewEventListener() {
+        return Objects.requireNonNull(boardViewEventListener);
     }
 
-    public void setBoardViewListener(BoardViewListener boardViewListener) {
-        if (boardViewListener == null) {
+    public void setBoardViewEventListener(BoardViewEventListener boardViewEventListener) {
+        if (boardViewEventListener == null) {
             throw new NullPointerException("Must provide a non-null listener.");
         }
 
-        this.boardViewListener = boardViewListener;
+        this.boardViewEventListener = boardViewEventListener;
     }
 }

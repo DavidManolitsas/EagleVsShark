@@ -1,11 +1,8 @@
 package main.java;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import main.java.util.SceneManager;
 
 /**
  * @author WeiYi Yu
@@ -25,18 +22,18 @@ public class Game
         primaryStage.show();
     }
 
-    private void initGameWindow(Stage primaryStage) throws IOException {
+    private void initGameWindow(Stage primaryStage) {
         primaryStage.setWidth(WINDOW_WIDTH);
         primaryStage.setHeight(WINDOW_HEIGHT);
         primaryStage.setTitle(APP_NAME);
 
-        FXMLLoader gameViewLoader =
-                new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
-        primaryStage.setScene(new Scene(gameViewLoader.load()));
+        SceneManager sceneManager = SceneManager.getInstance();
+        sceneManager.init(primaryStage);
+        sceneManager.showStartMenu();
     }
-
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }

@@ -1,6 +1,6 @@
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import main.java.view.BoardView?>
+<?import main.java.view.GameInfoView?>
 <BorderPane fx:controller="main.java.controller.GameViewController"
             xmlns:fx="http://javafx.com/fxml">
 
@@ -9,7 +9,7 @@
     </center>
 
     <right>
-        <Label text="GameInfoView"/>
+        <GameInfoView fx:id="gameInfoView"/>
     </right>
 
 </BorderPane>
