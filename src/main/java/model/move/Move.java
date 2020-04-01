@@ -2,7 +2,7 @@ package main.java.model.move;
 
 import java.util.List;
 
-abstract class Move {
+public abstract class Move {
     private int startRow;
     private int startCol;
     private int destRow;
@@ -10,7 +10,7 @@ abstract class Move {
     private List<Integer[]> paintInfo;
     private List<Integer[]> route;
 
-    public List<Integer[]> getPaintInfo(){
+    public List<Integer[]> getPaintInfo() {
         return paintInfo;
     }
 

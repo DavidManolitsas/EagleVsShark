@@ -1,5 +1,7 @@
 package main.java.model.piece;
 
+import main.java.model.move.Move;
+
 import java.util.List;
 
 public class SawShark extends Shark {
