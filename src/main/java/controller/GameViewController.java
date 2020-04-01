@@ -21,6 +21,7 @@ public class GameViewController
     @FXML
     public void initialize() {
         board = new Board(boardView);
+        boardView.setBoardViewEventListener(this);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class GameViewController
         Piece piece = board.getPiece(row, col);
 //        if (piece != null) {
 //            allValidMoves = piece.getAllMoves(row, col);
-//            boardView.showValidMoves(allValidMoves);
+        boardView.showValidMoves(row, col);
 //        }
     }
 }

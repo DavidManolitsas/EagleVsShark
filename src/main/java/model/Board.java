@@ -20,7 +20,7 @@ public class Board {
 
     private BoardModelEventListener eventListener;
 
-    private Square[] squares = new Square[ROW * COLUMN];
+    private Square[][] squares = new Square[ROW][COLUMN];
     private Map<Piece, Square> pieceSquareMap = new HashMap<>();
 
     private Piece chosenPiece = null;
@@ -41,13 +41,13 @@ public class Board {
         for (int row = 0; row < ROW; row++) {
             for (int col = 0; col < COLUMN; col++) {
                 Square square = new Square();
-                squares[row * ROW + col] = square;
+                squares[row][col] = square;
             }
         }
     }
 
     private Square getSquareAt(int row, int col) {
-        return squares[row * ROW + col];
+        return squares[row][col];
     }
     //endregion
 
