@@ -7,4 +7,8 @@ package main.java.model.piece;
  */
 abstract class Eagle extends Piece {
 
+    public Eagle(int startRow, int startCol) {
+        super(startRow, startCol);
+    }
+
 }

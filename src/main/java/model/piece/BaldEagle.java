@@ -1,20 +1,19 @@
 package main.java.model.piece;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class GoldenEagle extends Eagle {
-    //    private final int NUM_SQUARES_MOVED;
-    private ArrayList<Shark> sharkList;
-    // flies to behind any shark
-    // 3 movements then
+public class BaldEagle extends Eagle {
+//    private final int NUM_SQUARES_MOVED;
+    // moves forward 1-3 squares (eg. [4,4] -> [8,4]
+    // left, right and forward
+    // makes 9 movements
 
+    // assume start [4,4]
+    // move 1 - [5,4], [3,4], [4,5], [4,3]
+    // move 2 - [6,4], [2,4], [4,6], [4,2]
+    // move 3 - [7,4], [1,4], [4,7], [4,1]
 
-    // assume shark1 = [4,4], shark2 = [8,7], shark3 = [10, 4]
-    // assume shark pos = [i,j]
-    // move behind shark [i-1,j]
-
-    public GoldenEagle(int startRow, int startCol) {
+    public BaldEagle(int startRow, int startCol) {
         super(startRow, startCol);
 //        this.moveList = getMoveList();
     }
@@ -35,15 +34,7 @@ public class GoldenEagle extends Eagle {
         return moveList;
     }
 
-    private List getSharkPos() {
-        for (Shark shark : sharkList) {
-
-        }
-    }
-
-    private void setSharkList(LinkedList sharks) {
-        this.sharkList = sharkList;
-    }
-
-
+//    public List<Move> getMoveList() {
+//        return super.allMoves;
+//    }
 }
