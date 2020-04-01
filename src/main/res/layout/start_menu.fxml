@@ -1,0 +1,5 @@
+<?import main.java.view.StartMenu?>
+<StartMenu fx:controller="main.java.controller.StartMenuController"
+           fx:id="startMenu"
+           xmlns:fx="http://javafx.com/fxml">
+</StartMenu>

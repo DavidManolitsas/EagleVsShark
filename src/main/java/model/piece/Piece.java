@@ -1,5 +1,5 @@
 package main.java.model.piece;
 
-abstract class Piece {
+public abstract class Piece {
     private String name;
 }

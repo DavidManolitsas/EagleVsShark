@@ -21,8 +21,8 @@ import main.java.util.SceneManager;
  */
 
 
-
-public class StartMenu extends BorderPane {
+public class StartMenu
+        extends BorderPane {
 
     public interface StartMenuListener {
         void onStartBtClick() throws IOException;
@@ -34,12 +34,11 @@ public class StartMenu extends BorderPane {
     private static final Font TITLE = Font.font("Helvetica", 24);
     private static final Font BODY = Font.font("Helvetica", 14);
 
-    public StartMenu(){
-        drawMenu();
+    public StartMenu() {
         setCenter(drawMenu());
     }
 
-    public BorderPane drawMenu(){
+    public BorderPane drawMenu() {
         BorderPane root = new BorderPane();
         //Title
         Text title = new Text("Eagle vs. Shark\n\n");
@@ -71,8 +70,9 @@ public class StartMenu extends BorderPane {
         //Menu
         VBox menuList = new VBox();
         menuList.setSpacing(20);
-        menuList.setPadding(new Insets(10,200,10,200));
-        menuList.getChildren().addAll(title, sharkPlayerText, sharkPlayerNameField,  eaglePlayerText, eaglePlayerNameField, startBt);
+        menuList.setPadding(new Insets(10, 200, 10, 200));
+        menuList.getChildren()
+                .addAll(title, sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, startBt);
 
         root.setCenter(menuList);
         menuList.setAlignment(Pos.CENTER);
@@ -84,7 +84,7 @@ public class StartMenu extends BorderPane {
         SceneManager.getInstance().showGameView();
     }
 
-    public StartMenuListener getStartMenuListener(){
+    public StartMenuListener getStartMenuListener() {
         return Objects.requireNonNull(this.startMenuListener);
     }
 
