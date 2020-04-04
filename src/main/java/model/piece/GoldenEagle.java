@@ -16,38 +16,23 @@ public class GoldenEagle extends Eagle {
 
     public GoldenEagle() {
         super();
-//        this.moveList = getMoveList();
     }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
+        // but since we have 3 sharks there should technically be only 3 positions right now
+        for (int[] sharksPos : sharkPosList) {
+            int[] sharkPos = sharksPos;
+            Move move = movePiece(startRow, startCol, sharkPos);
+            allMovesList.add(move);
+        }
 
-        int[] sharkPos1 = getSharkPos(0);
-        int[] sharkPos2 = getSharkPos(1);
-        int[] sharkPos3 = getSharkPos(2);
-
-        Move move1 = movePiece(startRow, startCol, sharkPos1);
-        Move move2 = movePiece(startRow, startCol, sharkPos2);
-        Move move3 = movePiece(startRow, startCol, sharkPos3);
-
-        List<Move> moveList = getAllMovesList();
-
-//        for (int i = 0; i < moveList.size(); i++) {
-        moveList.add(move1);
-        moveList.add(move2);
-        moveList.add(move3);
-//        }
-        return moveList;
+        return allMovesList;
     }
 
     private Move movePiece(int startRow, int startCol, int[] sharkPos) {
         Move move = new GoldenEagleMove(startRow, startCol, sharkPos);
         return move;
-    }
-
-    private int[] getSharkPos(int index) {
-        int[] sharkPos = sharkPosList.get(index);
-        return sharkPos;
     }
 
     public void setSharkList(List<int[]> sharksPos) {

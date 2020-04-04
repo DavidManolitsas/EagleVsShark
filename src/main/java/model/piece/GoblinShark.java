@@ -3,7 +3,6 @@ package main.java.model.piece;
 import main.java.model.move.GoblinSharkMove;
 import main.java.model.move.Move;
 
-import java.util.Collections;
 import java.util.List;
 
 public class GoblinShark extends Shark {
@@ -12,17 +11,20 @@ public class GoblinShark extends Shark {
 
     public GoblinShark() {
         super();
-//        this.moveList = getMoveList();
     }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        Move move1 = movePiece(startRow, startCol, DIRECTION_DIAGONAL_RIGHT);
-        Move move2 = movePiece(startRow, startCol, DIRECTION_DIAGONAL_LEFT);
 
-        List<Move> moveList = getAllMovesList();
-        Collections.addAll(moveList, move1, move2);
-        return moveList;
+        // still unsure about movement
+        String[] directions = {DIRECTION_DIAGONAL_UP_RIGHT, DIRECTION_DIAGONAL_UP_LEFT};
+
+        for (String direction : directions) {
+            Move move = movePiece(startRow, startCol, direction);
+            allMovesList.add(move);
+        }
+
+        return allMovesList;
     }
 
     private Move movePiece(int startRow, int startCol, String direction) {

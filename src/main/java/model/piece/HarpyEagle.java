@@ -3,7 +3,6 @@ package main.java.model.piece;
 import main.java.model.move.HarpyEagleMove;
 import main.java.model.move.Move;
 
-import java.util.Collections;
 import java.util.List;
 
 public class HarpyEagle extends Eagle {
@@ -24,20 +23,18 @@ public class HarpyEagle extends Eagle {
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        Move move1 = movePiece(startRow, startCol, DIRECTION_DOWN);
-        Move move2 = movePiece(startRow, startCol, DIRECTION_UP);
-        Move move3 = movePiece(startRow, startCol, DIRECTION_RIGHT);
-        Move move4 = movePiece(startRow, startCol, DIRECTION_LEFT);
 
-        List<Move> moveList = getAllMovesList();
+        String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
+        for (String direction : directions) {
+            Move move = movePiece(startRow, startCol, direction);
+            allMovesList.add(move);
+        }
 
-        Collections.addAll(moveList, move1, move2, move3, move4);
-
-        return moveList;
+        return allMovesList;
     }
 
 
-    public Move movePiece(int startRow, int startCol, String direction) {
+    private Move movePiece(int startRow, int startCol, String direction) {
         Move move = new HarpyEagleMove(startRow, startCol, NUM_SQUARES_MOVED, direction);
         return move;
     }
