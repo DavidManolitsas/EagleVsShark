@@ -1,6 +1,6 @@
 package main.java.model;
 
-import main.java.model.piece.Piece;
+import main.java.model.piece.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +50,30 @@ public class Board {
         for (int row = 0; row < ROW; row++) {
             for (int col = 0; col < COLUMN; col++) {
                 Square square = new Square();
+
+                // TODO: Refactor test code
+                Piece piece = null;
+                if (row == 0) {
+                    if (col == 4) {
+                        piece = new BaldEagle();
+                    } else if (col == 5) {
+                        piece = new GoldenEagle();
+                    } else if (col == 6) {
+                        piece = new HarpyEagle();
+                    }
+                } else if (row == 14) {
+                    if (col == 4) {
+                        piece = new GoblinShark();
+                    } else if (col == 5) {
+                        piece = new Hammerhead();
+                    } else if (col == 6) {
+                        piece = new SawShark();
+                    }
+                }
+
+                if (piece != null) {
+                    square.setPiece(piece);
+                }
                 squares[row][col] = square;
             }
         }
