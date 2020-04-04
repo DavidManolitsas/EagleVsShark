@@ -1,7 +1,5 @@
 package main.java.view;
 
-import java.util.ArrayList;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -13,6 +11,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import main.java.model.move.Move;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -21,6 +24,14 @@ import javafx.scene.text.Text;
  */
 public class GameInfoView
         extends BorderPane {
+
+    public interface GameInfoViewEventListener {
+        void onMoveListItemClicked(Move move);
+
+        void onMoveButtonClicked(Move move);
+    }
+
+    private GameInfoViewEventListener gameInfoViewEventListener;
 
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
@@ -95,6 +106,10 @@ public class GameInfoView
         return root;
     }
 
+    public void showValidMoveList(List<Move> moveList) {
+        // TODO: Implementation
+    }
+
     public String setPlayerTurnText() {
         int x = 1;
         if (x == 1) {
@@ -102,6 +117,18 @@ public class GameInfoView
         } else {
             return "It's" + eaglePlayerName + "'s turn!";
         }
+    }
+
+    public GameInfoViewEventListener getGameInfoViewEventListener() {
+        return Objects.requireNonNull(gameInfoViewEventListener);
+    }
+
+    public void setGameInfoViewEventListener(GameInfoViewEventListener gameInfoViewEventListener) {
+        if (gameInfoViewEventListener == null) {
+            throw new NullPointerException("Must provide a non-null listener.");
+        }
+
+        this.gameInfoViewEventListener = gameInfoViewEventListener;
     }
 
 }

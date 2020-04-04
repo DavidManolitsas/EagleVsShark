@@ -7,7 +7,9 @@ import javafx.scene.control.Control;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import main.java.ResPath;
 import main.java.model.Board.BoardModelEventListener;
+import main.java.model.move.Move;
 
 import java.util.Objects;
 
@@ -27,6 +29,8 @@ public class BoardView
     public BoardView() {
         super();
         drawBoard();
+
+        drawPieces();
     }
 
     //region public BoardView methods
@@ -37,12 +41,10 @@ public class BoardView
         }
     }
 
-    public void showValidMoves(int row, int col) {
-        changeSquareColor(row - 1, col);
-        changeSquareColor(row - 2, col);
-        changeSquareColor(row - 3, col);
-        changeSquareColor(row - 3, col + 1);
-        changeSquareColor(row - 3, col - 1);
+    public void showMoveRoute(Move move) {
+        for (Integer[] position : move.getRoute()) {
+            changeSquareColor(position[0], position[1]);
+        }
     }
     //endregion
 
@@ -63,7 +65,7 @@ public class BoardView
         }
 
         for (int i = 0; i < COLUMN; i++) {
-            getColumnConstraints().add(new ColumnConstraints(10,
+            getColumnConstraints().add(new ColumnConstraints(50,
                                                              Control.USE_COMPUTED_SIZE,
                                                              Double.POSITIVE_INFINITY,
                                                              Priority.ALWAYS,
@@ -73,12 +75,27 @@ public class BoardView
 
 
         for (int i = 0; i < ROW; i++) {
-            getRowConstraints().add(new RowConstraints(10,
+            getRowConstraints().add(new RowConstraints(50,
                                                        Control.USE_COMPUTED_SIZE,
                                                        Double.POSITIVE_INFINITY,
                                                        Priority.ALWAYS,
                                                        VPos.CENTER,
                                                        true));
+        }
+    }
+
+    private void drawPieces() {
+        // TODO: Refactor test code
+        int[] row = {0, 14};
+        int[] col = {4, 5, 6};
+        String[] images = {ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,
+                ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMER_HEARD, ResPath.PIECE_SAW_SHARK};
+
+        int index = 0;
+        for (int i : row) {
+            for (int j : col) {
+                addPiece(i, j, images[index++]);
+            }
         }
     }
 
