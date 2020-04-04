@@ -1,28 +1,31 @@
 package main.java.model.piece;
 
 import main.java.model.move.Move;
+import main.java.model.move.SawSharkMove;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SawShark extends Shark {
+
+    private final int NUM_SQUARES_MOVED = 2;
+
     public SawShark() {
         super();
-//        this.moveList = getMoveList();
     }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-//        Move move1 = new Move(startRow, startCol, NUM_SQUARES_MOVED);
-//        Move move2 = new Move(startRow, startCol);
-//        Move move3 = new Move(startRow, startCol);
+        Move move1 = movePiece(startRow, startCol, DIRECTION_DIAGONAL_RIGHT);
+        Move move2 = movePiece(startRow, startCol, DIRECTION_DIAGONAL_LEFT);
 
-        List<Move> moveList = getMoveList();
-
-        for (int i = 0; i < moveList.size(); i++) {
-//            moveList.add(move1);
-//            moveList.add(move2);
-//            moveList.add(move3);
-        }
+        List<Move> moveList = getAllMovesList();
+        Collections.addAll(moveList, move1, move2);
         return moveList;
+    }
+
+    private Move movePiece(int startRow, int startCol, String direction) {
+        Move move = new SawSharkMove(startRow, startCol, NUM_SQUARES_MOVED, direction);
+        return move;
     }
 }
