@@ -5,7 +5,7 @@ import main.java.model.move.Move;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class Piece {
+public abstract class Piece {
     protected List<Move> allMovesList;
 
     public static final String DIRECTION_DOWN = "down";
@@ -20,6 +20,5 @@ abstract class Piece {
     }
 
     public abstract List<Move> getAllMoves(int startRow, int startCol);
-
 
 }

@@ -9,6 +9,9 @@ public class BaldEagle extends Eagle {
     private final int MOVE_TWO_SQUARES = 2;
     private final int MOVE_THREE_SQUARES = 3;
 
+    private String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
+    private int[] numSquaresMoved = {MOVE_ONE_SQUARE, MOVE_TWO_SQUARES, MOVE_THREE_SQUARES};
+
     // moves forward 1-3 squares (eg. [4,4] -> [8,4]
     // left, right and forward
     // makes 9 movements
@@ -20,28 +23,17 @@ public class BaldEagle extends Eagle {
 
     public BaldEagle() {
         super();
-
     }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
-        int[] numSquaresMoved = {MOVE_ONE_SQUARE, MOVE_TWO_SQUARES, MOVE_THREE_SQUARES};
-
         for (String direction : directions) {
             for (int squaresMoved : numSquaresMoved) {
-                Move move = movePiece(startRow, startCol, squaresMoved, direction);
+                Move move = new BaldEagleMove(startRow, startCol, squaresMoved, direction);
                 allMovesList.add(move);
             }
         }
-
         return allMovesList;
-    }
-
-
-    private Move movePiece(int startRow, int startCol, int numSquaresMoved, String direction) {
-        Move move = new BaldEagleMove(startRow, startCol, numSquaresMoved, direction);
-        return move;
     }
 
 }

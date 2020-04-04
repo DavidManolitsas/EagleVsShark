@@ -7,6 +7,7 @@ import java.util.List;
 
 public class HarpyEagle extends Eagle {
     private final int NUM_SQUARES_MOVED = 3;
+    private String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
     // flies forward, back, left or right 3 spaces
     // moves 4 times
 
@@ -18,24 +19,16 @@ public class HarpyEagle extends Eagle {
 
     public HarpyEagle() {
         super();
-//        this.moveList = getMoveList();
     }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-
-        String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
         for (String direction : directions) {
-            Move move = movePiece(startRow, startCol, direction);
+            Move move = new HarpyEagleMove(startRow, startCol, NUM_SQUARES_MOVED, direction);
             allMovesList.add(move);
         }
 
         return allMovesList;
     }
 
-
-    private Move movePiece(int startRow, int startCol, String direction) {
-        Move move = new HarpyEagleMove(startRow, startCol, NUM_SQUARES_MOVED, direction);
-        return move;
-    }
 }

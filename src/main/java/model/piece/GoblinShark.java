@@ -8,6 +8,8 @@ import java.util.List;
 public class GoblinShark extends Shark {
     // 0 for now
     private final int NUM_SQUARES_MOVED = 0;
+    // still unsure about movement
+    private String[] directions = {DIRECTION_DIAGONAL_UP_RIGHT, DIRECTION_DIAGONAL_UP_LEFT};
 
     public GoblinShark() {
         super();
@@ -15,21 +17,13 @@ public class GoblinShark extends Shark {
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-
-        // still unsure about movement
-        String[] directions = {DIRECTION_DIAGONAL_UP_RIGHT, DIRECTION_DIAGONAL_UP_LEFT};
-
         for (String direction : directions) {
-            Move move = movePiece(startRow, startCol, direction);
+            Move move = new GoblinSharkMove(startRow, startCol, NUM_SQUARES_MOVED, direction);
             allMovesList.add(move);
         }
 
         return allMovesList;
     }
 
-    private Move movePiece(int startRow, int startCol, String direction) {
-        Move move = new GoblinSharkMove(startRow, startCol, NUM_SQUARES_MOVED, direction);
-        return move;
-    }
 }
 
