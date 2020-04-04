@@ -5,7 +5,13 @@ import main.java.model.move.Move;
 import java.util.List;
 
 public class BaldEagle extends Eagle {
-//    private final int NUM_SQUARES_MOVED;
+    private final int MOVE_ONE_SQUARE = 1;
+    private final int MOVE_TWO_SQUARES = 2;
+    private final int MOVE_THREE_SQUARES = 3;
+
+    private String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
+    private int[] numSquaresMoved = {MOVE_ONE_SQUARE, MOVE_TWO_SQUARES, MOVE_THREE_SQUARES};
+
     // moves forward 1-3 squares (eg. [4,4] -> [8,4]
     // left, right and forward
     // makes 9 movements
@@ -17,26 +23,17 @@ public class BaldEagle extends Eagle {
 
     public BaldEagle() {
         super();
-//        this.moveList = getMoveList();
     }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-//        Move move1 = new Move(startRow, startCol, NUM_SQUARES_MOVED);
-//        Move move2 = new Move(startRow, startCol);
-//        Move move3 = new Move(startRow, startCol);
-
-        List<Move> moveList = getMoveList();
-
-        for (int i = 0; i < moveList.size(); i++) {
-//            moveList.add(move1);
-//            moveList.add(move2);
-//            moveList.add(move3);
+        for (String direction : directions) {
+            for (int squaresMoved : numSquaresMoved) {
+                Move move = new BaldEagleMove(startRow, startCol, squaresMoved, direction);
+                allMovesList.add(move);
+            }
         }
-        return moveList;
+        return allMovesList;
     }
 
-//    public List<Move> getMoveList() {
-//        return super.allMoves;
-//    }
 }
