@@ -1,26 +1,21 @@
 package main.java.view;
 
 
-import java.io.IOException;
-import java.util.Objects;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import main.java.ResPath;
 import main.java.util.SceneManager;
+
+import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -60,7 +55,7 @@ public class StartMenu
 
 
     private void drawBackground(){
-        Image image = new Image("/main/resources/StartMenuBackground.png");
+        Image image = new Image(ResPath.START_MENU_BACKGROUND);
         BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
         Background background = new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size));
         root.setBackground(background);

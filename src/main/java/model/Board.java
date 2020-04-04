@@ -34,6 +34,15 @@ public class Board {
     public Piece getPiece(int row, int col) {
         return getSquareAt(row, col).getPiece();
     }
+
+    public Piece getChosenPiece() {
+        return chosenPiece;
+    }
+
+    public void setChosenPiece(Piece chosenPiece) {
+        this.chosenPiece = chosenPiece;
+    }
+
     //endregion
 
     //region private methods
