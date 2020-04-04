@@ -59,16 +59,16 @@ public class GameInfoView
         Text turnCountText = new Text("Turn No. " + turnCount);
         turnCountText.setFont(BODY);
 
-        Text sharkScoreText = new Text("Shark Score: " + sharkPlayerScore);
+        Text sharkScoreText = new Text("Shark Score: " + (sharkPlayerScore / 150) + "%");
         sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + eaglePlayerScore);
+        Text eagleScoreText = new Text("Eagle Score: " + (eaglePlayerScore / 150) + "%");
         eagleScoreText.setFont(BODY);
 
         gameInfo.getChildren()
                 .addAll(title, sharkPlayer, eaglePlayer, playersTurn, turnCountText, sharkScoreText, eagleScoreText);
         root.setTop(gameInfo);
 
-        //TODO: PLACEHOLDER this is for testing change to a new type (not string)
+        //TODO: PLACEHOLDER this is for testing change to type move
         //This would be the list of valid moves
         String[] moves = {"Move 1", "Move 2", "Move 3", "Move 4", "Move 5", "Move 6", "Move 7"};
         ArrayList<BorderPane> moveList = new ArrayList<>();

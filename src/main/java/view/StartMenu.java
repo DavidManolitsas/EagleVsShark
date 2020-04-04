@@ -7,11 +7,19 @@ import java.util.Objects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import main.java.util.SceneManager;
 
 /**
@@ -31,24 +39,49 @@ public class StartMenu
     private StartMenuListener startMenuListener;
     private String sharkPlayerName;
     private String eaglePlayerName;
-    private static final Font TITLE = Font.font("Helvetica", 24);
-    private static final Font BODY = Font.font("Helvetica", 14);
+    private BorderPane root = new BorderPane();
+    private static final Font TITLE = Font.font("Helvetica", 36);
+    private static final Font BODY = Font.font("Helvetica", 16);
 
     public StartMenu() {
         setCenter(drawMenu());
     }
 
     public BorderPane drawMenu() {
-        BorderPane root = new BorderPane();
+        //Background
+        drawBackground();
         //Title
+        drawTitle();
+        //Players and Start Game
+        drawPlayerNames();
+
+        return root;
+    }
+
+
+    private void drawBackground(){
+        Image image = new Image("/main/resources/StartMenuBackground.png");
+        BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
+        Background background = new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size));
+        root.setBackground(background);
+    }
+
+    private void drawTitle(){
+        VBox titleBox = new VBox();
         Text title = new Text("Eagle vs. Shark\n\n");
         title.setFont(TITLE);
-        //Shark Player
+        title.setTextAlignment(TextAlignment.CENTER);
+        titleBox.getChildren().add(title);
+        titleBox.setAlignment(Pos.CENTER);
+        titleBox.setPadding(new Insets(60,0,0,0));
+        root.setTop(titleBox);
+    }
+
+    private void drawPlayerNames(){
         Text sharkPlayerText = new Text("Shark Player: ");
         sharkPlayerText.setFont(BODY);
         TextField sharkPlayerNameField = new TextField();
         sharkPlayerName = sharkPlayerNameField.getText();
-
         //Eagle Player
         Text eaglePlayerText = new Text("Eagle Player: ");
         eaglePlayerText.setFont(BODY);
@@ -56,10 +89,10 @@ public class StartMenu
         eaglePlayerName = eaglePlayerNameField.getText();
 
         //Start Game Button
-        Text startBt = new Text("START GAME");
+        Button startBt = new Button("Start Game");
         startBt.setFont(BODY);
         startBt.setCursor(Cursor.HAND);
-        startBt.setOnMouseClicked(event -> {
+        startBt.setOnAction(event -> {
             try {
                 getStartMenuListener().onStartBtClick();
             } catch (IOException e) {
@@ -70,14 +103,12 @@ public class StartMenu
         //Menu
         VBox menuList = new VBox();
         menuList.setSpacing(20);
-        menuList.setPadding(new Insets(10, 200, 10, 200));
+        menuList.setPadding(new Insets(0, 250, 10, 250));
         menuList.getChildren()
-                .addAll(title, sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, startBt);
+                .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, startBt);
 
         root.setCenter(menuList);
         menuList.setAlignment(Pos.CENTER);
-
-        return root;
     }
 
     public void startGame() {
