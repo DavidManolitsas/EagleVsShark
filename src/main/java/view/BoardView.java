@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.model.Board.BoardModelEventListener;
+import main.java.model.move.Move;
 
 import java.util.Objects;
 
@@ -37,12 +38,10 @@ public class BoardView
         }
     }
 
-    public void showValidMoves(int row, int col) {
-        changeSquareColor(row - 1, col);
-        changeSquareColor(row - 2, col);
-        changeSquareColor(row - 3, col);
-        changeSquareColor(row - 3, col + 1);
-        changeSquareColor(row - 3, col - 1);
+    public void showMoveRoute(Move move) {
+        for (Integer[] position : move.getRoute()) {
+            changeSquareColor(position[0], position[1]);
+        }
     }
     //endregion
 

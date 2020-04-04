@@ -26,7 +26,9 @@ public class GameInfoView
         extends BorderPane {
 
     public interface GameInfoViewEventListener {
-        void onMoveClicked(Move move);
+        void onMoveListItemClicked(Move move);
+
+        void onMoveButtonClicked(Move move);
     }
 
     private GameInfoViewEventListener gameInfoViewEventListener;
