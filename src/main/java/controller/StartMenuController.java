@@ -1,10 +1,10 @@
 package main.java.controller;
 
-import java.io.IOException;
-
 import javafx.fxml.FXML;
 import main.java.view.StartMenu;
 import main.java.view.StartMenu.StartMenuListener;
+
+import java.io.IOException;
 
 /**
  * @author David Manolitsas

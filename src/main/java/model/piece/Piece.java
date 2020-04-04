@@ -15,6 +15,7 @@ public abstract class Piece {
     public static final String DIRECTION_DIAGONAL_UP_RIGHT = "diagonal up right";
     public static final String DIRECTION_DIAGONAL_UP_LEFT = "diagonal up left";
 
+
     public Piece() {
         allMovesList = new ArrayList<Move>();
     }
