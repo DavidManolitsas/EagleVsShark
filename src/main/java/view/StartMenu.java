@@ -1,21 +1,26 @@
 package main.java.view;
 
 
+import java.io.IOException;
+import java.util.Objects;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import main.java.ResPath;
 import main.java.util.SceneManager;
-
-import java.io.IOException;
-import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -63,12 +68,14 @@ public class StartMenu
 
     private void drawTitle(){
         VBox titleBox = new VBox();
-        Text title = new Text("Eagle vs. Shark\n\n");
+        Text title = new Text("\nEagle vs. Shark");
         title.setFont(TITLE);
-        title.setTextAlignment(TextAlignment.CENTER);
-        titleBox.getChildren().add(title);
+        Text mango = new Text("Created by Mango");
+        mango.setFont(BODY);
+        titleBox.getChildren().addAll(title, mango);
         titleBox.setAlignment(Pos.CENTER);
         titleBox.setPadding(new Insets(60,0,0,0));
+        titleBox.setSpacing(10);
         root.setTop(titleBox);
     }
 
