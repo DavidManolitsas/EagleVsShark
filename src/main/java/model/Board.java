@@ -55,19 +55,19 @@ public class Board {
                 Piece piece = null;
                 if (row == 0) {
                     if (col == 4) {
-                        piece = new BaldEagle();
-                    } else if (col == 5) {
-                        piece = new GoldenEagle();
-                    } else if (col == 6) {
-                        piece = new HarpyEagle();
-                    }
-                } else if (row == 14) {
-                    if (col == 4) {
                         piece = new GoblinShark();
                     } else if (col == 5) {
                         piece = new Hammerhead();
                     } else if (col == 6) {
                         piece = new SawShark();
+                    }
+                } else if (row == 14) {
+                    if (col == 4) {
+                        piece = new BaldEagle();
+                    } else if (col == 5) {
+                        piece = new GoldenEagle();
+                    } else if (col == 6) {
+                        piece = new HarpyEagle();
                     }
                 }
 

@@ -88,8 +88,8 @@ public class BoardView
         // TODO: Refactor test code
         int[] row = {0, 14};
         int[] col = {4, 5, 6};
-        String[] images = {ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,
-                ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMER_HEARD, ResPath.PIECE_SAW_SHARK};
+        String[] images = {ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMER_HEARD, ResPath.PIECE_SAW_SHARK,
+                ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,};
 
         int index = 0;
         for (int i : row) {
