@@ -10,6 +10,10 @@ public class SawSharkMove extends Move {
     private List<Integer[]> paintInfo;
     private List<Integer[]> route;
 
+    public SawSharkMove(int startRow, int startCol, int num_squares_moved, String direction) {
+        super();
+    }
+
     @Override
     public int[] getFinalPosition() {
         return super.getFinalPosition();

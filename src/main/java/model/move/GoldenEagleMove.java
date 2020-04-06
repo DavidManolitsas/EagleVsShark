@@ -10,6 +10,10 @@ public class GoldenEagleMove extends Move {
     private List<Integer[]> paintInfo;
     private List<Integer[]> route;
 
+    public GoldenEagleMove(int startRow, int startCol, int[] sharkPos) {
+        super();
+    }
+
     @Override
     public int[] getFinalPosition() {
         return super.getFinalPosition();

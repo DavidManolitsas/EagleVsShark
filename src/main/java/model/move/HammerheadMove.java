@@ -2,13 +2,17 @@ package main.java.model.move;
 
 import java.util.List;
 
-public class HammerheadMove extends Move{
+public class HammerheadMove extends Move {
     private int startRow;
     private int startCol;
     private int destRow;
     private int destCol;
     private List<Integer[]> paintInfo;
     private List<Integer[]> route;
+
+    public HammerheadMove(int startRow, int startCol, int num_squares_moved, String direction) {
+        super();
+    }
 
     @Override
     public int[] getFinalPosition() {
