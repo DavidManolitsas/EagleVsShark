@@ -7,11 +7,14 @@ public class GoldenEagleMove extends Move {
     private int startCol;
     private int destRow;
     private int destCol;
+    private int[] sharkPos = new int[2];
     private List<Integer[]> paintInfo;
     private List<Integer[]> route;
 
     public GoldenEagleMove(int startRow, int startCol, int[] sharkPos) {
-        super();
+        this.startRow = startRow;
+        this.startCol = startCol;
+        this.sharkPos = sharkPos;
     }
 
     @Override

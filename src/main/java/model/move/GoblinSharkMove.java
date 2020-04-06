@@ -7,11 +7,16 @@ public class GoblinSharkMove extends Move {
     private int startCol;
     private int destRow;
     private int destCol;
+    private int squaresMoved;
+    private String direction;
     private List<Integer[]> paintInfo;
     private List<Integer[]> route;
 
-    public GoblinSharkMove(int startRow, int startCol, int num_squares_moved, String direction) {
-        super();
+    public GoblinSharkMove(int startRow, int startCol, int squaresMoved, String direction) {
+        this.startRow = startRow;
+        this.startCol = startCol;
+        this.squaresMoved = squaresMoved;
+        this.direction = direction;
     }
 
     @Override

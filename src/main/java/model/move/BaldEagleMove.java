@@ -7,11 +7,16 @@ public class BaldEagleMove extends Move {
     private int startCol;
     private int destRow;
     private int destCol;
+    private int squaresMoved;
+    private String direction;
     private List<Integer[]> paintInfo;
     private List<Integer[]> route;
 
     public BaldEagleMove(int startRow, int startCol, int squaresMoved, String direction) {
-        super();
+        this.startRow = startRow;
+        this.startCol = startCol;
+        this.squaresMoved = squaresMoved;
+        this.direction = direction;
     }
 
     @Override
