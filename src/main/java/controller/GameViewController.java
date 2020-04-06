@@ -59,7 +59,7 @@ public class GameViewController
 
     @Override
     public void onMoveButtonClicked(Move move) {
-
+        //TODO: implement, I have passed the move from the gameInfoView
     }
     //endregion
 }

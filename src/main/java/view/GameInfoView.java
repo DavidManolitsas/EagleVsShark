@@ -105,6 +105,12 @@ public class GameInfoView
             moveBt.setWrapText(true);
             moveBt.setFont(TITLE);
             moveBt.setPrefWidth(250);
+
+            moveBt.setOnAction(e -> {
+                getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
+                moveList = null;
+            });
+
             this.setBottom(moveBt);
         }
 
@@ -135,7 +141,7 @@ public class GameInfoView
         drawGameInfo();
     }
 
-    private Move getSelectedMove() {
+    private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
     }
 
