@@ -1,5 +1,4 @@
 package main.java.model.piece;
-package main.java.model.move;
 
 /**
  * @author David Manolitsas

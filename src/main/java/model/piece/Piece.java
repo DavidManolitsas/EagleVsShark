@@ -5,7 +5,6 @@ import main.java.model.move.Move;
 import java.util.ArrayList;
 import java.util.List;
 
-package main.java.model.move;
 
 public abstract class Piece {
     protected List<Move> allMovesList;

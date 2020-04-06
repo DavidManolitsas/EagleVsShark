@@ -5,8 +5,6 @@ import main.java.model.move.SawSharkMove;
 
 import java.util.List;
 
-package main.java.model.move;
-
 public class SawShark extends Shark {
 
     private final int NUM_SQUARES_MOVED = 2;

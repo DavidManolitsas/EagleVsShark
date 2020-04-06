@@ -5,7 +5,6 @@ import main.java.model.move.Move;
 
 import java.util.List;
 
-package main.java.model.move;
 
 public class GoblinShark extends Shark {
 
