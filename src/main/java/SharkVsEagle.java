@@ -8,7 +8,7 @@ import main.java.util.SceneManager;
  * @author WeiYi Yu
  * @date 2020-03-23
  */
-public class Game
+public class SharkVsEagle
         extends Application {
 
     public static final int WINDOW_WIDTH = 900;
