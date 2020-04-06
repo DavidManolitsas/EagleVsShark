@@ -5,21 +5,21 @@ package main.java.model;
  * @project OOSD-A1
  * @date 2020-04-06
  */
-class Game {
+public class Game {
 
     private Board board;
     private Player sharkPlayer;
     private Player eaglePlayer;
+    private int sharkSquareCount;
+    private int eagleSquareCount;
     private int turnCount;
 
     public Game() {
+        this.sharkSquareCount = 0;
+        this.eagleSquareCount = 0;
         this.turnCount = 0;
     }
 
-
-    public void startGame() {
-
-    }
 
     public void endGame() {
 
@@ -27,6 +27,11 @@ class Game {
 
     public void trackPlayerTurn() {
 
+    }
+
+    public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
+        this.sharkSquareCount = sharkSquareCount;
+        this.eagleSquareCount = eagleSquareCount;
     }
 
     public Board getBoard() {
@@ -41,16 +46,8 @@ class Game {
         return sharkPlayer;
     }
 
-    public void setSharkPlayer(Player sharkPlayer) {
-        this.sharkPlayer = sharkPlayer;
-    }
-
     public Player getEaglePlayer() {
         return eaglePlayer;
-    }
-
-    public void setEaglePlayer(Player eaglePlayer) {
-        this.eaglePlayer = eaglePlayer;
     }
 
     public int incrementTurnCount() {

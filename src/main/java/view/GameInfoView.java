@@ -1,10 +1,14 @@
 package main.java.view;
 
+import java.util.List;
+import java.util.Objects;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -12,10 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import main.java.model.move.Move;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -35,6 +35,9 @@ public class GameInfoView
 
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
+
+    private ListView<Move> moveList = null;
+
     //TODO: place holders
     private String sharkPlayerName = "John";
     private String eaglePlayerName = "Smith";
@@ -44,12 +47,10 @@ public class GameInfoView
 
 
     public GameInfoView() {
-        setCenter(drawGameInfo());
+        drawGameInfo();
     }
 
-    public BorderPane drawGameInfo() {
-        BorderPane root = new BorderPane();
-
+    public void drawGameInfo() {
         VBox gameInfo = new VBox();
         gameInfo.setPadding(new Insets(40, 20, 40, 20));
         gameInfo.setSpacing(10);
@@ -77,37 +78,65 @@ public class GameInfoView
 
         gameInfo.getChildren()
                 .addAll(title, sharkPlayer, eaglePlayer, playersTurn, turnCountText, sharkScoreText, eagleScoreText);
-        root.setTop(gameInfo);
+        this.setTop(gameInfo);
 
         //TODO: PLACEHOLDER this is for testing change to type move
         //This would be the list of valid moves
-        String[] moves = {"Move 1", "Move 2", "Move 3", "Move 4", "Move 5", "Move 6", "Move 7"};
-        ArrayList<BorderPane> moveList = new ArrayList<>();
+//        String[] moves = {"Move 1", "Move 2", "Move 3", "Move 4", "Move 5", "Move 6", "Move 7"};
+//        ArrayList<BorderPane> moveList = new ArrayList<>();
+//
+//        for (int i = 0; i < moves.length; i++) {
+//            BorderPane pane = new BorderPane();
+//            pane.setPadding(new Insets(30, 20, 30, 20));
+//            Text text = new Text(moves[i]);
+//            pane.setCenter(text);
+//            moveList.add(pane);
+//        }
+//
+//        ListView<BorderPane> list = new ListView<BorderPane>();
+//        //set items
+//        ObservableList<BorderPane> items = FXCollections.observableArrayList(moveList);
+//        list.setItems(items);
+//        root.setCenter(list);
+        this.setCenter(moveList);
 
-        for (int i = 0; i < moves.length; i++) {
-            BorderPane pane = new BorderPane();
-            pane.setPadding(new Insets(30, 20, 30, 20));
-            Text text = new Text(moves[i]);
-            pane.setCenter(text);
-            moveList.add(pane);
+        if (moveList != null) {
+            Button moveBt = new Button("Move");
+            moveBt.setWrapText(true);
+            moveBt.setFont(TITLE);
+            moveBt.setPrefWidth(250);
+            this.setBottom(moveBt);
         }
 
-        ListView<BorderPane> list = new ListView<BorderPane>();
-        //set items
-        ObservableList<BorderPane> items = FXCollections.observableArrayList(moveList);
-        list.setItems(items);
-        root.setCenter(list);
-
-        Button moveBt = new Button("Move");
-        moveBt.setWrapText(true);
-        moveBt.setFont(TITLE);
-        moveBt.setPrefWidth(250);
-        root.setBottom(moveBt);
-        return root;
     }
 
-    public void showValidMoveList(List<Move> moveList) {
-        // TODO: Implementation
+    public void showValidMoveList(List<Move> moves) {
+        //reset move list
+        moveList = null;
+        // refresh move list
+        ObservableList<Move> moveListObservable = FXCollections.observableArrayList();
+        moveListObservable.addAll(moves);
+        moveList = new ListView<>(moveListObservable);
+
+        // assign name to each Move object
+        moveList.setCellFactory(e -> new ListCell<Move>() {
+            protected void updateItem(Move item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item == null) {
+                    setText(null);
+                } else {
+                    setText("Move " + (moves.indexOf(item) + 1));
+                }
+            }
+        });
+
+        //redraw game info
+        drawGameInfo();
+    }
+
+    private Move getSelectedMove() {
+        return moveList.getSelectionModel().getSelectedItem();
     }
 
     public String setPlayerTurnText() {
