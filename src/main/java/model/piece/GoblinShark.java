@@ -5,11 +5,13 @@ import main.java.model.move.Move;
 
 import java.util.List;
 
+package main.java.model.move;
+
 public class GoblinShark extends Shark {
-    // 0 for now
-    private final int NUM_SQUARES_MOVED = 0;
+
+    private final int NUM_SQUARES_MOVED = 3;
     // still unsure about movement
-    private String[] directions = {DIRECTION_DIAGONAL_UP_RIGHT, DIRECTION_DIAGONAL_UP_LEFT};
+    private String[] directions = {DIRECTION_UP};
 
     public GoblinShark() {
         super();

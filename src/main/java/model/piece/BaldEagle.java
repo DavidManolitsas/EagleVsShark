@@ -1,8 +1,11 @@
 package main.java.model.piece;
 
+import main.java.model.move.BaldEagleMove;
 import main.java.model.move.Move;
 
 import java.util.List;
+
+package main.java.model.move;
 
 public class BaldEagle extends Eagle {
     private final int MOVE_ONE_SQUARE = 1;

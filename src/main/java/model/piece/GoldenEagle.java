@@ -5,6 +5,8 @@ import main.java.model.move.Move;
 
 import java.util.List;
 
+package main.java.model.move;
+
 public class GoldenEagle extends Eagle {
     private List<int[]> sharkPosList;
     // flies to behind any shark
