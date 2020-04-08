@@ -39,18 +39,10 @@ public class GameInfoView
 
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
-
+    private static final int TOTAL_SQUARES = 150;
     private ListView<Move> moveList;
-
+    //TODO: is this right?
     private Game game;
-
-    //TODO: place holders
-    private String sharkPlayerName = "John";
-    private String eaglePlayerName = "Smith";
-    private int sharkPlayerScore = 0;
-    private int eaglePlayerScore = 0;
-    private int turnCount = 1;
-
 
     public GameInfoView() {
         game = new Game("John", "Smith");
@@ -76,36 +68,19 @@ public class GameInfoView
         playersTurn.setFont(TITLE);
         playersTurn.setFill(Color.PURPLE);
 
-        Text turnCountText = new Text("Turn No. " + game.getSharkSquareCount());
+        Text turnCountText = new Text("Turn No. " + game.getTurnCount());
         turnCountText.setFont(BODY);
 
-        Text sharkScoreText = new Text("Shark Score: " + (game.getSharkSquareCount() / 150) + "%");
+        Text sharkScoreText = new Text("Shark Score: " + (game.getSharkSquareCount() / TOTAL_SQUARES) + "%");
         sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + (game.getEagleSquareCount() / 150) + "%");
+        Text eagleScoreText = new Text("Eagle Score: " + (game.getEagleSquareCount() / TOTAL_SQUARES) + "%");
         eagleScoreText.setFont(BODY);
 
         gameInfo.getChildren()
                 .addAll(title, sharkPlayer, eaglePlayer, playersTurn, turnCountText, sharkScoreText, eagleScoreText);
         this.setTop(gameInfo);
 
-        //TODO: PLACEHOLDER this is for testing change to type move
-        //This would be the list of valid moves
-//        String[] moves = {"Move 1", "Move 2", "Move 3", "Move 4", "Move 5", "Move 6", "Move 7"};
-//        ArrayList<BorderPane> moveList = new ArrayList<>();
-//
-//        for (int i = 0; i < moves.length; i++) {
-//            BorderPane pane = new BorderPane();
-//            pane.setPadding(new Insets(30, 20, 30, 20));
-//            Text text = new Text(moves[i]);
-//            pane.setCenter(text);
-//            moveList.add(pane);
-//        }
-//
-//        ListView<BorderPane> list = new ListView<BorderPane>();
-//        //set items
-//        ObservableList<BorderPane> items = FXCollections.observableArrayList(moveList);
-//        list.setItems(items);
-//        root.setCenter(list);
+        // Set moveList
         this.setCenter(moveList);
 
         if (moveList != null) {
@@ -155,7 +130,7 @@ public class GameInfoView
         moveList.setOnMouseClicked(event -> {
             Move move = getSelectedMove();
             if (move != null) {
-                getGameInfoViewEventListener().onMoveListItemClicked(move);
+                getGameInfoViewEventListener().onMoveListItemClicked(getSelectedMove());
             }
         });
 
