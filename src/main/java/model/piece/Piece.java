@@ -23,4 +23,10 @@ public abstract class Piece {
 
     public abstract List<Move> getAllMoves(int startRow, int startCol);
 
+    public List<Move> getMovesList(int startRow, int startCol) {
+        if (allMovesList.isEmpty()) {
+            getAllMoves(startRow, startCol);
+        }
+        return allMovesList;
+    }
 }

@@ -20,7 +20,6 @@ public class GoldenEagle extends Eagle {
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        // but since we have 3 sharks we should expect only 3 positions right now?
         for (int[] sharksPos : sharkPosList) {
             int[] sharkPos = sharksPos;
             Move move = new GoldenEagleMove(startRow, startCol, sharkPos);
