@@ -33,9 +33,12 @@ public class GameViewController
     @FXML
     public void initialize() {
         board = new Board(boardView);
-        game = new Game("John", "Smith");
+        game = Game.getInstance();
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
+        gameInfoView.showPlayerNames(game.getSharkPlayer().getPlayerName(), game.getEaglePlayer().getPlayerName());
+        gameInfoView.updateGameInfo(game.getTurnCount(), game.getEagleSquareCount(), game.getSharkSquareCount());
+
     }
 
     //region BoardView Event
@@ -61,5 +64,11 @@ public class GameViewController
     public void onMoveButtonClicked(Move move) {
         //TODO: implement, I have passed the move from the gameInfoView
     }
+
+    public void getPlayerNames() {
+        //get from model
+    }
+
+
     //endregion
 }

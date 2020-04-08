@@ -33,17 +33,13 @@ public class StartMenu
         extends BorderPane {
 
     public interface StartMenuListener {
-        void onStartBtClick() throws IOException;
+        void onStartBtClick(String sharkPlayerName, String eaglePlayerName) throws IOException;
     }
 
     private StartMenuListener startMenuListener;
-    private String sharkPlayerName;
-    private String eaglePlayerName;
     private BorderPane root = new BorderPane();
     private static final Font TITLE = Font.font("Helvetica", 36);
     private static final Font BODY = Font.font("Helvetica", 16);
-    private TextField sharkPlayerNameField;
-    private TextField eaglePlayerNameField;
 
 
     public StartMenu() {
@@ -85,25 +81,26 @@ public class StartMenu
     private void drawPlayerNames() {
         Text sharkPlayerText = new Text("Shark Player: ");
         sharkPlayerText.setFont(BODY);
-        sharkPlayerNameField = new TextField();
+        TextField sharkPlayerNameField = new TextField();
         //Eagle Player
         Text eaglePlayerText = new Text("Eagle Player: ");
         eaglePlayerText.setFont(BODY);
-        eaglePlayerNameField = new TextField();
-
+        TextField eaglePlayerNameField = new TextField();
 
         //Start Game Button
         Button startBt = new Button("Start Game");
         startBt.setFont(BODY);
         startBt.setCursor(Cursor.HAND);
         startBt.setOnAction(event -> {
+
+            String eaglePlayerName = eaglePlayerNameField.getText();
+            String sharkPlayerName = sharkPlayerNameField.getText();
             try {
-                eaglePlayerName = eaglePlayerNameField.getText();
-                sharkPlayerName = sharkPlayerNameField.getText();
-                getStartMenuListener().onStartBtClick();
+                getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("wrong!");
             }
+
         });
 
         //Menu
@@ -133,11 +130,4 @@ public class StartMenu
         this.startMenuListener = startMenuListener;
     }
 
-    public String getSharkPlayerName() {
-        return sharkPlayerName;
-    }
-
-    public String getEaglePlayerName() {
-        return eaglePlayerName;
-    }
 }

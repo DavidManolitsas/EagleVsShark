@@ -7,6 +7,10 @@ package main.java.model;
  */
 public class Game {
 
+    public interface GameModelEventListener {
+        void updateGameInfo(int turnCount, int sharkSquareCount, int eagleSquareCount);
+    }
+
     private Board board;
     private Player sharkPlayer;
     private Player eaglePlayer;
@@ -14,14 +18,18 @@ public class Game {
     private int eagleSquareCount;
     private int turnCount;
 
-    public Game(String sharkPlayerName, String eaglePlayerName) {
-        this.sharkPlayer = new Player(sharkPlayerName);
-        this.eaglePlayer = new Player(eaglePlayerName);
+    public Game() {
+
         this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
         this.turnCount = 1;
     }
 
+    private static final Game INSTANCE = new Game();
+
+    public static Game getInstance() {
+        return INSTANCE;
+    }
 
     public void endGame() {
 
@@ -56,6 +64,10 @@ public class Game {
         return turnCount++;
     }
 
+    public int getTurnCount() {
+        return turnCount;
+    }
+
     public void setTurnCount(int turnCount) {
         this.turnCount = turnCount;
     }
@@ -68,7 +80,8 @@ public class Game {
         return eagleSquareCount;
     }
 
-    public int getTurnCount() {
-        return turnCount;
+    public void setPlayers(String sharkPlayerName, String eaglePlayerName) {
+        this.sharkPlayer = new Player(sharkPlayerName);
+        this.eaglePlayer = new Player(eaglePlayerName);
     }
 }
