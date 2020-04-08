@@ -25,8 +25,13 @@ public class StartMenuController
 
     @Override
     public void onStartBtClick(String sharkPlayerName, String eaglePlayerName) {
-        game = Game.getInstance();
-        game.setPlayers(sharkPlayerName, eaglePlayerName);
-        startMenu.startGame();
+
+        if (sharkPlayerName.trim().isEmpty() || eaglePlayerName.trim().isEmpty()) {
+            startMenu.showError("Enter both player names to start the game");
+        } else {
+            game = Game.getInstance();
+            game.setPlayers(sharkPlayerName, eaglePlayerName);
+            startMenu.startGame();
+        }
     }
 }

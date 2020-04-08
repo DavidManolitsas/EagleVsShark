@@ -7,6 +7,8 @@ import java.util.Objects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -128,6 +130,12 @@ public class StartMenu
         }
 
         this.startMenuListener = startMenuListener;
+    }
+
+    public void showError(String message) {
+        Alert a = new Alert(AlertType.ERROR);
+        a.setContentText(message);
+        a.show();
     }
 
 }
