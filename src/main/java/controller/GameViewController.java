@@ -1,7 +1,5 @@
 package main.java.controller;
 
-import java.util.List;
-
 import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
@@ -11,6 +9,8 @@ import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
+
+import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -33,7 +33,10 @@ public class GameViewController
     @FXML
     public void initialize() {
         board = new Board(boardView);
-        game = new Game();
+        game = Game.getInstance();
+        game.setListener(gameInfoView);
+        game.initGame();
+
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
     }
@@ -54,7 +57,11 @@ public class GameViewController
     //region GameInfoView Event
     @Override
     public void onMoveListItemClicked(Move move) {
-        boardView.showMoveRoute(move);
+        if (move == null) {
+            gameInfoView.showError("No move was selected");
+        } else {
+            boardView.showMoveRoute(move);
+        }
     }
 
     @Override

@@ -7,6 +7,8 @@ import java.util.Objects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -33,15 +35,14 @@ public class StartMenu
         extends BorderPane {
 
     public interface StartMenuListener {
-        void onStartBtClick() throws IOException;
+        void onStartBtClick(String sharkPlayerName, String eaglePlayerName) throws IOException;
     }
 
     private StartMenuListener startMenuListener;
-    private String sharkPlayerName;
-    private String eaglePlayerName;
     private BorderPane root = new BorderPane();
     private static final Font TITLE = Font.font("Helvetica", 36);
     private static final Font BODY = Font.font("Helvetica", 16);
+
 
     public StartMenu() {
         setCenter(drawMenu());
@@ -59,14 +60,14 @@ public class StartMenu
     }
 
 
-    private void drawBackground(){
+    private void drawBackground() {
         Image image = new Image(ResPath.START_MENU_BACKGROUND);
         BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
         Background background = new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size));
         root.setBackground(background);
     }
 
-    private void drawTitle(){
+    private void drawTitle() {
         VBox titleBox = new VBox();
         Text title = new Text("\nEagle vs. Shark");
         title.setFont(TITLE);
@@ -79,27 +80,29 @@ public class StartMenu
         root.setTop(titleBox);
     }
 
-    private void drawPlayerNames(){
+    private void drawPlayerNames() {
         Text sharkPlayerText = new Text("Shark Player: ");
         sharkPlayerText.setFont(BODY);
         TextField sharkPlayerNameField = new TextField();
-        sharkPlayerName = sharkPlayerNameField.getText();
         //Eagle Player
         Text eaglePlayerText = new Text("Eagle Player: ");
         eaglePlayerText.setFont(BODY);
         TextField eaglePlayerNameField = new TextField();
-        eaglePlayerName = eaglePlayerNameField.getText();
 
         //Start Game Button
         Button startBt = new Button("Start Game");
         startBt.setFont(BODY);
         startBt.setCursor(Cursor.HAND);
         startBt.setOnAction(event -> {
+
+            String eaglePlayerName = eaglePlayerNameField.getText();
+            String sharkPlayerName = sharkPlayerNameField.getText();
             try {
-                getStartMenuListener().onStartBtClick();
+                getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("wrong!");
             }
+
         });
 
         //Menu
@@ -129,11 +132,10 @@ public class StartMenu
         this.startMenuListener = startMenuListener;
     }
 
-    public String getSharkPlayerName() {
-        return sharkPlayerName;
+    public void showError(String message) {
+        Alert a = new Alert(AlertType.ERROR);
+        a.setContentText(message);
+        a.show();
     }
 
-    public String getEaglePlayerName() {
-        return eaglePlayerName;
-    }
 }

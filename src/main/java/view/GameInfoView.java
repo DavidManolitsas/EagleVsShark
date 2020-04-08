@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 
 /**
@@ -26,7 +28,8 @@ import main.java.model.move.Move;
  * @date 2020-03-31
  */
 public class GameInfoView
-        extends BorderPane {
+        extends BorderPane
+        implements GameModelEventListener {
 
     public interface GameInfoViewEventListener {
         void onMoveListItemClicked(Move move);
@@ -38,70 +41,19 @@ public class GameInfoView
 
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
-
     private ListView<Move> moveList;
-
-    //TODO: place holders
-    private String sharkPlayerName = "John";
-    private String eaglePlayerName = "Smith";
-    private int sharkPlayerScore = 0;
-    private int eaglePlayerScore = 0;
-    private int turnCount = 1;
+    private VBox gameInfo = new VBox();
+    private DecimalFormat decimalFormat = new DecimalFormat("#%");
 
 
     public GameInfoView() {
+        initGameInfo();
         initMoveList();
-        drawGameInfo();
+        drawMoveList();
     }
 
-    public void drawGameInfo() {
-        VBox gameInfo = new VBox();
-        gameInfo.setPadding(new Insets(40, 20, 40, 20));
-        gameInfo.setSpacing(10);
-        gameInfo.setAlignment(Pos.CENTER);
-
-        Text title = new Text("Eagle vs. Shark\n");
-        title.setFont(TITLE);
-
-        Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
-        sharkPlayer.setFont(BODY);
-        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
-        eaglePlayer.setFont(BODY);
-
-        Text playersTurn = new Text(setPlayerTurnText() + "\n");
-        playersTurn.setFont(TITLE);
-        playersTurn.setFill(Color.PURPLE);
-
-        Text turnCountText = new Text("Turn No. " + turnCount);
-        turnCountText.setFont(BODY);
-
-        Text sharkScoreText = new Text("Shark Score: " + (sharkPlayerScore / 150) + "%");
-        sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + (eaglePlayerScore / 150) + "%");
-        eagleScoreText.setFont(BODY);
-
-        gameInfo.getChildren()
-                .addAll(title, sharkPlayer, eaglePlayer, playersTurn, turnCountText, sharkScoreText, eagleScoreText);
-        this.setTop(gameInfo);
-
-        //TODO: PLACEHOLDER this is for testing change to type move
-        //This would be the list of valid moves
-//        String[] moves = {"Move 1", "Move 2", "Move 3", "Move 4", "Move 5", "Move 6", "Move 7"};
-//        ArrayList<BorderPane> moveList = new ArrayList<>();
-//
-//        for (int i = 0; i < moves.length; i++) {
-//            BorderPane pane = new BorderPane();
-//            pane.setPadding(new Insets(30, 20, 30, 20));
-//            Text text = new Text(moves[i]);
-//            pane.setCenter(text);
-//            moveList.add(pane);
-//        }
-//
-//        ListView<BorderPane> list = new ListView<BorderPane>();
-//        //set items
-//        ObservableList<BorderPane> items = FXCollections.observableArrayList(moveList);
-//        list.setItems(items);
-//        root.setCenter(list);
+    private void drawMoveList() {
+        // Set moveList
         this.setCenter(moveList);
 
         if (moveList != null) {
@@ -111,11 +63,7 @@ public class GameInfoView
             moveBt.setPrefWidth(250);
 
             moveBt.setOnAction(event -> {
-                try {
-                    getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
-                } catch (NullPointerException e) {
-                    showError("No move was selected");
-                }
+                getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
             });
 
             this.setBottom(moveBt);
@@ -128,7 +76,6 @@ public class GameInfoView
         ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
         moveList.getItems().removeAll();
         moveList.setItems(moveListObservable);
-
 
         // assign name to each Move object
         moveList.setCellFactory(e -> new ListCell<Move>() {
@@ -147,34 +94,90 @@ public class GameInfoView
 
         });
 
+        moveList.setOnMouseClicked(event -> {
+            Move move = getSelectedMove();
+            if (move != null) {
+                getGameInfoViewEventListener().onMoveListItemClicked(getSelectedMove());
+            }
+        });
+
         //redraw game info
-        drawGameInfo();
+        drawMoveList();
     }
 
     private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
     }
 
-    public String setPlayerTurnText() {
-        int x = 1;
-        if (x == 1) {
-            return "It's " + sharkPlayerName + "'s turn!";
+    private void drawGameInfo(int turnCount, double sharkScore, double eagleScore) {
+        Text playersTurn = new Text(setPlayerTurnText(turnCount) + "\n");
+        playersTurn.setFont(TITLE);
+        playersTurn.setFill(Color.PURPLE);
+
+        Text turnCountText = new Text("Turn No. " + turnCount);
+        turnCountText.setFont(BODY);
+
+        Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
+        sharkScoreText.setFont(BODY);
+        Text eagleScoreText = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
+        eagleScoreText.setFont(BODY);
+
+        gameInfo.getChildren().addAll(playersTurn, turnCountText, sharkScoreText, eagleScoreText);
+
+    }
+
+    public void showPlayerNames(String sharkPlayerName, String eaglePlayerName) {
+        Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
+        sharkPlayer.setFont(BODY);
+        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
+        eaglePlayer.setFont(BODY);
+        gameInfo.getChildren().addAll(sharkPlayer, eaglePlayer);
+    }
+
+
+    private String setPlayerTurnText(int turnCount) {
+        if (turnCount % 2 == 0) {
+            return "It's the Eagle's turn!";
         } else {
-            return "It's" + eaglePlayerName + "'s turn!";
+            return "It's the Shark's turn!";
         }
     }
 
     private void initMoveList() {
         moveList = new ListView<>();
         moveList.setFixedCellSize(50);
-
     }
 
-    private void showError(String message) {
+    private void initGameInfo() {
+        gameInfo.setPadding(new Insets(40, 20, 40, 20));
+        gameInfo.setSpacing(10);
+        gameInfo.setAlignment(Pos.CENTER);
+
+        Text title = new Text("Eagle vs. Shark\n");
+        title.setFont(TITLE);
+        gameInfo.getChildren().add(title);
+        this.setTop(gameInfo);
+    }
+
+    public void showError(String message) {
         Alert a = new Alert(AlertType.ERROR);
         a.setContentText(message);
         a.show();
     }
+
+    //region Game Event
+    @Override
+    public void gameInitialised(String eaglePlayerName, String sharkPlayerName,
+                                int turnCount, double sharkScore, double eagleScore) {
+        showPlayerNames(eaglePlayerName, sharkPlayerName);
+        drawGameInfo(turnCount, sharkScore, eagleScore);
+    }
+
+    @Override
+    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
+        drawGameInfo(turnCount, sharkScore, eagleScore);
+    }
+    //end region
 
     public GameInfoViewEventListener getGameInfoViewEventListener() {
         return Objects.requireNonNull(gameInfoViewEventListener);
