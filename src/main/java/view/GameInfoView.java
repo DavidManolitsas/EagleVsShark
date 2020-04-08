@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import main.java.model.move.Move;
 
 /**
@@ -38,7 +39,7 @@ public class GameInfoView
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
 
-    private ListView<Move> moveList = new ListView<>();
+    private ListView<Move> moveList;
 
     //TODO: place holders
     private String sharkPlayerName = "John";
@@ -49,6 +50,7 @@ public class GameInfoView
 
 
     public GameInfoView() {
+        initMoveList();
         drawGameInfo();
     }
 
@@ -127,8 +129,10 @@ public class GameInfoView
         moveList.getItems().removeAll();
         moveList.setItems(moveListObservable);
 
+
         // assign name to each Move object
         moveList.setCellFactory(e -> new ListCell<Move>() {
+
             protected void updateItem(Move item, boolean empty) {
                 super.updateItem(item, empty);
 
@@ -136,8 +140,11 @@ public class GameInfoView
                     setText(null);
                 } else {
                     setText("Move " + (moves.indexOf(item) + 1));
+                    setTextAlignment(TextAlignment.CENTER);
+                    setFont(BODY);
                 }
             }
+
         });
 
         //redraw game info
@@ -157,7 +164,13 @@ public class GameInfoView
         }
     }
 
-    public void showError(String message) {
+    private void initMoveList() {
+        moveList = new ListView<>();
+        moveList.setFixedCellSize(50);
+
+    }
+
+    private void showError(String message) {
         Alert a = new Alert(AlertType.ERROR);
         a.setContentText(message);
         a.show();
