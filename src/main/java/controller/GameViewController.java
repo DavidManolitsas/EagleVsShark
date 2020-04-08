@@ -48,20 +48,22 @@ public class GameViewController
 
         if (piece != null) {
             board.setChosenPiece(piece);
-            List<Move> allMoves = piece.getAllMoves(row, col);
+            List<Move> allMoves = piece.getMovesList(row, col);
             gameInfoView.showValidMoveList(allMoves);
         }
     }
     //endregion
 
+
     //region GameInfoView Event
     @Override
     public void onMoveListItemClicked(Move move) {
-        if (move == null) {
-            gameInfoView.showError("No move was selected");
-        } else {
-            boardView.showMoveRoute(move);
+        Move lastMove = board.getPreviewMove();
+        if (lastMove != null) {
+            boardView.removeMovePreview(lastMove);
         }
+        boardView.showMovePreview(move);
+        board.setPreviewMove(move);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package main.java.model;
 
+import main.java.model.move.Move;
 import main.java.model.piece.*;
 
 import java.util.HashMap;
@@ -25,6 +26,8 @@ public class Board {
 
     private Piece chosenPiece = null;
 
+    private Move previewMove = null;
+
     public Board(BoardModelEventListener listener) {
         eventListener = listener;
         initSquare();
@@ -35,12 +38,16 @@ public class Board {
         return getSquareAt(row, col).getPiece();
     }
 
-    public Piece getChosenPiece() {
-        return chosenPiece;
-    }
-
     public void setChosenPiece(Piece chosenPiece) {
         this.chosenPiece = chosenPiece;
+    }
+
+    public Move getPreviewMove() {
+        return previewMove;
+    }
+
+    public void setPreviewMove(Move previewMove) {
+        this.previewMove = previewMove;
     }
 
     //endregion

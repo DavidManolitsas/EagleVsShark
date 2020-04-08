@@ -24,6 +24,9 @@ public class BoardView
         void onSquareClicked(int row, int col);
     }
 
+    public static final String VIEW_ID_PIECE = "piece";
+    public static final String VIEW_ID_PREVIEW = "preview";
+
     private BoardViewEventListener boardViewEventListener;
 
     public BoardView() {
@@ -34,16 +37,24 @@ public class BoardView
     }
 
     //region public BoardView methods
-    public void changeSquareColor(int row, int col) {
-        Node square = getSquareAt(row, col);
-        if (square != null) {
-            square.setStyle("-fx-background-color: red;");
+    public void showMovePreview(Move move) {
+        for (Integer[] position : move.getRoute()) {
+            StackPane square = getSquareAt(position[0], position[1]);
+            if (square != null) {
+                Node route = new StackPane();
+                route.setStyle("-fx-background-color: rgba(51,153,204,0.6);");
+                route.setId(VIEW_ID_PREVIEW);
+                square.getChildren().add(route);
+            }
         }
     }
 
-    public void showMoveRoute(Move move) {
+    public void removeMovePreview(Move move) {
         for (Integer[] position : move.getRoute()) {
-            changeSquareColor(position[0], position[1]);
+            StackPane square = getSquareAt(position[0], position[1]);
+            if (square != null) {
+                square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_PREVIEW));
+            }
         }
     }
     //endregion
@@ -130,6 +141,7 @@ public class BoardView
 
         Image image = new Image(pieceImgPath, 50, 50, true, false);
         ImageView imageView = new ImageView(image);
+        imageView.setId(VIEW_ID_PIECE);
         square.getChildren().add(imageView);
     }
     //endregion
