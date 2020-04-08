@@ -1,9 +1,5 @@
 package main.java.view;
 
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Objects;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -22,6 +18,10 @@ import javafx.scene.text.TextAlignment;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * @author David Manolitsas
  * @project OOSD-A1
@@ -30,12 +30,6 @@ import main.java.model.move.Move;
 public class GameInfoView
         extends BorderPane
         implements GameModelEventListener {
-
-
-    @Override
-    public void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
-        drawGameInfo(turnCount, sharkScore, eagleScore);
-    }
 
     public interface GameInfoViewEventListener {
         void onMoveListItemClicked(Move move);
@@ -175,6 +169,20 @@ public class GameInfoView
         a.setContentText(message);
         a.show();
     }
+
+    //region Game Event
+    @Override
+    public void gameInitialised(String eaglePlayerName, String sharkPlayerName,
+                                int turnCount, double sharkScore, double eagleScore) {
+        showPlayerNames(eaglePlayerName, sharkPlayerName);
+        drawGameInfo(turnCount, sharkScore, eagleScore);
+    }
+
+    @Override
+    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
+        drawGameInfo(turnCount, sharkScore, eagleScore);
+    }
+    //end region
 
     public GameInfoViewEventListener getGameInfoViewEventListener() {
         return Objects.requireNonNull(gameInfoViewEventListener);
