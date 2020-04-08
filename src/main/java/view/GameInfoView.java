@@ -1,5 +1,9 @@
 package main.java.view;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Objects;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -17,10 +21,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -94,7 +94,6 @@ public class GameInfoView
 
         });
 
-        //
         moveList.setOnMouseClicked(event -> {
             Move move = getSelectedMove();
             if (move != null) {
@@ -118,9 +117,6 @@ public class GameInfoView
         Text turnCountText = new Text("Turn No. " + turnCount);
         turnCountText.setFont(BODY);
 
-
-        System.out.println(sharkScore);
-
         Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
         sharkScoreText.setFont(BODY);
         Text eagleScoreText = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
@@ -130,8 +126,7 @@ public class GameInfoView
 
     }
 
-    public void showPlayerNames(String eaglePlayerName, String sharkPlayerName) {
-
+    public void showPlayerNames(String sharkPlayerName, String eaglePlayerName) {
         Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
         sharkPlayer.setFont(BODY);
         Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
