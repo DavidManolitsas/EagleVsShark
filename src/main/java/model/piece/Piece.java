@@ -21,7 +21,7 @@ public abstract class Piece {
         allMovesList = new ArrayList<Move>();
     }
 
-    public abstract List<Move> getAllMoves(int startRow, int startCol);
+    protected abstract List<Move> getAllMoves(int startRow, int startCol);
 
     public List<Move> getMovesList(int startRow, int startCol) {
         if (allMovesList.isEmpty()) {
