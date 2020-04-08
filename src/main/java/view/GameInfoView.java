@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import main.java.model.Game;
 import main.java.model.move.Move;
 
 /**
@@ -41,6 +42,8 @@ public class GameInfoView
 
     private ListView<Move> moveList;
 
+    private Game game;
+
     //TODO: place holders
     private String sharkPlayerName = "John";
     private String eaglePlayerName = "Smith";
@@ -50,6 +53,7 @@ public class GameInfoView
 
 
     public GameInfoView() {
+        game = new Game("John", "Smith");
         initMoveList();
         drawGameInfo();
     }
@@ -63,21 +67,21 @@ public class GameInfoView
         Text title = new Text("Eagle vs. Shark\n");
         title.setFont(TITLE);
 
-        Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
+        Text sharkPlayer = new Text(game.getSharkPlayer().getPlayerName() + " is the Shark Player");
         sharkPlayer.setFont(BODY);
-        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
+        Text eaglePlayer = new Text(game.getEaglePlayer().getPlayerName() + " is the Eagle Player\n");
         eaglePlayer.setFont(BODY);
 
         Text playersTurn = new Text(setPlayerTurnText() + "\n");
         playersTurn.setFont(TITLE);
         playersTurn.setFill(Color.PURPLE);
 
-        Text turnCountText = new Text("Turn No. " + turnCount);
+        Text turnCountText = new Text("Turn No. " + game.getSharkSquareCount());
         turnCountText.setFont(BODY);
 
-        Text sharkScoreText = new Text("Shark Score: " + (sharkPlayerScore / 150) + "%");
+        Text sharkScoreText = new Text("Shark Score: " + (game.getSharkSquareCount() / 150) + "%");
         sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + (eaglePlayerScore / 150) + "%");
+        Text eagleScoreText = new Text("Eagle Score: " + (game.getEagleSquareCount() / 150) + "%");
         eagleScoreText.setFont(BODY);
 
         gameInfo.getChildren()
@@ -147,20 +151,28 @@ public class GameInfoView
 
         });
 
+        //
+        moveList.setOnMouseClicked(event -> {
+            Move move = getSelectedMove();
+            if (move != null) {
+                getGameInfoViewEventListener().onMoveListItemClicked(move);
+            }
+        });
+
         //redraw game info
         drawGameInfo();
     }
+
 
     private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
     }
 
-    public String setPlayerTurnText() {
-        int x = 1;
-        if (x == 1) {
-            return "It's " + sharkPlayerName + "'s turn!";
+    private String setPlayerTurnText() {
+        if (game.getTurnCount() % 2 == 0) {
+            return "It's " + game.getEaglePlayer().getPlayerName() + "'s turn!";
         } else {
-            return "It's" + eaglePlayerName + "'s turn!";
+            return "It's " + game.getSharkPlayer().getPlayerName() + "'s turn!";
         }
     }
 

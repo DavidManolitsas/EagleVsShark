@@ -42,6 +42,9 @@ public class StartMenu
     private BorderPane root = new BorderPane();
     private static final Font TITLE = Font.font("Helvetica", 36);
     private static final Font BODY = Font.font("Helvetica", 16);
+    private TextField sharkPlayerNameField;
+    private TextField eaglePlayerNameField;
+
 
     public StartMenu() {
         setCenter(drawMenu());
@@ -59,14 +62,14 @@ public class StartMenu
     }
 
 
-    private void drawBackground(){
+    private void drawBackground() {
         Image image = new Image(ResPath.START_MENU_BACKGROUND);
         BackgroundSize size = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
         Background background = new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, size));
         root.setBackground(background);
     }
 
-    private void drawTitle(){
+    private void drawTitle() {
         VBox titleBox = new VBox();
         Text title = new Text("\nEagle vs. Shark");
         title.setFont(TITLE);
@@ -79,16 +82,15 @@ public class StartMenu
         root.setTop(titleBox);
     }
 
-    private void drawPlayerNames(){
+    private void drawPlayerNames() {
         Text sharkPlayerText = new Text("Shark Player: ");
         sharkPlayerText.setFont(BODY);
-        TextField sharkPlayerNameField = new TextField();
-        sharkPlayerName = sharkPlayerNameField.getText();
+        sharkPlayerNameField = new TextField();
         //Eagle Player
         Text eaglePlayerText = new Text("Eagle Player: ");
         eaglePlayerText.setFont(BODY);
-        TextField eaglePlayerNameField = new TextField();
-        eaglePlayerName = eaglePlayerNameField.getText();
+        eaglePlayerNameField = new TextField();
+
 
         //Start Game Button
         Button startBt = new Button("Start Game");
@@ -96,6 +98,8 @@ public class StartMenu
         startBt.setCursor(Cursor.HAND);
         startBt.setOnAction(event -> {
             try {
+                eaglePlayerName = eaglePlayerNameField.getText();
+                sharkPlayerName = sharkPlayerNameField.getText();
                 getStartMenuListener().onStartBtClick();
             } catch (IOException e) {
                 e.printStackTrace();

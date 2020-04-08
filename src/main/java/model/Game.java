@@ -14,10 +14,12 @@ public class Game {
     private int eagleSquareCount;
     private int turnCount;
 
-    public Game() {
+    public Game(String sharkPlayerName, String eaglePlayerName) {
+        this.sharkPlayer = new Player(sharkPlayerName);
+        this.eaglePlayer = new Player(eaglePlayerName);
         this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
-        this.turnCount = 0;
+        this.turnCount = 1;
     }
 
 
@@ -56,5 +58,17 @@ public class Game {
 
     public void setTurnCount(int turnCount) {
         this.turnCount = turnCount;
+    }
+
+    public int getSharkSquareCount() {
+        return sharkSquareCount;
+    }
+
+    public int getEagleSquareCount() {
+        return eagleSquareCount;
+    }
+
+    public int getTurnCount() {
+        return turnCount;
     }
 }
