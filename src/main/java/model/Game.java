@@ -1,5 +1,6 @@
 package main.java.model;
 
+
 /**
  * @author David Manolitsas
  * @project OOSD-A1
@@ -8,21 +9,21 @@ package main.java.model;
 public class Game {
 
     public interface GameModelEventListener {
-        void updateGameInfo(int turnCount, int sharkSquareCount, int eagleSquareCount);
+        void updateGameInfo(int turnCount, double sharkSquareCount, double eagleSquareCount);
     }
 
     private Board board;
+    private static final double TOTAL_SQUARES = 150;
     private Player sharkPlayer;
     private Player eaglePlayer;
-    private int sharkSquareCount;
-    private int eagleSquareCount;
+    private double sharkSquareCount;
+    private double eagleSquareCount;
     private int turnCount;
 
-    public Game() {
+    private GameModelEventListener listener;
 
-        this.sharkSquareCount = 0;
-        this.eagleSquareCount = 0;
-        this.turnCount = 1;
+    public Game() {
+        initGame();
     }
 
     private static final Game INSTANCE = new Game();
@@ -31,8 +32,9 @@ public class Game {
         return INSTANCE;
     }
 
-    public void endGame() {
-
+    public void nextTurn() {
+        incrementTurnCount();
+        listener.updateGameInfo(turnCount, sharkSquareCount, eagleSquareCount);
     }
 
     public void trackPlayerTurn() {
@@ -42,6 +44,10 @@ public class Game {
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
         this.sharkSquareCount = sharkSquareCount;
         this.eagleSquareCount = eagleSquareCount;
+    }
+
+    public void endGame() {
+
     }
 
     public Board getBoard() {
@@ -68,20 +74,35 @@ public class Game {
         return turnCount;
     }
 
-    public void setTurnCount(int turnCount) {
-        this.turnCount = turnCount;
-    }
-
-    public int getSharkSquareCount() {
+    public double getSharkSquareCount() {
         return sharkSquareCount;
     }
 
-    public int getEagleSquareCount() {
+    public double getEagleSquareCount() {
         return eagleSquareCount;
+    }
+
+    public double getTotalSquares() {
+        return TOTAL_SQUARES;
     }
 
     public void setPlayers(String sharkPlayerName, String eaglePlayerName) {
         this.sharkPlayer = new Player(sharkPlayerName);
         this.eaglePlayer = new Player(eaglePlayerName);
+    }
+
+    public GameModelEventListener getListener() {
+        return listener;
+    }
+
+
+    public void setListener(GameModelEventListener listener) {
+        this.listener = listener;
+    }
+
+    private void initGame() {
+        this.sharkSquareCount = 0;
+        this.eagleSquareCount = 0;
+        this.turnCount = 1;
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
+import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.view.BoardView;
@@ -18,7 +19,9 @@ import main.java.view.GameInfoView.GameInfoViewEventListener;
  */
 public class GameViewController
         implements BoardViewEventListener,
-                   GameInfoViewEventListener {
+                   GameInfoViewEventListener,
+                   GameModelEventListener {
+
 
     @FXML
     private BoardView boardView;
@@ -34,11 +37,11 @@ public class GameViewController
     public void initialize() {
         board = new Board(boardView);
         game = Game.getInstance();
+        game.setListener(this);
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
         gameInfoView.showPlayerNames(game.getSharkPlayer().getPlayerName(), game.getEaglePlayer().getPlayerName());
-        gameInfoView.updateGameInfo(game.getTurnCount(), game.getEagleSquareCount(), game.getSharkSquareCount());
-
+        game.getListener().updateGameInfo(game.getTurnCount(), game.getEagleSquareCount(), game.getSharkSquareCount());
     }
 
     //region BoardView Event
@@ -65,4 +68,17 @@ public class GameViewController
         //TODO: implement, I have passed the move from the gameInfoView
     }
     //endregion
+
+    //region Game Event
+    @Override
+    public void updateGameInfo(int turnCount, double sharkSquareCount, double eagleSquareCount) {
+
+        //Calculate % of territory
+        double sharkScore = (sharkSquareCount / game.getTotalSquares());
+        double eagleScore = (eagleSquareCount / game.getTotalSquares());
+
+        gameInfoView.updateGameInfo(turnCount, sharkScore, eagleScore);
+
+    }
+    //end region
 }

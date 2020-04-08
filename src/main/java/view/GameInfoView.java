@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,8 +33,8 @@ public class GameInfoView
 
 
     @Override
-    public void updateGameInfo(int turnCount, int sharkSquareCount, int eagleSquareCount) {
-        drawGameInfo(sharkSquareCount, eagleSquareCount, turnCount);
+    public void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
+        drawGameInfo(turnCount, sharkScore, eagleScore);
     }
 
     public interface GameInfoViewEventListener {
@@ -46,9 +47,9 @@ public class GameInfoView
 
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
-    private static final int TOTAL_SQUARES = 150;
     private ListView<Move> moveList;
     private VBox gameInfo = new VBox();
+    private DecimalFormat decimalFormat = new DecimalFormat("#%");
 
 
     public GameInfoView() {
@@ -115,7 +116,7 @@ public class GameInfoView
         return moveList.getSelectionModel().getSelectedItem();
     }
 
-    private void drawGameInfo(int sharkSquareCount, int eagleSquareCount, int turnCount) {
+    private void drawGameInfo(int turnCount, double sharkScore, double eagleScore) {
         Text playersTurn = new Text(setPlayerTurnText(turnCount) + "\n");
         playersTurn.setFont(TITLE);
         playersTurn.setFill(Color.PURPLE);
@@ -123,9 +124,12 @@ public class GameInfoView
         Text turnCountText = new Text("Turn No. " + turnCount);
         turnCountText.setFont(BODY);
 
-        Text sharkScoreText = new Text("Shark Score: " + (sharkSquareCount / TOTAL_SQUARES) + "%");
+
+        System.out.println(sharkScore);
+
+        Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
         sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + (eagleSquareCount / TOTAL_SQUARES) + "%");
+        Text eagleScoreText = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
         eagleScoreText.setFont(BODY);
 
         gameInfo.getChildren().addAll(playersTurn, turnCountText, sharkScoreText, eagleScoreText);
