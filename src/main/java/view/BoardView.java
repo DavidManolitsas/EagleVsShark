@@ -61,8 +61,16 @@ public class BoardView
 
     //region BoardModelEvent methods
     @Override
-    public void onDataChanged() {
+    public void onPiecePositionUpdated(Move move) {
+        Integer[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
 
+        StackPane start = getSquareAt(startPos[0], startPos[1]);
+        Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);
+        start.getChildren().remove(piece);
+
+        StackPane destination = getSquareAt(destinationPos[0], destinationPos[1]);
+        destination.getChildren().add(piece);
     }
     //endregion
 

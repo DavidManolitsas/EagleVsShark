@@ -54,7 +54,6 @@ public class GameViewController
     }
     //endregion
 
-
     //region GameInfoView Event
     @Override
     public void onMoveListItemClicked(Move move) {
@@ -68,7 +67,10 @@ public class GameViewController
 
     @Override
     public void onMoveButtonClicked(Move move) {
-        //TODO: implement, I have passed the move from the gameInfoView
+        boardView.removeMovePreview(move);
+        board.setPreviewMove(null);
+
+        board.updatePiecePosition(move);
     }
     //endregion
 }
