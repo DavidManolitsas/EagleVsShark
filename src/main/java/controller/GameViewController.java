@@ -1,11 +1,8 @@
 package main.java.controller;
 
-import java.util.List;
-
 import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
-import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.view.BoardView;
@@ -13,15 +10,15 @@ import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 
+import java.util.List;
+
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
  */
 public class GameViewController
         implements BoardViewEventListener,
-                   GameInfoViewEventListener,
-                   GameModelEventListener {
-
+                   GameInfoViewEventListener {
 
     @FXML
     private BoardView boardView;
@@ -37,11 +34,11 @@ public class GameViewController
     public void initialize() {
         board = new Board(boardView);
         game = Game.getInstance();
-        game.setListener(this);
+        game.setListener(gameInfoView);
+        game.initGame();
+
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
-        gameInfoView.showPlayerNames(game.getSharkPlayer().getPlayerName(), game.getEaglePlayer().getPlayerName());
-        game.getListener().updateGameInfo(game.getTurnCount(), game.getEagleSquareCount(), game.getSharkSquareCount());
     }
 
     //region BoardView Event
@@ -60,7 +57,11 @@ public class GameViewController
     //region GameInfoView Event
     @Override
     public void onMoveListItemClicked(Move move) {
-        boardView.showMoveRoute(move);
+        if (move == null) {
+            gameInfoView.showError("No move was selected");
+        } else {
+            boardView.showMoveRoute(move);
+        }
     }
 
     @Override
@@ -68,17 +69,4 @@ public class GameViewController
         //TODO: implement, I have passed the move from the gameInfoView
     }
     //endregion
-
-    //region Game Event
-    @Override
-    public void updateGameInfo(int turnCount, double sharkSquareCount, double eagleSquareCount) {
-
-        //Calculate % of territory
-        double sharkScore = (sharkSquareCount / game.getTotalSquares());
-        double eagleScore = (eagleSquareCount / game.getTotalSquares());
-
-        gameInfoView.updateGameInfo(turnCount, sharkScore, eagleScore);
-
-    }
-    //end region
 }
