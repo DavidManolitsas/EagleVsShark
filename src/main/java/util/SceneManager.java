@@ -1,5 +1,6 @@
 package main.java.util;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -47,8 +48,12 @@ public class SceneManager {
         Menu eagleVsShark = new Menu("Menu");
         MenuItem howTo = new MenuItem("How to play");
         howTo.setOnAction(event -> {
-            Stage howToStage = new HowToPlay();
-            howToStage.show();
+            try {
+                Stage howToStage = new HowToPlay();
+                howToStage.show();
+            } catch (FileNotFoundException e) {
+                System.err.println("File not found");
+            }
         });
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(event -> {

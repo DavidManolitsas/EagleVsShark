@@ -114,7 +114,7 @@ public class GameInfoView
         playersTurn.setFont(TITLE);
         playersTurn.setFill(Color.PURPLE);
 
-        Text turnCountText = new Text("Turn No. " + turnCount);
+        Text turnCountText = new Text("Turn No. " + turnCount + "/20");
         turnCountText.setFont(BODY);
 
         Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
