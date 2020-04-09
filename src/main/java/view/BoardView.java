@@ -27,6 +27,10 @@ public class BoardView
     public static final String VIEW_ID_PIECE = "piece";
     public static final String VIEW_ID_PREVIEW = "preview";
 
+    public static final String COLOUR_EAGLE = "#ffebd9";
+    public static final String COLOUR_SHARK = "#3282b8";
+    public static final String COLOUR_NEUTRAL = "#f1f3f4";
+
     private BoardViewEventListener boardViewEventListener;
 
     public BoardView() {
@@ -121,12 +125,13 @@ public class BoardView
     private StackPane getSquare(int row, int col) {
         StackPane square = new StackPane();
         String color;
-        if ((row + col) % 2 == 0) {
-            color = "white";
+
+        if (row < 7) {
+            color = COLOUR_SHARK;
         } else {
-            color = "black";
+            color = COLOUR_EAGLE;
         }
-        square.setStyle("-fx-background-color: " + color + ";");
+        square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
         square.setOnMouseClicked(event -> getBoardViewEventListener().onSquareClicked(row, col));
         return square;
     }
