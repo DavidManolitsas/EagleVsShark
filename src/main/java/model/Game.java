@@ -10,7 +10,7 @@ public class Game {
 
     public interface GameModelEventListener {
         void gameInitialised(String eaglePlayerName, String sharkPlayerName,
-                             int turnCount, double sharkScore, double eagleScore);
+                             int turnCount, int totalTurns, double sharkScore, double eagleScore);
 
         void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore);
     }
@@ -23,6 +23,7 @@ public class Game {
     private double sharkSquareCount;
     private double eagleSquareCount;
     private int turnCount;
+    private static final int TOTAL_TURNS = 30;
 
     private GameModelEventListener listener;
 
@@ -34,6 +35,9 @@ public class Game {
 
     public void nextTurn() {
         incrementTurnCount();
+        if (turnCount == TOTAL_TURNS) {
+            //TODO: game ends
+        }
         listener.gameInfoUpdated(turnCount, sharkSquareCount, eagleSquareCount);
     }
 
@@ -66,8 +70,8 @@ public class Game {
         return eaglePlayer;
     }
 
-    public int incrementTurnCount() {
-        return turnCount++;
+    public void incrementTurnCount() {
+        turnCount++;
     }
 
     public int getTurnCount() {
@@ -102,6 +106,6 @@ public class Game {
 
         listener.gameInitialised(sharkPlayer.getPlayerName(),
                                  eaglePlayer.getPlayerName(),
-                                 turnCount, getSharkScore(), getEagleScore());
+                                 turnCount, TOTAL_TURNS, getSharkScore(), getEagleScore());
     }
 }

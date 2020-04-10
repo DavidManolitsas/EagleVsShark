@@ -44,6 +44,7 @@ public class GameInfoView
     private ListView<Move> moveList;
     private VBox gameInfo = new VBox();
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
+    private int totalTurns;
 
 
     public GameInfoView() {
@@ -114,7 +115,7 @@ public class GameInfoView
         playersTurn.setFont(TITLE);
         playersTurn.setFill(Color.PURPLE);
 
-        Text turnCountText = new Text("Turn No. " + turnCount + "/20");
+        Text turnCountText = new Text("Turn No. " + turnCount + "/" + totalTurns);
         turnCountText.setFont(BODY);
 
         Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
@@ -168,7 +169,8 @@ public class GameInfoView
     //region Game Event
     @Override
     public void gameInitialised(String eaglePlayerName, String sharkPlayerName,
-                                int turnCount, double sharkScore, double eagleScore) {
+                                int turnCount, int totalTurns, double sharkScore, double eagleScore) {
+        this.totalTurns = totalTurns;
         showPlayerNames(eaglePlayerName, sharkPlayerName);
         drawGameInfo(turnCount, sharkScore, eagleScore);
     }
