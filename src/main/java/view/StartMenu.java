@@ -19,7 +19,9 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import main.java.ResPath;
 import main.java.util.SceneManager;
@@ -40,7 +42,7 @@ public class StartMenu
 
     private StartMenuListener startMenuListener;
     private BorderPane root = new BorderPane();
-    private static final Font TITLE = Font.font("Helvetica", 36);
+    private static final Font TITLE = Font.font("Impact", FontWeight.BOLD, 50);
     private static final Font BODY = Font.font("Helvetica", 16);
 
 
@@ -69,13 +71,15 @@ public class StartMenu
 
     private void drawTitle() {
         VBox titleBox = new VBox();
-        Text title = new Text("\nEagle vs. Shark");
+        Text title = new Text("Eagle vs. Shark");
         title.setFont(TITLE);
+        title.setFill(Color.ORANGERED);
         Text mango = new Text("Created by Mango");
         mango.setFont(BODY);
+        mango.setFill(Color.ORANGERED);
         titleBox.getChildren().addAll(title, mango);
         titleBox.setAlignment(Pos.CENTER);
-        titleBox.setPadding(new Insets(60,0,0,0));
+        titleBox.setPadding(new Insets(210, 0, 0, 0));
         titleBox.setSpacing(10);
         root.setTop(titleBox);
     }
@@ -93,6 +97,7 @@ public class StartMenu
         Button startBt = new Button("Start Game");
         startBt.setFont(BODY);
         startBt.setCursor(Cursor.HAND);
+        startBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
         startBt.setOnAction(event -> {
 
             String eaglePlayerName = eaglePlayerNameField.getText();
@@ -108,7 +113,7 @@ public class StartMenu
         //Menu
         VBox menuList = new VBox();
         menuList.setSpacing(20);
-        menuList.setPadding(new Insets(0, 250, 10, 250));
+        menuList.setPadding(new Insets(0, 270, 180, 270));
         menuList.getChildren()
                 .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, startBt);
 

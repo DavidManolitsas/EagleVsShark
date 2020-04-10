@@ -65,10 +65,14 @@ public class Game {
             //sharks win the game
             //TODO: placeholder
             System.out.println("The Sharks Win");
-        } else {
+        } else if (eagleSquareCount > sharkSquareCount) {
             //eagles win the game
             //TODO: placeholder
             System.out.println("The Eagles Win");
+        } else {
+            //its a draw
+            //TODO: placeholder
+            System.out.println("It's a Draw");
         }
     }
 

@@ -40,7 +40,8 @@ public class GameInfoView
 
     private GameInfoViewEventListener gameInfoViewEventListener;
 
-    private static final Font TITLE = Font.font("Helvetica", 18);
+    private static final Font TITLE = Font.font("Impact", 28);
+    private static final Font HEADING = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
     private ListView<Move> moveList;
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
@@ -51,6 +52,7 @@ public class GameInfoView
     private VBox whoseTurn = new VBox();
     private VBox scoreInfo = new VBox();
     private VBox chosenPiece = new VBox();
+
 
     public GameInfoView() {
         initGameInfo();
@@ -67,9 +69,10 @@ public class GameInfoView
     //start region move list
     private void drawMoveList() {
         if (moveList != null) {
-            Button moveBt = new Button("Move");
+            Button moveBt = new Button("Move Piece");
             moveBt.setWrapText(true);
-            moveBt.setFont(TITLE);
+            moveBt.setFont(HEADING);
+            moveBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
             moveBt.setPrefWidth(250);
 
             moveBt.setOnAction(event -> {
@@ -137,8 +140,9 @@ public class GameInfoView
     }
 
     public void drawTitle() {
-        Text title = new Text("Eagle vs. Shark\n");
+        Text title = new Text("Eagle vs. Shark");
         title.setFont(TITLE);
+        title.setFill(Color.ORANGERED);
         titleInfo.getChildren().add(title);
     }
 
@@ -162,7 +166,7 @@ public class GameInfoView
 
     private void drawPlayersTurn(int turnCount) {
         Text playersTurn = new Text(setPlayerTurnText(turnCount) + "\n");
-        playersTurn.setFont(TITLE);
+        playersTurn.setFont(HEADING);
         playersTurn.setFill(Color.ORANGERED);
         whoseTurn.getChildren().add(playersTurn);
     }
@@ -212,7 +216,7 @@ public class GameInfoView
     public void showChosenPiece(Piece piece) {
         chosenPiece.getChildren().clear();
         Text pieceName = new Text("\n" + getPieceName(piece) + " selected");
-        pieceName.setFont(TITLE);
+        pieceName.setFont(HEADING);
         pieceName.setFill(Color.ORANGERED);
         chosenPiece.getChildren().add(pieceName);
     }
@@ -230,7 +234,6 @@ public class GameInfoView
         drawPlayersTurn(turnCount);
         drawTurnCount(turnCount);
         drawScores(sharkScore, eagleScore);
-        showChosenPiece(null);
     }
 
     private void clearView() {
