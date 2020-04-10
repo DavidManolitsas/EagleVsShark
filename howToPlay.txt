@@ -4,6 +4,12 @@ How To Win:
 To win Eagle vs. Shark capture more territory than your opponent before
 the 20th turn or capture 60% of the total board area.
 
+How To Move Your Pieces:
+When its your turn select one of you piece on the board. On the left
+you will see a list of potential moves. Select one of these to see
+the movement path of that piece. Once you have chosen a move click
+the "Move Piece" button in the bottom right.
+
 How to Capture Territory:
 To capture territory move your pieces around the board. Each piece
 moves in their own unique way. Explore the different movements options

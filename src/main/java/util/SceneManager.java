@@ -46,6 +46,10 @@ public class SceneManager {
     public void initMenuBar() {
         MenuBar menu = new MenuBar();
         Menu eagleVsShark = new Menu("Menu");
+        MenuItem newGame = new MenuItem("New Game");
+        newGame.setOnAction(event -> {
+            showStartMenu();
+        });
         MenuItem howTo = new MenuItem("How to play");
         howTo.setOnAction(event -> {
             try {
@@ -59,7 +63,7 @@ public class SceneManager {
         quit.setOnAction(event -> {
             Platform.exit();
         });
-        eagleVsShark.getItems().addAll(howTo, quit);
+        eagleVsShark.getItems().addAll(newGame, howTo, quit);
         menu.getMenus().add(eagleVsShark);
         root.setTop(menu);
     }

@@ -1,6 +1,10 @@
 package main.java.model;
 
 
+import main.java.model.piece.Eagle;
+import main.java.model.piece.Piece;
+import main.java.model.piece.Shark;
+
 /**
  * @author David Manolitsas
  * @project OOSD-A1
@@ -40,7 +44,7 @@ public class Game {
             endGame();
         } else {
             incrementTurnCount();
-            listener.gameInfoUpdated(turnCount, sharkSquareCount, eagleSquareCount);
+            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore());
         }
     }
 
@@ -59,14 +63,32 @@ public class Game {
     public void endGame() {
         if (sharkSquareCount > eagleSquareCount) {
             //sharks win the game
-        } else {
+            //TODO: placeholder
+            System.out.println("The Sharks Win");
+        } else if (eagleSquareCount > sharkSquareCount) {
             //eagles win the game
+            //TODO: placeholder
+            System.out.println("The Eagles Win");
+        } else {
+            //its a draw
+            //TODO: placeholder
+            System.out.println("It's a Draw");
         }
     }
 
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
         this.sharkSquareCount = sharkSquareCount;
         this.eagleSquareCount = eagleSquareCount;
+    }
+
+    public boolean pieceBelongsToPlayer(Piece piece) {
+        if (turnCount % 2 == 0) {
+            //eagles turn
+            return piece instanceof Eagle;
+        } else {
+            //sharks turn
+            return piece instanceof Shark;
+        }
     }
 
     public Board getBoard() {

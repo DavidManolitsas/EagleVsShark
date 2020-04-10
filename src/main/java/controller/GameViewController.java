@@ -50,6 +50,7 @@ public class GameViewController
             board.setChosenPiece(piece);
             List<Move> allMoves = piece.getMovesList(row, col);
             gameInfoView.showValidMoveList(allMoves);
+            gameInfoView.showChosenPiece(piece);
         }
     }
     //endregion
