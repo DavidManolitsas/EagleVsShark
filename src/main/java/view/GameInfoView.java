@@ -42,9 +42,15 @@ public class GameInfoView
     private static final Font TITLE = Font.font("Helvetica", 18);
     private static final Font BODY = Font.font("Helvetica", 14);
     private ListView<Move> moveList;
-    private VBox gameInfo = new VBox();
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
     private int totalTurns;
+    //Game Information components
+    private VBox gameInfo = new VBox();
+    private Text playersTurn;
+    private Text turnCountText;
+    private Text sharkScoreText;
+    private Text eagleScoreText;
+
 
 
     public GameInfoView() {
@@ -111,20 +117,10 @@ public class GameInfoView
     }
 
     private void drawGameInfo(int turnCount, double sharkScore, double eagleScore) {
-        Text playersTurn = new Text(setPlayerTurnText(turnCount) + "\n");
-        playersTurn.setFont(TITLE);
-        playersTurn.setFill(Color.PURPLE);
-
-        Text turnCountText = new Text("Turn No. " + turnCount + "/" + totalTurns);
-        turnCountText.setFont(BODY);
-
-        Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
-        sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
-        eagleScoreText.setFont(BODY);
-
-        gameInfo.getChildren().addAll(playersTurn, turnCountText, sharkScoreText, eagleScoreText);
-
+        playersTurn.setText(setPlayerTurnText(turnCount) + "\n");
+        turnCountText.setText("Turn No. " + turnCount + "/" + totalTurns);
+        sharkScoreText.setText("Shark Score: " + decimalFormat.format(sharkScore));
+        eagleScoreText.setText("Eagle Score: " + decimalFormat.format(eagleScore));
     }
 
     public void showPlayerNames(String sharkPlayerName, String eaglePlayerName) {
@@ -132,7 +128,8 @@ public class GameInfoView
         sharkPlayer.setFont(BODY);
         Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
         eaglePlayer.setFont(BODY);
-        gameInfo.getChildren().addAll(sharkPlayer, eaglePlayer);
+        gameInfo.getChildren()
+                .addAll(sharkPlayer, eaglePlayer, playersTurn, turnCountText, sharkScoreText, eagleScoreText);
     }
 
 
@@ -157,6 +154,20 @@ public class GameInfoView
         Text title = new Text("Eagle vs. Shark\n");
         title.setFont(TITLE);
         gameInfo.getChildren().add(title);
+
+        playersTurn = new Text();
+        playersTurn.setFont(TITLE);
+        playersTurn.setFill(Color.PURPLE);
+
+        turnCountText = new Text();
+        turnCountText.setFont(BODY);
+
+        sharkScoreText = new Text();
+        sharkScoreText.setFont(BODY);
+
+        eagleScoreText = new Text();
+        eagleScoreText.setFont(BODY);
+
         this.setTop(gameInfo);
     }
 

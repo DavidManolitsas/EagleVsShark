@@ -34,24 +34,39 @@ public class Game {
     }
 
     public void nextTurn() {
-        incrementTurnCount();
         if (turnCount == TOTAL_TURNS) {
-            //TODO: game ends
+            endGame();
+        } else if (isWinner()) {
+            endGame();
+        } else {
+            incrementTurnCount();
+            listener.gameInfoUpdated(turnCount, sharkSquareCount, eagleSquareCount);
         }
-        listener.gameInfoUpdated(turnCount, sharkSquareCount, eagleSquareCount);
     }
 
-    public void trackPlayerTurn() {
 
+    public boolean isWinner() {
+        if (sharkSquareCount / TOTAL_SQUARES > 0.6) {
+            //sharks win
+            return true;
+        } else if (eagleSquareCount / TOTAL_SQUARES > 0.6) {
+            //eagles win
+            return true;
+        }
+        return false;
+    }
+
+    public void endGame() {
+        if (sharkSquareCount > eagleSquareCount) {
+            //sharks win the game
+        } else {
+            //eagles win the game
+        }
     }
 
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
         this.sharkSquareCount = sharkSquareCount;
         this.eagleSquareCount = eagleSquareCount;
-    }
-
-    public void endGame() {
-
     }
 
     public Board getBoard() {
