@@ -5,7 +5,8 @@ package main.java.model.piece;
  * @project OOSD-A1
  * @date 2020-03-19
  */
-abstract class Eagle extends Piece {
+public abstract class Eagle
+        extends Piece {
 
     public Eagle() {
         super();
