@@ -89,6 +89,7 @@ public class GameInfoView
         ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
         moveList.getItems().removeAll();
         moveList.setItems(moveListObservable);
+        moveList.setStyle("-fx-selection-bar: rgba(255,69,0,0.33)");
 
         // assign name to each Move object
         moveList.setCellFactory(e -> new ListCell<Move>() {
@@ -102,6 +103,7 @@ public class GameInfoView
                     setText("Move " + (moves.indexOf(item) + 1));
                     setTextAlignment(TextAlignment.CENTER);
                     setFont(BODY);
+
                 }
             }
 
