@@ -24,6 +24,13 @@ public class BoardView
         void onSquareClicked(int row, int col);
     }
 
+    public static final String VIEW_ID_PIECE = "piece";
+    public static final String VIEW_ID_PREVIEW = "preview";
+
+    public static final String COLOUR_EAGLE = "#ffebd9";
+    public static final String COLOUR_SHARK = "#3282b8";
+    public static final String COLOUR_NEUTRAL = "#f1f3f4";
+
     private BoardViewEventListener boardViewEventListener;
 
     public BoardView() {
@@ -34,24 +41,40 @@ public class BoardView
     }
 
     //region public BoardView methods
-    public void changeSquareColor(int row, int col) {
-        Node square = getSquareAt(row, col);
-        if (square != null) {
-            square.setStyle("-fx-background-color: red;");
+    public void showMovePreview(Move move) {
+        for (Integer[] position : move.getRoute()) {
+            StackPane square = getSquareAt(position[0], position[1]);
+            if (square != null) {
+                Node route = new StackPane();
+                route.setStyle("-fx-background-color: rgba(51,153,204,0.6);");
+                route.setId(VIEW_ID_PREVIEW);
+                square.getChildren().add(route);
+            }
         }
     }
 
-    public void showMoveRoute(Move move) {
+    public void removeMovePreview(Move move) {
         for (Integer[] position : move.getRoute()) {
-            changeSquareColor(position[0], position[1]);
+            StackPane square = getSquareAt(position[0], position[1]);
+            if (square != null) {
+                square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_PREVIEW));
+            }
         }
     }
     //endregion
 
     //region BoardModelEvent methods
     @Override
-    public void onDataChanged() {
+    public void onPiecePositionUpdated(Move move) {
+        Integer[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
 
+        StackPane start = getSquareAt(startPos[0], startPos[1]);
+        Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);
+        start.getChildren().remove(piece);
+
+        StackPane destination = getSquareAt(destinationPos[0], destinationPos[1]);
+        destination.getChildren().add(piece);
     }
     //endregion
 
@@ -102,12 +125,13 @@ public class BoardView
     private StackPane getSquare(int row, int col) {
         StackPane square = new StackPane();
         String color;
-        if ((row + col) % 2 == 0) {
-            color = "white";
+
+        if (row < 7) {
+            color = COLOUR_SHARK;
         } else {
-            color = "black";
+            color = COLOUR_EAGLE;
         }
-        square.setStyle("-fx-background-color: " + color + ";");
+        square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
         square.setOnMouseClicked(event -> getBoardViewEventListener().onSquareClicked(row, col));
         return square;
     }
@@ -130,6 +154,7 @@ public class BoardView
 
         Image image = new Image(pieceImgPath, 50, 50, true, false);
         ImageView imageView = new ImageView(image);
+        imageView.setId(VIEW_ID_PIECE);
         square.getChildren().add(imageView);
     }
     //endregion

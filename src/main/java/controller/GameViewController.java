@@ -48,7 +48,7 @@ public class GameViewController
 
         if (piece != null) {
             board.setChosenPiece(piece);
-            List<Move> allMoves = piece.getAllMoves(row, col);
+            List<Move> allMoves = piece.getMovesList(row, col);
             gameInfoView.showValidMoveList(allMoves);
         }
     }
@@ -57,16 +57,20 @@ public class GameViewController
     //region GameInfoView Event
     @Override
     public void onMoveListItemClicked(Move move) {
-        if (move == null) {
-            gameInfoView.showError("No move was selected");
-        } else {
-            boardView.showMoveRoute(move);
+        Move lastMove = board.getPreviewMove();
+        if (lastMove != null) {
+            boardView.removeMovePreview(lastMove);
         }
+        boardView.showMovePreview(move);
+        board.setPreviewMove(move);
     }
 
     @Override
     public void onMoveButtonClicked(Move move) {
-        //TODO: implement, I have passed the move from the gameInfoView
+        boardView.removeMovePreview(move);
+        board.setPreviewMove(null);
+
+        board.updatePiecePosition(move);
     }
     //endregion
 }
