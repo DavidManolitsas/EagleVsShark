@@ -21,7 +21,7 @@ public class HarpyEagleMove extends Move {
 
     @Override
     public int[] getFinalPosition() {
-        return super.getFinalPosition();
+        return new int[]{destRow, destCol};
     }
 
     @Override
@@ -32,5 +32,85 @@ public class HarpyEagleMove extends Move {
     @Override
     public List<Integer[]> getRoute() {
         return route;
+    }
+
+    @Override
+    public void checkValid() {
+
+    }
+
+    private void checkAndAttach(){
+        // generate all info base on the direction
+        switch(direction){
+            case "down":
+                break;
+
+            case "up":
+                // execute each command
+                for(String command : COMMANDS){
+                    switch(command){
+                        case "paint":
+                            //paintGeneration();
+                            break;
+                        case "dest":
+                            // record destination coordinate base on the steps and direction
+                            destRow = startRow - squaresMoved;
+                            destCol = startCol;
+                            break;
+                        case "route":
+                            // record route based on the steps and direction
+                            for(int row = startRow; row <= destRow; row--){
+                                route.add(new Integer[]{row, startCol});
+                            }
+                            break;
+                    }
+                }
+                break;
+
+            case "left":
+                break;
+            case "right":
+                break;
+
+            case "diagonal up left":
+                for(String command : COMMANDS) {
+                    switch (command) {
+                        case "paint":
+                            //paintGeneration();
+                            break;
+                        case "dest":
+                            destRow = startRow - squaresMoved;
+                            destCol = startCol - squaresMoved;
+                            break;
+                        case "route":
+                            int col = startCol;
+                            for(int row = startRow; row >= destRow; row--, col-- ){
+                                route.add(new Integer[]{row, col});
+                            }
+                            break;
+                    }
+                }
+                break;
+            case "diagonal up right":
+                for(String command : COMMANDS) {
+                    switch (command) {
+                        case "paint":
+                            //paintGeneration();
+                            break;
+                        case "dest":
+                            destRow = startRow - squaresMoved;
+                            destCol = startCol + squaresMoved;
+                            break;
+                        case "route":
+                            int col = startCol;
+                            for(int row = startRow; row >= destRow; row--, col++ ){
+                                route.add(new Integer[]{row, col});
+                            }
+                            break;
+                    }
+                }
+                break;
+        }
+
     }
 }

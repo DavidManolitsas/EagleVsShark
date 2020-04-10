@@ -3,23 +3,21 @@ package main.java.model.move;
 import java.util.List;
 
 public abstract class Move {
-    private int startRow;
-    private int startCol;
-    private int destRow;
-    private int destCol;
-    private List<Integer[]> paintInfo;
-    private List<Integer[]> route;
+    public static final String PAINT = "paint";
+    public static final String DEST = "dest";
+    public static final String ROUTE = "route";
+    public static final String[] COMMANDS = {DEST, PAINT, ROUTE};
+    protected boolean isValid;
 
-    public List<Integer[]> getPaintInfo() {
-        return paintInfo;
-    }
+    public abstract List<Integer[]> getPaintInfo();
 
-    public List<Integer[]> getRoute(){
-        return route;
-    }
+    public abstract List<Integer[]> getRoute();
 
-    public int[] getFinalPosition(){
-        int[] finalPosition = {destRow, destCol};
-        return finalPosition;
+    public abstract int[] getFinalPosition();
+
+    public abstract void checkValid();
+
+    public boolean isValid(){
+        return isValid;
     }
 }
