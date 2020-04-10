@@ -15,11 +15,13 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
+import main.java.model.piece.Piece;
 
 /**
  * @author David Manolitsas
@@ -49,7 +51,6 @@ public class GameInfoView
     private VBox whoseTurn = new VBox();
     private VBox scoreInfo = new VBox();
     private VBox chosenPiece = new VBox();
-
 
     public GameInfoView() {
         initGameInfo();
@@ -129,6 +130,7 @@ public class GameInfoView
     //start region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo.setSpacing(10);
+        titleInfo.setAlignment(Pos.CENTER);
         drawTitle();
         drawPlayerNames(sharkPlayerName, eaglePlayerName);
         rootGameInfo.getChildren().add(titleInfo);
@@ -153,12 +155,15 @@ public class GameInfoView
     //start region whose turn
     public void initWhoseTurn(int turnCount) {
         whoseTurn.setSpacing(10);
+        whoseTurn.setAlignment(Pos.CENTER);
         drawPlayersTurn(turnCount);
         rootGameInfo.getChildren().add(whoseTurn);
     }
 
     private void drawPlayersTurn(int turnCount) {
         Text playersTurn = new Text(setPlayerTurnText(turnCount) + "\n");
+        playersTurn.setFont(TITLE);
+        playersTurn.setFill(Color.ORANGERED);
         whoseTurn.getChildren().add(playersTurn);
     }
 
@@ -175,6 +180,7 @@ public class GameInfoView
     // start region score info
     public void initScoreInfo(int turnCount, double sharkScore, double eagleScore) {
         scoreInfo.setSpacing(10);
+        scoreInfo.setAlignment(Pos.CENTER);
         drawTurnCount(turnCount);
         drawScores(sharkScore, eagleScore);
 
@@ -183,13 +189,38 @@ public class GameInfoView
 
     public void drawTurnCount(int turnCount) {
         Text turnCountText = new Text("Turn No. " + turnCount + "/" + totalTurns);
+        turnCountText.setFont(BODY);
         scoreInfo.getChildren().add(turnCountText);
     }
 
     private void drawScores(double sharkScore, double eagleScore) {
         Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
+        sharkScoreText.setFont(BODY);
         Text eagleScoreText = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
+        eagleScoreText.setFont(BODY);
         scoreInfo.getChildren().addAll(sharkScoreText, eagleScoreText);
+    }
+    //end region
+
+    //start region chosen piece
+    public void initChosenPiece() {
+        chosenPiece.setSpacing(10);
+        chosenPiece.setAlignment(Pos.CENTER);
+        rootGameInfo.getChildren().add(chosenPiece);
+    }
+
+    public void showChosenPiece(Piece piece) {
+        chosenPiece.getChildren().clear();
+        Text pieceName = new Text("\n" + getPieceName(piece) + " selected");
+        pieceName.setFont(TITLE);
+        pieceName.setFill(Color.ORANGERED);
+        chosenPiece.getChildren().add(pieceName);
+    }
+
+    public String getPieceName(Piece piece) {
+        String name = piece.getClass().getSimpleName();
+        String pieceName = name.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2");
+        return pieceName;
     }
     //end region
 
@@ -199,7 +230,7 @@ public class GameInfoView
         drawPlayersTurn(turnCount);
         drawTurnCount(turnCount);
         drawScores(sharkScore, eagleScore);
-        System.out.println(sharkScore + " " + eagleScore);
+        showChosenPiece(null);
     }
 
     private void clearView() {
@@ -225,6 +256,7 @@ public class GameInfoView
         initWhoseTurn(turnCount);
         initScoreInfo(turnCount, sharkScore, eagleScore);
         initMoveList();
+        initChosenPiece();
     }
 
     @Override

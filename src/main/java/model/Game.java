@@ -133,7 +133,7 @@ public class Game {
     }
 
     public void initGame() {
-        this.sharkSquareCount = 15;
+        this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
         this.turnCount = 1;
 
