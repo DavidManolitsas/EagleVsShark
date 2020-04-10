@@ -55,14 +55,45 @@ public class GameViewController
 
         board.setChosenPiece(piece);
         List<Move> allMoves = piece.getMovesList(row, col);
-        gameInfoView.showValidMoveList(allMoves);
+        gameInfoView.showValidMoveList(getTestMoves(row, col));
         gameInfoView.showChosenPiece(piece);
     }
     //endregion
 
+    private List<Move> getTestMoves(int row, int col) {
+        List<Move> list = new ArrayList<>();
+        list.add(new HammerheadMove(row, col, 1, "") {
+            @Override
+            public List<Integer[]> getRoute() {
+                List<Integer[]> list = new ArrayList<>();
+
+                int[] rows = {row, row - 1, row - 2, row - 3, row - 3, row - 3};
+                int[] cols = {col, col, col, col, col + 1, col - 1};
+
+                for (int i = 0; i < rows.length; i++) {
+                    Integer[] position = new Integer[2];
+                    position[0] = rows[i];
+                    position[1] = cols[i];
+                    list.add(position);
+                }
+                return list;
+            }
+
+            @Override
+            public int[] getFinalPosition() {
+                return new int[] {row - 3, col};
+            }
+        });
+        return new ArrayList<>(list);
+    }
+
     //region GameInfoView Event
     @Override
     public void onMoveListItemClicked(Move move) {
+        if (move == null) {
+            return;
+        }
+
         Move lastMove = board.getPreviewMove();
         if (lastMove != null) {
             boardView.removeMovePreview(lastMove);
@@ -73,11 +104,16 @@ public class GameViewController
 
     @Override
     public void onMoveButtonClicked(Move move) {
-        game.nextTurn();
-        //update board and board view
+        if (move == null) {
+            gameInfoView.showError("No move was selected");
+            return;
+        }
+
         boardView.removeMovePreview(move);
         board.setPreviewMove(null);
         board.updatePiecePosition(move);
+
+        game.nextTurn();
     }
 
 
