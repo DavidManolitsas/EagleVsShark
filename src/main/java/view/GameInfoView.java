@@ -57,7 +57,7 @@ public class GameInfoView
     private ListView<Move> moveList;
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
     private int totalTurns;
-    private int startTime;
+    private Integer startTime;
     private Integer timeRemaining;
     //Game Information components
     private VBox rootGameInfo = new VBox();
@@ -66,7 +66,8 @@ public class GameInfoView
     private VBox scoreInfo = new VBox();
     private VBox chosenPiece = new VBox();
     private VBox movement;
-
+    //timer
+    Timeline time;
 
     public GameInfoView() {
         initGameInfo();
@@ -89,7 +90,6 @@ public class GameInfoView
         this.setBottom(movement);
     }
 
-
     private void drawMoveButton() {
         if (moveList != null) {
             Button moveBt = new Button("Move Piece");
@@ -99,7 +99,11 @@ public class GameInfoView
             moveBt.setPrefWidth(250);
 
             moveBt.setOnAction(event -> {
-                getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
+                //reset the timer
+                time.stop();
+                time = null;
+
+                gameInfoViewEventListener.onMoveButtonClicked(getSelectedMove());
             });
 
             movement.getChildren().add(moveBt);
@@ -203,34 +207,33 @@ public class GameInfoView
     }
 
     private void startTimer() {
-        Text timeRemainingText = new Text(timeRemaining + " seconds\n");
+        Text timeRemainingText = new Text(timeRemaining.toString() + " seconds\n");
         timeRemainingText.setFont(HEADING);
         timeRemainingText.setFill(Color.ORANGERED);
         whoseTurn.getChildren().add(timeRemainingText);
 
-        Timeline time = new Timeline();
+        time = new Timeline();
         time.setCycleCount(startTime);
-
 
         KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent actionEvent) {
+                //decrement time
                 timeRemaining--;
-
+                //draw time remaining
                 timeRemainingText.setText(timeRemaining.toString() + " seconds\n");
-
+                //check if timer has finished
                 if (timeRemaining <= 0) {
                     time.stop();
                     gameInfoViewEventListener.timeRanOut();
                 }
             }
-        });
 
+        });
 
         time.getKeyFrames().add(frame);
         time.playFromStart();
-
     }
 
     public void resetTimer() {
