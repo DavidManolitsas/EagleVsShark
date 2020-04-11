@@ -53,7 +53,7 @@ public class GameInfoView
 
     private static final Font TITLE = Font.font("Impact", 28);
     private static final Font HEADING = Font.font("Helvetica", 18);
-    private static final Font BODY = Font.font("Helvetica", 14);
+    private static final Font BODY = Font.font("Helvetica", 16);
     private ListView<Move> moveList;
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
     private int totalTurns;
@@ -99,10 +99,7 @@ public class GameInfoView
             moveBt.setPrefWidth(250);
 
             moveBt.setOnAction(event -> {
-                //reset the timer
-                time.stop();
-                time = null;
-
+                deleteTimer();
                 gameInfoViewEventListener.onMoveButtonClicked(getSelectedMove());
             });
 
@@ -187,7 +184,7 @@ public class GameInfoView
         whoseTurn.setSpacing(10);
         whoseTurn.setAlignment(Pos.CENTER);
         drawPlayersTurn(turnCount);
-        startTimer();
+        drawTimer();
         rootGameInfo.getChildren().add(whoseTurn);
     }
 
@@ -206,7 +203,7 @@ public class GameInfoView
         }
     }
 
-    private void startTimer() {
+    private void drawTimer() {
         Text timeRemainingText = new Text(timeRemaining.toString() + " seconds\n");
         timeRemainingText.setFont(HEADING);
         timeRemainingText.setFill(Color.ORANGERED);
@@ -295,7 +292,7 @@ public class GameInfoView
         clearView();
         drawPlayersTurn(turnCount);
         resetTimer();
-        startTimer();
+        drawTimer();
         drawTurnCount(turnCount);
         drawScores(sharkScore, eagleScore);
     }
@@ -350,6 +347,22 @@ public class GameInfoView
     @Override
     public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
         updateGameInfo(turnCount, sharkScore, eagleScore);
+    }
+
+    @Override
+    public void stopTimer() {
+        time.stop();
+    }
+
+    @Override
+    public void startTimer() {
+        time.play();
+    }
+
+    @Override
+    public void deleteTimer() {
+        time.stop();
+        time = null;
     }
     //end region
 

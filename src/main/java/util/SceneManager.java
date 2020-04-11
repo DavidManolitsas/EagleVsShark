@@ -12,6 +12,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import main.java.ResPath;
+import main.java.model.Game;
 import main.java.view.HowToPlay;
 
 /**
@@ -44,16 +45,24 @@ public class SceneManager {
     }
 
     public void initMenuBar() {
+        Game game = Game.getInstance();
         MenuBar menu = new MenuBar();
         Menu eagleVsShark = new Menu("Menu");
         MenuItem newGame = new MenuItem("New Game");
         newGame.setOnAction(event -> {
+            game.getListener().deleteTimer();
             showStartMenu();
         });
         MenuItem howTo = new MenuItem("How to play");
         howTo.setOnAction(event -> {
             try {
+                game.getListener().stopTimer();
                 Stage howToStage = new HowToPlay();
+
+                howToStage.setOnHidden(e -> {
+                    game.getListener().startTimer();
+                });
+
                 howToStage.show();
             } catch (FileNotFoundException e) {
                 System.err.println("File not found");

@@ -17,6 +17,13 @@ public class Game {
                              int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore);
 
         void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore);
+
+        //timer functions
+        void stopTimer();
+
+        void startTimer();
+
+        void deleteTimer();
     }
 
     //listener
