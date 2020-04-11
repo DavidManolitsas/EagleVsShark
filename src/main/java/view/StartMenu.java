@@ -1,7 +1,6 @@
 package main.java.view;
 
 
-import java.io.IOException;
 import java.util.Objects;
 
 import javafx.geometry.Insets;
@@ -37,7 +36,7 @@ public class StartMenu
         extends BorderPane {
 
     public interface StartMenuListener {
-        void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit) throws IOException;
+        void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit);
     }
 
     private StartMenuListener startMenuListener;
@@ -114,12 +113,8 @@ public class StartMenu
             String eaglePlayerName = eaglePlayerNameField.getText();
             String sharkPlayerName = sharkPlayerNameField.getText();
             String timeLimit = timeLimitField.getText();
-            try {
-                getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName, timeLimit);
-            } catch (IOException e) {
-                System.err.println("wrong!");
-            }
 
+            getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName, timeLimit);
         });
 
         //Menu
