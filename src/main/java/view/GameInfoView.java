@@ -4,13 +4,19 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
@@ -19,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
@@ -36,30 +43,37 @@ public class GameInfoView
         void onMoveListItemClicked(Move move);
 
         void onMoveButtonClicked(Move move);
+
+        void timeRanOut();
+
+        void nextPlayerTurn();
     }
 
     private GameInfoViewEventListener gameInfoViewEventListener;
 
     private static final Font TITLE = Font.font("Impact", 28);
     private static final Font HEADING = Font.font("Helvetica", 18);
-    private static final Font BODY = Font.font("Helvetica", 14);
+    private static final Font BODY = Font.font("Helvetica", 16);
     private ListView<Move> moveList;
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
     private int totalTurns;
+    private Integer startTime;
+    private Integer timeRemaining;
     //Game Information components
     private VBox rootGameInfo = new VBox();
     private VBox titleInfo = new VBox();
     private VBox whoseTurn = new VBox();
     private VBox scoreInfo = new VBox();
     private VBox chosenPiece = new VBox();
-
+    private VBox movement;
+    //timer
+    Timeline time;
 
     public GameInfoView() {
         initGameInfo();
     }
 
     private void initGameInfo() {
-        rootGameInfo.setPadding(new Insets(40, 20, 40, 20));
         rootGameInfo.setSpacing(10);
         rootGameInfo.setAlignment(Pos.CENTER);
         this.setTop(rootGameInfo);
@@ -67,7 +81,16 @@ public class GameInfoView
 
 
     //start region move list
-    private void drawMoveList() {
+    private void initMovement() {
+        movement = new VBox();
+        moveList = new ListView<>();
+        moveList.setFixedCellSize(50);
+        moveList.setPrefHeight(480);
+        movement.getChildren().add(moveList);
+        this.setBottom(movement);
+    }
+
+    private void drawMoveButton() {
         if (moveList != null) {
             Button moveBt = new Button("Move Piece");
             moveBt.setWrapText(true);
@@ -76,15 +99,18 @@ public class GameInfoView
             moveBt.setPrefWidth(250);
 
             moveBt.setOnAction(event -> {
-                getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
+                deleteTimer();
+                gameInfoViewEventListener.onMoveButtonClicked(getSelectedMove());
             });
 
-            this.setBottom(moveBt);
+            movement.getChildren().add(moveBt);
         }
 
     }
 
     public void showValidMoveList(List<Move> moves) {
+        movement.getChildren().clear();
+        movement.getChildren().add(moveList);
         // update the move list
         ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
         moveList.getItems().removeAll();
@@ -116,18 +142,12 @@ public class GameInfoView
             }
         });
 
-        //redraw game info
-        drawMoveList();
+        drawMoveButton();
+
     }
 
     private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
-    }
-
-    private void initMoveList() {
-        moveList = new ListView<>();
-        moveList.setFixedCellSize(50);
-        this.setCenter(moveList);
     }
     //end region
 
@@ -135,6 +155,7 @@ public class GameInfoView
     //start region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo.setSpacing(10);
+        titleInfo.setPadding(new Insets(30, 0, 0, 0));
         titleInfo.setAlignment(Pos.CENTER);
         drawTitle();
         drawPlayerNames(sharkPlayerName, eaglePlayerName);
@@ -158,27 +179,62 @@ public class GameInfoView
     //end region
 
 
-    //start region whose turn
+    //start region whose turn and timer
     public void initWhoseTurn(int turnCount) {
         whoseTurn.setSpacing(10);
         whoseTurn.setAlignment(Pos.CENTER);
         drawPlayersTurn(turnCount);
+        drawTimer();
         rootGameInfo.getChildren().add(whoseTurn);
     }
 
     private void drawPlayersTurn(int turnCount) {
-        Text playersTurn = new Text(setPlayerTurnText(turnCount) + "\n");
+        Text playersTurn = new Text(getPlayerTurnText(turnCount));
         playersTurn.setFont(HEADING);
         playersTurn.setFill(Color.ORANGERED);
         whoseTurn.getChildren().add(playersTurn);
     }
 
-    private String setPlayerTurnText(int turnCount) {
+    private String getPlayerTurnText(int turnCount) {
         if (turnCount % 2 == 0) {
             return "It's the Eagle's turn!";
         } else {
             return "It's the Shark's turn!";
         }
+    }
+
+    private void drawTimer() {
+        Text timeRemainingText = new Text(timeRemaining.toString() + " seconds\n");
+        timeRemainingText.setFont(HEADING);
+        timeRemainingText.setFill(Color.ORANGERED);
+        whoseTurn.getChildren().add(timeRemainingText);
+
+        time = new Timeline();
+        time.setCycleCount(startTime);
+
+        KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //decrement time
+                timeRemaining--;
+                //draw time remaining
+                timeRemainingText.setText(timeRemaining.toString() + " seconds\n");
+                //check if timer has finished
+                if (timeRemaining <= 0) {
+                    time.stop();
+                    gameInfoViewEventListener.timeRanOut();
+                }
+            }
+
+        });
+
+        time.getKeyFrames().add(frame);
+        time.playFromStart();
+    }
+
+    public void resetTimer() {
+        timeRemaining = startTime;
     }
     //end region
 
@@ -211,6 +267,7 @@ public class GameInfoView
     //start region chosen piece
     public void initChosenPiece() {
         chosenPiece.setSpacing(10);
+        chosenPiece.setPadding(new Insets(0, 0, 15, 0));
         chosenPiece.setAlignment(Pos.CENTER);
         rootGameInfo.getChildren().add(chosenPiece);
     }
@@ -234,6 +291,8 @@ public class GameInfoView
     private void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
         clearView();
         drawPlayersTurn(turnCount);
+        resetTimer();
+        drawTimer();
         drawTurnCount(turnCount);
         drawScores(sharkScore, eagleScore);
     }
@@ -242,8 +301,10 @@ public class GameInfoView
         whoseTurn.getChildren().clear();
         scoreInfo.getChildren().clear();
         chosenPiece.getChildren().clear();
+        movement.getChildren().clear();
+        movement.getChildren().add(moveList);
+        moveList.getItems().clear();
     }
-
 
     public void showError(String message) {
         Alert a = new Alert(AlertType.ERROR);
@@ -251,22 +312,57 @@ public class GameInfoView
         a.show();
     }
 
+    public void showTimeRanOutAlert() {
+        Alert a = new Alert(AlertType.INFORMATION);
+        a.setHeaderText("You ran out of time!");
+        a.setContentText("It's now the next players turn");
+        ButtonType nextTurn = new ButtonType("Next Turn", ButtonBar.ButtonData.OK_DONE);
+        a.getButtonTypes().setAll(nextTurn);
+
+        a.setOnHidden(event -> {
+            gameInfoViewEventListener.nextPlayerTurn();
+        });
+
+        a.show();
+    }
+
+
     //region Game Event
     @Override
     public void gameInitialised(String sharkPlayerName, String eaglePlayerName,
-                                int turnCount, int totalTurns, double sharkScore, double eagleScore) {
+                                int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore) {
 
+        //initialise number of turns and time per turn
         this.totalTurns = totalTurns;
+        this.startTime = turnTime;
+        this.timeRemaining = turnTime;
+        //initialise game information
         initTitleInfo(sharkPlayerName, eaglePlayerName);
         initWhoseTurn(turnCount);
         initScoreInfo(turnCount, sharkScore, eagleScore);
-        initMoveList();
         initChosenPiece();
+        initMovement();
     }
 
     @Override
     public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
         updateGameInfo(turnCount, sharkScore, eagleScore);
+    }
+
+    @Override
+    public void stopTimer() {
+        time.stop();
+    }
+
+    @Override
+    public void startTimer() {
+        time.play();
+    }
+
+    @Override
+    public void deleteTimer() {
+        time.stop();
+        time = null;
     }
     //end region
 

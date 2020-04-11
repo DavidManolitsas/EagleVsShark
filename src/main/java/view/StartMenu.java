@@ -1,7 +1,6 @@
 package main.java.view;
 
 
-import java.io.IOException;
 import java.util.Objects;
 
 import javafx.geometry.Insets;
@@ -37,7 +36,7 @@ public class StartMenu
         extends BorderPane {
 
     public interface StartMenuListener {
-        void onStartBtClick(String sharkPlayerName, String eaglePlayerName) throws IOException;
+        void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit);
     }
 
     private StartMenuListener startMenuListener;
@@ -56,7 +55,7 @@ public class StartMenu
         //Title
         drawTitle();
         //Players and Start Game
-        drawPlayerNames();
+        drawGameDetails();
 
         return root;
     }
@@ -84,14 +83,25 @@ public class StartMenu
         root.setTop(titleBox);
     }
 
-    private void drawPlayerNames() {
+    private void drawGameDetails() {
+        //Shark Player
         Text sharkPlayerText = new Text("Shark Player: ");
         sharkPlayerText.setFont(BODY);
         TextField sharkPlayerNameField = new TextField();
+        sharkPlayerNameField.setFont(BODY);
+        sharkPlayerNameField.setAlignment(Pos.CENTER);
         //Eagle Player
         Text eaglePlayerText = new Text("Eagle Player: ");
         eaglePlayerText.setFont(BODY);
         TextField eaglePlayerNameField = new TextField();
+        eaglePlayerNameField.setFont(BODY);
+        eaglePlayerNameField.setAlignment(Pos.CENTER);
+        //set time limit per turn
+        Text timeLimitText = new Text("Time per turn (seconds): ");
+        timeLimitText.setFont(BODY);
+        TextField timeLimitField = new TextField();
+        timeLimitField.setFont(BODY);
+        timeLimitField.setAlignment(Pos.CENTER);
 
         //Start Game Button
         Button startBt = new Button("Start Game");
@@ -102,12 +112,9 @@ public class StartMenu
 
             String eaglePlayerName = eaglePlayerNameField.getText();
             String sharkPlayerName = sharkPlayerNameField.getText();
-            try {
-                getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName);
-            } catch (IOException e) {
-                System.err.println("wrong!");
-            }
+            String timeLimit = timeLimitField.getText();
 
+            getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName, timeLimit);
         });
 
         //Menu
@@ -115,7 +122,8 @@ public class StartMenu
         menuList.setSpacing(20);
         menuList.setPadding(new Insets(0, 270, 180, 270));
         menuList.getChildren()
-                .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, startBt);
+                .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, timeLimitText,
+                        timeLimitField, startBt);
 
         root.setCenter(menuList);
         menuList.setAlignment(Pos.CENTER);
@@ -139,6 +147,7 @@ public class StartMenu
 
     public void showError(String message) {
         Alert a = new Alert(AlertType.ERROR);
+        a.setHeaderText("Game Setup Incorrect");
         a.setContentText(message);
         a.show();
     }

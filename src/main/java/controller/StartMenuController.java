@@ -23,15 +23,25 @@ public class StartMenuController
         startMenu.setStartMenuListener(this);
     }
 
-    @Override
-    public void onStartBtClick(String sharkPlayerName, String eaglePlayerName) {
 
+    @Override
+    public void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit) {
+        //check all game details are correct
         if (sharkPlayerName.trim().isEmpty() || eaglePlayerName.trim().isEmpty()) {
             startMenu.showError("Enter both player names to start the game");
+        } else if (timeLimit.trim().isEmpty()) {
+            startMenu.showError("Enter a time limit to start the game");
         } else {
-            game = Game.getInstance();
-            game.setPlayers(sharkPlayerName, eaglePlayerName);
-            startMenu.startGame();
+            try {
+                game = Game.getInstance();
+                int turnTime = Integer.parseInt(timeLimit);
+                game.setTurnTime(turnTime);
+                game.setPlayers(sharkPlayerName, eaglePlayerName);
+                startMenu.startGame();
+            } catch (NumberFormatException e) {
+                startMenu.showError("Enter a number as the time limit to continue");
+            }
+
         }
     }
 }
