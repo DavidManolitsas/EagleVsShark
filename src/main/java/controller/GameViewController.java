@@ -69,10 +69,10 @@ public class GameViewController
     @Override
     public void onMoveButtonClicked(Move move) {
         game.nextTurn();
-
-//        boardView.removeMovePreview(move);
-//        board.setPreviewMove(null);
-//        board.updatePiecePosition(move);
+        //update board and board view
+        boardView.removeMovePreview(move);
+        board.setPreviewMove(null);
+        board.updatePiecePosition(move);
     }
 
 
