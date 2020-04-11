@@ -70,10 +70,22 @@ public class GameViewController
     public void onMoveButtonClicked(Move move) {
         game.nextTurn();
 
-        boardView.removeMovePreview(move);
-        board.setPreviewMove(null);
 
-        board.updatePiecePosition(move);
+//        boardView.removeMovePreview(move);
+//        board.setPreviewMove(null);
+//
+//        board.updatePiecePosition(move);
+    }
+
+
+    @Override
+    public void timeRanOut() {
+        gameInfoView.showTimeRanOutAlert();
+    }
+
+    @Override
+    public void nextPlayerTurn() {
+        game.nextTurn();
     }
     //endregion
 }

@@ -37,7 +37,7 @@ public class StartMenu
         extends BorderPane {
 
     public interface StartMenuListener {
-        void onStartBtClick(String sharkPlayerName, String eaglePlayerName) throws IOException;
+        void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit) throws IOException;
     }
 
     private StartMenuListener startMenuListener;
@@ -93,6 +93,11 @@ public class StartMenu
         eaglePlayerText.setFont(BODY);
         TextField eaglePlayerNameField = new TextField();
 
+
+        Text timeLimitText = new Text("Time per turn (seconds): ");
+        timeLimitText.setFont(BODY);
+        TextField timeLimitField = new TextField();
+
         //Start Game Button
         Button startBt = new Button("Start Game");
         startBt.setFont(BODY);
@@ -102,8 +107,9 @@ public class StartMenu
 
             String eaglePlayerName = eaglePlayerNameField.getText();
             String sharkPlayerName = sharkPlayerNameField.getText();
+            String timeLimit = timeLimitField.getText();
             try {
-                getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName);
+                getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName, timeLimit);
             } catch (IOException e) {
                 System.err.println("wrong!");
             }
@@ -115,7 +121,8 @@ public class StartMenu
         menuList.setSpacing(20);
         menuList.setPadding(new Insets(0, 270, 180, 270));
         menuList.getChildren()
-                .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, startBt);
+                .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, timeLimitText,
+                        timeLimitField, startBt);
 
         root.setCenter(menuList);
         menuList.setAlignment(Pos.CENTER);
@@ -139,6 +146,7 @@ public class StartMenu
 
     public void showError(String message) {
         Alert a = new Alert(AlertType.ERROR);
+        a.setHeaderText("Game Setup Incorrect");
         a.setContentText(message);
         a.show();
     }

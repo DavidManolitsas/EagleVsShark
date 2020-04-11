@@ -14,22 +14,23 @@ public class Game {
 
     public interface GameModelEventListener {
         void gameInitialised(String eaglePlayerName, String sharkPlayerName,
-                             int turnCount, int totalTurns, double sharkScore, double eagleScore);
+                             int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore);
 
         void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore);
     }
 
-    private static final double TOTAL_SQUARES = 150;
+    //listener
+    private GameModelEventListener listener;
 
+    private static final double TOTAL_SQUARES = 150;
+    private static final int TOTAL_TURNS = 30;
+    private int turnTime;
     private Board board;
     private Player sharkPlayer;
     private Player eaglePlayer;
     private double sharkSquareCount;
     private double eagleSquareCount;
     private int turnCount;
-    private static final int TOTAL_TURNS = 30;
-
-    private GameModelEventListener listener;
 
     private static final Game INSTANCE = new Game();
 
@@ -115,6 +116,14 @@ public class Game {
         return turnCount;
     }
 
+    public int getTurnTime() {
+        return turnTime;
+    }
+
+    public void setTurnTime(int turnTime) {
+        this.turnTime = turnTime;
+    }
+
     public double getSharkScore() {
         return sharkSquareCount / TOTAL_SQUARES;
     }
@@ -143,6 +152,6 @@ public class Game {
 
         listener.gameInitialised(sharkPlayer.getPlayerName(),
                                  eaglePlayer.getPlayerName(),
-                                 turnCount, TOTAL_TURNS, getSharkScore(), getEagleScore());
+                                 turnCount, TOTAL_TURNS, turnTime, getSharkScore(), getEagleScore());
     }
 }
