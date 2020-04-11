@@ -58,13 +58,14 @@ public class GameInfoView
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
     private int totalTurns;
     private int startTime;
-    private int timeRemaining;
+    private Integer timeRemaining;
     //Game Information components
     private VBox rootGameInfo = new VBox();
     private VBox titleInfo = new VBox();
     private VBox whoseTurn = new VBox();
     private VBox scoreInfo = new VBox();
     private VBox chosenPiece = new VBox();
+    private VBox movement;
 
 
     public GameInfoView() {
@@ -72,7 +73,6 @@ public class GameInfoView
     }
 
     private void initGameInfo() {
-        rootGameInfo.setPadding(new Insets(40, 20, 40, 20));
         rootGameInfo.setSpacing(10);
         rootGameInfo.setAlignment(Pos.CENTER);
         this.setTop(rootGameInfo);
@@ -80,7 +80,17 @@ public class GameInfoView
 
 
     //start region move list
-    private void drawMoveList() {
+    private void initMovement() {
+        movement = new VBox();
+        moveList = new ListView<>();
+        moveList.setFixedCellSize(50);
+        moveList.setPrefHeight(480);
+        movement.getChildren().add(moveList);
+        this.setBottom(movement);
+    }
+
+
+    private void drawMoveButton() {
         if (moveList != null) {
             Button moveBt = new Button("Move Piece");
             moveBt.setWrapText(true);
@@ -92,12 +102,14 @@ public class GameInfoView
                 getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
             });
 
-            this.setBottom(moveBt);
+            movement.getChildren().add(moveBt);
         }
 
     }
 
     public void showValidMoveList(List<Move> moves) {
+        movement.getChildren().clear();
+        movement.getChildren().add(moveList);
         // update the move list
         ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
         moveList.getItems().removeAll();
@@ -129,18 +141,12 @@ public class GameInfoView
             }
         });
 
-        //redraw game info
-        drawMoveList();
+        drawMoveButton();
+
     }
 
     private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
-    }
-
-    private void initMoveList() {
-        moveList = new ListView<>();
-        moveList.setFixedCellSize(50);
-        this.setCenter(moveList);
     }
     //end region
 
@@ -148,6 +154,7 @@ public class GameInfoView
     //start region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo.setSpacing(10);
+        titleInfo.setPadding(new Insets(30, 0, 0, 0));
         titleInfo.setAlignment(Pos.CENTER);
         drawTitle();
         drawPlayerNames(sharkPlayerName, eaglePlayerName);
@@ -181,13 +188,13 @@ public class GameInfoView
     }
 
     private void drawPlayersTurn(int turnCount) {
-        Text playersTurn = new Text(setPlayerTurnText(turnCount));
+        Text playersTurn = new Text(getPlayerTurnText(turnCount));
         playersTurn.setFont(HEADING);
         playersTurn.setFill(Color.ORANGERED);
         whoseTurn.getChildren().add(playersTurn);
     }
 
-    private String setPlayerTurnText(int turnCount) {
+    private String getPlayerTurnText(int turnCount) {
         if (turnCount % 2 == 0) {
             return "It's the Eagle's turn!";
         } else {
@@ -204,11 +211,14 @@ public class GameInfoView
         Timeline time = new Timeline();
         time.setCycleCount(startTime);
 
+
         KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+
             @Override
             public void handle(ActionEvent actionEvent) {
-                timeRemaining -= 1;
-                timeRemainingText.setText(timeRemaining + " seconds\n");
+                timeRemaining--;
+
+                timeRemainingText.setText(timeRemaining.toString() + " seconds\n");
 
                 if (timeRemaining <= 0) {
                     time.stop();
@@ -257,6 +267,7 @@ public class GameInfoView
     //start region chosen piece
     public void initChosenPiece() {
         chosenPiece.setSpacing(10);
+        chosenPiece.setPadding(new Insets(0, 0, 15, 0));
         chosenPiece.setAlignment(Pos.CENTER);
         rootGameInfo.getChildren().add(chosenPiece);
     }
@@ -290,6 +301,9 @@ public class GameInfoView
         whoseTurn.getChildren().clear();
         scoreInfo.getChildren().clear();
         chosenPiece.getChildren().clear();
+        movement.getChildren().clear();
+        movement.getChildren().add(moveList);
+        moveList.getItems().clear();
     }
 
     public void showError(String message) {
@@ -297,7 +311,6 @@ public class GameInfoView
         a.setContentText(message);
         a.show();
     }
-
 
     public void showTimeRanOutAlert() {
         Alert a = new Alert(AlertType.INFORMATION);
@@ -308,7 +321,6 @@ public class GameInfoView
 
         a.setOnHidden(event -> {
             gameInfoViewEventListener.nextPlayerTurn();
-            resetTimer();
         });
 
         a.show();
@@ -328,8 +340,8 @@ public class GameInfoView
         initTitleInfo(sharkPlayerName, eaglePlayerName);
         initWhoseTurn(turnCount);
         initScoreInfo(turnCount, sharkScore, eagleScore);
-        initMoveList();
         initChosenPiece();
+        initMovement();
     }
 
     @Override

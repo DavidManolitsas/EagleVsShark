@@ -70,10 +70,8 @@ public class GameViewController
     public void onMoveButtonClicked(Move move) {
         game.nextTurn();
 
-
 //        boardView.removeMovePreview(move);
 //        board.setPreviewMove(null);
-//
 //        board.updatePiecePosition(move);
     }
 

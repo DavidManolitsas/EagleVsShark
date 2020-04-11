@@ -26,8 +26,7 @@ public class StartMenuController
 
     @Override
     public void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit) {
-        System.out.println(timeLimit);
-
+        //check all game details are correct
         if (sharkPlayerName.trim().isEmpty() || eaglePlayerName.trim().isEmpty()) {
             startMenu.showError("Enter both player names to start the game");
         } else if (timeLimit.trim().isEmpty()) {
