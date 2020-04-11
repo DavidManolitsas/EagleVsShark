@@ -56,7 +56,7 @@ public class StartMenu
         //Title
         drawTitle();
         //Players and Start Game
-        drawPlayerNames();
+        drawGameDetails();
 
         return root;
     }
@@ -84,19 +84,25 @@ public class StartMenu
         root.setTop(titleBox);
     }
 
-    private void drawPlayerNames() {
+    private void drawGameDetails() {
+        //Shark Player
         Text sharkPlayerText = new Text("Shark Player: ");
         sharkPlayerText.setFont(BODY);
         TextField sharkPlayerNameField = new TextField();
+        sharkPlayerNameField.setFont(BODY);
+        sharkPlayerNameField.setAlignment(Pos.CENTER);
         //Eagle Player
         Text eaglePlayerText = new Text("Eagle Player: ");
         eaglePlayerText.setFont(BODY);
         TextField eaglePlayerNameField = new TextField();
-
-
+        eaglePlayerNameField.setFont(BODY);
+        eaglePlayerNameField.setAlignment(Pos.CENTER);
+        //set time limit per turn
         Text timeLimitText = new Text("Time per turn (seconds): ");
         timeLimitText.setFont(BODY);
         TextField timeLimitField = new TextField();
+        timeLimitField.setFont(BODY);
+        timeLimitField.setAlignment(Pos.CENTER);
 
         //Start Game Button
         Button startBt = new Button("Start Game");
