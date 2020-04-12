@@ -60,33 +60,34 @@ public class GameViewController
         boardView.highlightSquare(row, col);
 
         board.setChosenPiece(piece);
-        List<Move> allMoves = piece.getMovesList(row, col);
+//        List<Move> allMoves = piece.getMovesList(row, col);
         gameInfoView.showValidMoveList(getTestMoves(row, col));
         gameInfoView.showChosenPiece(piece);
     }
     //endregion
 
     private List<Move> getTestMoves(int row, int col) {
-        int direction;
+        int directions;
         if (game.getTurnCount() % 2 == 0) {
-            direction = 1;
+            directions = 1;
         } else {
-            direction = -1;
+            directions = -1;
         }
 
         List<Move> list = new ArrayList<>();
         list.add(new HammerheadMove(row, col, 1, "") {
             @Override
-            public List<Integer[]> getRoute() {
-                List<Integer[]> list = new ArrayList<>();
+            public List<int[]> getRoute() {
+                List<int[]> list = new ArrayList<>();
 
 
-                int[] rows = {row, row + direction, row + (2 * direction), row + (3 * direction), row + (3 * direction),
-                        row + (3 * direction)};
+                int[] rows =
+                        {row, row + directions, row + (2 * directions), row + (3 * directions), row + (3 * directions),
+                                row + (3 * directions)};
                 int[] cols = {col, col, col, col, col + 1, col - 1};
 
                 for (int i = 0; i < rows.length; i++) {
-                    Integer[] position = new Integer[2];
+                    int[] position = new int[2];
                     position[0] = rows[i];
                     position[1] = cols[i];
                     list.add(position);
@@ -96,12 +97,12 @@ public class GameViewController
 
             @Override
             public int[] getFinalPosition() {
-                return new int[] {row + 3 * direction, col};
+                return new int[] {row + 3 * directions, col};
             }
 
             @Override
-            public List<Integer[]> getPaintInfo() {
-                List<Integer[]> list = new ArrayList<>();
+            public List<int[]> getPaintInfo() {
+                List<int[]> list = new ArrayList<>();
 
                 int[] rows =
                         {getFinalPosition()[0], getFinalPosition()[0], getFinalPosition()[0],
@@ -111,7 +112,7 @@ public class GameViewController
                         getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1,
                         getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1};
                 for (int i = 0; i < rows.length; i++) {
-                    Integer[] position = new Integer[2];
+                    int[] position = new int[2];
                     position[0] = rows[i];
                     position[1] = cols[i];
                     list.add(position);

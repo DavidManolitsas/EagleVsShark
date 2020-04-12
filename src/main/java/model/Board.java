@@ -46,7 +46,7 @@ public class Board {
     }
 
     public void updatePiecePosition(Move move, Piece piece) {
-        Integer[] startPos = move.getRoute().get(0);
+        int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
 
         Square start = getSquareAt(startPos[0], startPos[1]);
@@ -59,7 +59,7 @@ public class Board {
     }
 
     public void updateTerritory(Move move, Player player) {
-        for (Integer[] position : move.getPaintInfo()) {
+        for (int[] position : move.getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
             square.setOccupiedPlayer(player);
         }

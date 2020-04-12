@@ -116,7 +116,7 @@ public class BoardView
             color = COLOUR_SHARK;
         }
 
-        for (Integer[] position : move.getPaintInfo()) {
+        for (int[] position : move.getPaintInfo()) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
