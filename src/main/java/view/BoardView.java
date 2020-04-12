@@ -31,6 +31,8 @@ public class BoardView
     public static final String COLOUR_SHARK = "#3282b8";
     public static final String COLOUR_NEUTRAL = "#f1f3f4";
 
+    public static final int SQUARE_SIZE = 40;
+
     private BoardViewEventListener boardViewEventListener;
 
     public BoardView() {
@@ -61,6 +63,23 @@ public class BoardView
             }
         }
     }
+
+    public void updateTerritory(Move move, int turnCount) {
+        String color;
+
+        if (turnCount % 2 == 0) {
+            color = COLOUR_EAGLE;
+        } else {
+            color = COLOUR_SHARK;
+        }
+
+        for (Integer[] position : move.getPaintInfo()) {
+            StackPane square = getSquareAt(position[0], position[1]);
+            if (square != null) {
+                square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
+            }
+        }
+    }
     //endregion
 
     //region BoardModelEvent methods
@@ -88,7 +107,7 @@ public class BoardView
         }
 
         for (int i = 0; i < COLUMN; i++) {
-            getColumnConstraints().add(new ColumnConstraints(50,
+            getColumnConstraints().add(new ColumnConstraints(SQUARE_SIZE,
                                                              Control.USE_COMPUTED_SIZE,
                                                              Double.POSITIVE_INFINITY,
                                                              Priority.ALWAYS,
@@ -98,7 +117,7 @@ public class BoardView
 
 
         for (int i = 0; i < ROW; i++) {
-            getRowConstraints().add(new RowConstraints(50,
+            getRowConstraints().add(new RowConstraints(SQUARE_SIZE,
                                                        Control.USE_COMPUTED_SIZE,
                                                        Double.POSITIVE_INFINITY,
                                                        Priority.ALWAYS,
@@ -128,14 +147,7 @@ public class BoardView
 
     private StackPane getSquare(int row, int col) {
         StackPane square = new StackPane();
-        String color;
-
-        if (row < 7) {
-            color = COLOUR_SHARK;
-        } else {
-            color = COLOUR_EAGLE;
-        }
-        square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
+        square.setStyle("-fx-border-color: black; -fx-background-color: " + COLOUR_NEUTRAL + ";");
         square.setOnMouseClicked(event -> getBoardViewEventListener().onSquareClicked(row, col));
         return square;
     }
@@ -156,7 +168,7 @@ public class BoardView
             return;
         }
 
-        Image image = new Image(pieceImgPath, 50, 50, true, false);
+        Image image = new Image(pieceImgPath, SQUARE_SIZE, SQUARE_SIZE, true, false);
         ImageView imageView = new ImageView(image);
         imageView.setId(VIEW_ID_PIECE);
         square.getChildren().add(imageView);

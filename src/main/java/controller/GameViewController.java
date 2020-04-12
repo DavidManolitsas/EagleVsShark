@@ -64,13 +64,22 @@ public class GameViewController
     //endregion
 
     private List<Move> getTestMoves(int row, int col) {
+        int direction;
+        if (game.getTurnCount() % 2 == 0) {
+            direction = -1;
+        } else {
+            direction = 1;
+        }
+
         List<Move> list = new ArrayList<>();
         list.add(new HammerheadMove(row, col, 1, "") {
             @Override
             public List<Integer[]> getRoute() {
                 List<Integer[]> list = new ArrayList<>();
 
-                int[] rows = {row, row - 1, row - 2, row - 3, row - 3, row - 3};
+
+                int[] rows = {row, row + direction, row + (2 * direction), row + (3 * direction), row + (3 * direction),
+                        row + (3 * direction)};
                 int[] cols = {col, col, col, col, col + 1, col - 1};
 
                 for (int i = 0; i < rows.length; i++) {
@@ -84,7 +93,27 @@ public class GameViewController
 
             @Override
             public int[] getFinalPosition() {
-                return new int[] {row - 3, col};
+                return new int[] {row + 3 * direction, col};
+            }
+
+            @Override
+            public List<Integer[]> getPaintInfo() {
+                List<Integer[]> list = new ArrayList<>();
+
+                int[] rows =
+                        {getFinalPosition()[0], getFinalPosition()[0], getFinalPosition()[0],
+                                getFinalPosition()[0] + 1, getFinalPosition()[0] + 1, getFinalPosition()[0] + 1,
+                                getFinalPosition()[0] - 1, getFinalPosition()[0] - 1, getFinalPosition()[0] - 1};
+                int[] cols = {getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1,
+                        getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1,
+                        getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1};
+                for (int i = 0; i < rows.length; i++) {
+                    Integer[] position = new Integer[2];
+                    position[0] = rows[i];
+                    position[1] = cols[i];
+                    list.add(position);
+                }
+                return list;
             }
         });
         return new ArrayList<>(list);
@@ -121,6 +150,7 @@ public class GameViewController
         Player currentPlayer = game.getCurrentPlayer();
         board.updatePiecePosition(move, piece);
         board.updateTerritory(move, currentPlayer);
+        boardView.updateTerritory(move, game.getTurnCount());
 
         game.nextTurn();
     }
