@@ -23,13 +23,14 @@ public class SawSharkMove extends Move {
 
             case "left":
                 break;
+
             case "right":
                 break;
 
             case "diagonal up left":
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             // paint triangle shape
                             for (int i = 0; i < squaresMoved; i++) {
                                 for (int m = i; m > -1; m--) {
@@ -41,12 +42,12 @@ public class SawSharkMove extends Move {
                             }
                             break;
 
-                        case "dest":
+                        case DEST:
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol - squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             // the route will determine after located destination
                             int col = startCol;
                             for (int row = startRow; row >= destination[0]; row--, col--) {
@@ -59,7 +60,7 @@ public class SawSharkMove extends Move {
             case "diagonal up right":
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             // paint triangle shape
                             for (int i = 0; i < squaresMoved; i++) {
                                 for (int m = i; m > -1; m++) {
@@ -71,12 +72,12 @@ public class SawSharkMove extends Move {
                             }
                             break;
 
-                        case "dest":
+                        case DEST:
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol + squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             int col = startCol;
                             for (int row = startRow; row >= destination[0]; row--, col++) {
                                 route.add(new int[]{row, col});

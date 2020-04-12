@@ -10,6 +10,7 @@ public class GoblinSharkMove extends Move {
 
     public GoblinSharkMove(int startRow, int startCol, int squaresMoved, String direction) {
         super(startRow, startCol, squaresMoved, direction);
+        checkAndAttach();
     }
 
 
@@ -26,18 +27,18 @@ public class GoblinSharkMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             // the destination will be check first
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow;
                             destination[1] = startCol - squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             // record route based on the steps and direction
                             for (int col = startCol; col >= destination[1]; col--) {
                                 route.add(new int[]{startRow, col});
@@ -50,18 +51,18 @@ public class GoblinSharkMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             // the destination will be check first
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow;
                             destination[1] = startCol + squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             // record route based on the steps and direction
                             for (int col = startCol; col <= destination[0]; col++) {
                                 route.add(new int[]{startRow, col});
@@ -74,16 +75,16 @@ public class GoblinSharkMove extends Move {
             case "diagonal up left":
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol - squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             int col = startCol;
                             for (int row = startRow; row >= destination[0]; row--, col--) {
                                 route.add(new int[]{row, col});
@@ -95,16 +96,16 @@ public class GoblinSharkMove extends Move {
             case "diagonal up right":
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol + squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             int col = startCol;
                             for (int row = startRow; row >= destination[0]; row--, col++) {
                                 route.add(new int[]{row, col});

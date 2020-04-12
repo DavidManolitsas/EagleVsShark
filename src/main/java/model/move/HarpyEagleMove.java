@@ -17,20 +17,20 @@ public class HarpyEagleMove extends Move {
                 // execute each command
                 for(String command : COMMANDS){
                     switch(command){
-                        case "paint":
+                        case PAINT:
                             paintTrack();
                             // add the two squares at the top of the destination(according to the direction)
                             paintInfo.add(new int[]{destination[0] + 1, destination[1] - 1});
                             paintInfo.add(new int[]{destination[0] + 1, destination[1] + 1});
                             break;
 
-                        case "dest":
+                        case DEST:
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow + squaresMoved;
                             destination[1] = startCol;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             recordRoute();
                             break;
                     }
@@ -42,18 +42,18 @@ public class HarpyEagleMove extends Move {
                 // execute each command
                 for(String command : COMMANDS){
                     switch(command){
-                        case "paint":
+                        case PAINT:
                             paintTrack();
                             // add the two squares at the top of the destination(according to the direction)
                             paintInfo.add(new int[]{destination[0] - 1, destination[1] - 1});
                             paintInfo.add(new int[]{destination[0] - 1, destination[1] + 1});
                             break;
-                        case "dest":
+                        case DEST:
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol;
                             break;
-                        case "route":
+                        case ROUTE:
                             recordRoute();
                             break;
                     }
@@ -64,21 +64,21 @@ public class HarpyEagleMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintTrack();
                             // add the two squares at the top of the destination(according to the direction)
                             paintInfo.add(new int[]{destination[0] + 1, destination[1] - 1});
                             paintInfo.add(new int[]{destination[0] - 1, destination[1] - 1});
                             break;
 
-                        case "dest":
+                        case DEST:
                             // the destination will be check first
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow;
                             destination[1] = startCol - squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             recordRoute();
                             break;
                     }
@@ -89,21 +89,21 @@ public class HarpyEagleMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintTrack();
                             // add the two squares at the top of the destination(according to the direction)
                             paintInfo.add(new int[]{destination[0] + 1, destination[1] + 1});
                             paintInfo.add(new int[]{destination[0] - 1, destination[1] + 1});
                             break;
 
-                        case "dest":
+                        case DEST:
                             // the destination will be check first
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow;
                             destination[1] = startCol + squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             recordRoute();
                             break;
                     }

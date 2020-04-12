@@ -20,15 +20,15 @@ public class HammerheadMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
-                        case "dest":
+                        case DEST:
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol;
                             break;
-                        case "route":
+                        case ROUTE:
                             // record route based on the steps and direction
                             for (int row = startRow; row <= destination[0]; row--) {
                                 route.add(new int[]{row, startCol});
@@ -47,16 +47,16 @@ public class HammerheadMove extends Move {
             case "diagonal up left":
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol - squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             int col = startCol;
                             for (int row = startRow; row >= destination[0]; row--, col--) {
                                 route.add(new int[]{row, col});
@@ -68,16 +68,16 @@ public class HammerheadMove extends Move {
             case "diagonal up right":
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             destination[0] = startRow - squaresMoved;
                             destination[1] = startCol + squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             int col = startCol;
                             for (int row = startRow; row >= destination[0]; row--, col++) {
                                 route.add(new int[]{row, col});

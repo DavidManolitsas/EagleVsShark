@@ -17,18 +17,18 @@ public class BaldEagleMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             // the destination will be check first
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow + squaresMoved;
                             destination[1] = startCol;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             recordRoute();
                             break;
                     }
@@ -42,18 +42,18 @@ public class BaldEagleMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             // the destination will be check first
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow;
                             destination[1] = startCol - squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             recordRoute();
                             break;
                     }
@@ -63,18 +63,18 @@ public class BaldEagleMove extends Move {
                 // execute each command
                 for (String command : COMMANDS) {
                     switch (command) {
-                        case "paint":
+                        case PAINT:
                             paintGeneration();
                             break;
 
-                        case "dest":
+                        case DEST:
                             // the destination will be check first
                             // record destination coordinate base on the steps and direction
                             destination[0] = startRow;
                             destination[1] = startCol + squaresMoved;
                             break;
 
-                        case "route":
+                        case ROUTE:
                             recordRoute();
                             break;
                     }
