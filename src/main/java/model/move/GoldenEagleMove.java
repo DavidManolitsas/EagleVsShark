@@ -7,6 +7,7 @@ public class GoldenEagleMove extends Move {
 
     public GoldenEagleMove(int startRow, int startCol, int[] sharkPos) {
         super(startRow, startCol, 0 , "");
+        this.sharkPos = sharkPos;
         checkAndAttach();
     }
 
