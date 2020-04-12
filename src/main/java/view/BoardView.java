@@ -26,6 +26,7 @@ public class BoardView
 
     public static final String VIEW_ID_PIECE = "piece";
     public static final String VIEW_ID_PREVIEW = "preview";
+    public static final String VIEW_ID_HIGHLIGHT = "highlight";
 
     public static final String COLOUR_EAGLE = "#ffebd9";
     public static final String COLOUR_SHARK = "#3282b8";
@@ -33,6 +34,9 @@ public class BoardView
     public static final String COLOUR_ROUTE_PREVIEW = "rgba(237, 124, 124, 0.37)";
 
     public static final int SQUARE_SIZE = 40;
+
+    private int[] lastHighlightPos = null;
+    private Move lastPreviewMove = null;
 
     private BoardViewEventListener boardViewEventListener;
 
@@ -44,7 +48,39 @@ public class BoardView
     }
 
     //region public BoardView methods
+    public void highlightSquare(int row, int col) {
+        if (lastHighlightPos != null) {
+            removeHighlight();
+        }
+
+        StackPane square = getSquareAt(row, col);
+        Node highlight = new StackPane();
+        highlight.setId(VIEW_ID_HIGHLIGHT);
+        highlight.setStyle("-fx-background-color: " + COLOUR_ROUTE_PREVIEW + ";");
+        square.getChildren().add(highlight);
+
+        lastHighlightPos = new int[] {row, col};
+
+        removeMovePreview();
+    }
+
+    public void removeHighlight() {
+        if (lastHighlightPos == null) {
+            return;
+        }
+
+        StackPane square = getSquareAt(lastHighlightPos[0], lastHighlightPos[1]);
+        if (square != null) {
+            square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_HIGHLIGHT));
+        }
+        lastHighlightPos = null;
+    }
+
     public void showMovePreview(Move move) {
+        if (lastPreviewMove != null) {
+            removeMovePreview();
+        }
+
         for (int[] position : move.getRoute()) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
@@ -54,15 +90,21 @@ public class BoardView
                 square.getChildren().add(route);
             }
         }
+        lastPreviewMove = move;
     }
 
-    public void removeMovePreview(Move move) {
-        for (int[] position : move.getRoute()) {
+    public void removeMovePreview() {
+        if (lastPreviewMove == null) {
+            return;
+        }
+
+        for (int[] position : lastPreviewMove.getRoute()) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_PREVIEW));
             }
         }
+        lastPreviewMove = null;
     }
 
     public void updateTerritory(Move move, int turnCount) {

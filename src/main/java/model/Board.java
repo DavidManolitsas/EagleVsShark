@@ -26,8 +26,6 @@ public class Board {
 
     private Piece chosenPiece = null;
 
-    private Move previewMove = null;
-
     public Board(BoardModelEventListener listener) {
         eventListener = listener;
         initSquare();
@@ -45,14 +43,6 @@ public class Board {
 
     public Piece getChosenPiece() {
         return chosenPiece;
-    }
-
-    public Move getPreviewMove() {
-        return previewMove;
-    }
-
-    public void setPreviewMove(Move previewMove) {
-        this.previewMove = previewMove;
     }
 
     public void updatePiecePosition(Move move, Piece piece) {

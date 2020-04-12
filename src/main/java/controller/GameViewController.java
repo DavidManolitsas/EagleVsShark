@@ -56,6 +56,9 @@ public class GameViewController
             return;
         }
 
+        boardView.removeMovePreview();
+        boardView.highlightSquare(row, col);
+
         board.setChosenPiece(piece);
         List<Move> allMoves = piece.getMovesList(row, col);
         gameInfoView.showValidMoveList(getTestMoves(row, col));
@@ -126,12 +129,7 @@ public class GameViewController
             return;
         }
 
-        Move lastMove = board.getPreviewMove();
-        if (lastMove != null) {
-            boardView.removeMovePreview(lastMove);
-        }
         boardView.showMovePreview(move);
-        board.setPreviewMove(move);
     }
 
     @Override
@@ -142,8 +140,8 @@ public class GameViewController
         }
 
         // Remove preview
-        boardView.removeMovePreview(move);
-        board.setPreviewMove(null);
+        boardView.removeMovePreview();
+        boardView.removeHighlight();
 
         // Update board
         Piece piece = board.getChosenPiece();
