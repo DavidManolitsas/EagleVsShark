@@ -3,6 +3,8 @@ package main.java.controller;
 import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
+import main.java.model.Player;
+import main.java.model.move.HammerheadMove;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.view.BoardView;
@@ -10,6 +12,7 @@ import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,9 +112,15 @@ public class GameViewController
             return;
         }
 
+        // Remove preview
         boardView.removeMovePreview(move);
         board.setPreviewMove(null);
-        board.updatePiecePosition(move);
+
+        // Update board
+        Piece piece = board.getChosenPiece();
+        Player currentPlayer = game.getCurrentPlayer();
+        board.updatePiecePosition(move, piece);
+        board.updateTerritory(move, currentPlayer);
 
         game.nextTurn();
     }

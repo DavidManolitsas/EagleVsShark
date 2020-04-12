@@ -43,6 +43,10 @@ public class Board {
         this.chosenPiece = chosenPiece;
     }
 
+    public Piece getChosenPiece() {
+        return chosenPiece;
+    }
+
     public Move getPreviewMove() {
         return previewMove;
     }
@@ -51,17 +55,24 @@ public class Board {
         this.previewMove = previewMove;
     }
 
-    public void updatePiecePosition(Move move) {
-        int[] startPos = move.getRoute().get(0);
+    public void updatePiecePosition(Move move, Piece piece) {
+        Integer[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
 
         Square start = getSquareAt(startPos[0], startPos[1]);
         start.setPiece(null);
 
         Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
-        destination.setPiece(chosenPiece);
+        destination.setPiece(piece);
 
         eventListener.onPiecePositionUpdated(move);
+    }
+
+    public void updateTerritory(Move move, Player player) {
+        for (Integer[] position : move.getPaintInfo()) {
+            Square square = getSquareAt(position[0], position[1]);
+            square.setOccupiedPlayer(player);
+        }
     }
     //endregion
 

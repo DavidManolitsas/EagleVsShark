@@ -99,6 +99,14 @@ public class Game {
         }
     }
 
+    public Player getCurrentPlayer() {
+        if (turnCount % 2 == 0) {
+            return eaglePlayer;
+        } else {
+            return sharkPlayer;
+        }
+    }
+
     public Board getBoard() {
         return board;
     }
