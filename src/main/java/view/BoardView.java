@@ -108,18 +108,20 @@ public class BoardView
     }
 
     private void drawPieces() {
-        // TODO: Refactor test code
-        int[] row = {0, 14};
-        int[] col = {4, 5, 6};
+        int topRow = 0;
+        int bottomRow = ROW - 1;
+        int[] pieceRows = {topRow, bottomRow};
+        int[] pieceCols = {4, 5, 6};
+
         String[] images = {
                 ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,
-                ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMER_HEARD, ResPath.PIECE_SAW_SHARK
+                ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMERHEAD, ResPath.PIECE_SAW_SHARK
         };
 
         int index = 0;
-        for (int i : row) {
-            for (int j : col) {
-                addPiece(i, j, images[index++]);
+        for (int row : pieceRows) {
+            for (int col : pieceCols) {
+                addPiece(row, col, images[index++]);
             }
         }
     }

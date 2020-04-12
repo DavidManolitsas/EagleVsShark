@@ -16,9 +16,11 @@ public abstract class Piece {
     public static final String DIRECTION_DIAGONAL_UP_RIGHT = "diagonal up right";
     public static final String DIRECTION_DIAGONAL_UP_LEFT = "diagonal up left";
 
-//    private String pieceName;
+    // Initial position of piece
+    private int[] startPos;
 
-    public Piece() {
+    public Piece(int startRow, int startCol) {
+        startPos = new int[] {startRow, startCol};
         allMovesList = new ArrayList<Move>();
     }
 
@@ -31,7 +33,10 @@ public abstract class Piece {
         return allMovesList;
     }
 
-//    public String getPieceName(){
-//        return this.pieceName;
-//    }
+    /**
+     * @return Initial position of the piece
+     */
+    public int[] getStartPos() {
+        return startPos;
+    }
 }

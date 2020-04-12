@@ -6,14 +6,15 @@ import main.java.model.move.Move;
 import java.util.List;
 
 
-public class GoblinShark extends Shark {
+public class GoblinShark
+        extends Shark {
 
     private final int NUM_SQUARES_MOVED = 1;
     // still unsure about movement
     private String[] directions = {DIRECTION_LEFT, DIRECTION_DIAGONAL_UP_LEFT, DIRECTION_DIAGONAL_UP_RIGHT, DIRECTION_RIGHT};
 
-    public GoblinShark() {
-        super();
+    public GoblinShark(int startRow, int startCol) {
+        super(startRow, startCol);
     }
 
     @Override

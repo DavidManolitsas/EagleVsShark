@@ -5,9 +5,14 @@ import main.java.model.move.Move;
 
 import java.util.List;
 
-public class HarpyEagle extends Eagle {
+public class HarpyEagle
+        extends Eagle {
     private final int NUM_SQUARES_MOVED = 3;
     private String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
+
+    public HarpyEagle(int startRow, int startCol) {
+        super(startRow, startCol);
+    }
     // flies forward, back, left or right 3 spaces
     // moves 4 times
 
@@ -16,10 +21,6 @@ public class HarpyEagle extends Eagle {
     // move 2 = [1,4]
     // move 3 = [4, 7]
     // move 4 = [4,1]
-
-    public HarpyEagle() {
-        super();
-    }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {

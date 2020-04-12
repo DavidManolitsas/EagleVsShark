@@ -7,7 +7,7 @@ package main.java.model.piece;
  */
 public abstract class Shark
         extends Piece {
-    public Shark() {
-        super();
+    public Shark(int startRow, int startCol) {
+        super(startRow, startCol);
     }
 }

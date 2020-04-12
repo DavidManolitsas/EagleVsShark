@@ -5,18 +5,19 @@ import main.java.model.move.Move;
 
 import java.util.List;
 
-public class GoldenEagle extends Eagle {
+public class GoldenEagle
+        extends Eagle {
     private List<int[]> sharkPosList;
+
+    public GoldenEagle(int startRow, int startCol) {
+        super(startRow, startCol);
+    }
     // flies to behind any shark
     // 3 movements then
 
     // assume shark1 = [4,4], shark2 = [8,7], shark3 = [10, 4]
     // assume shark pos = [i,j]
     // move behind shark [i-1,j]
-
-    public GoldenEagle() {
-        super();
-    }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
