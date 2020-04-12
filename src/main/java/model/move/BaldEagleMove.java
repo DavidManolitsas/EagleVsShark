@@ -3,34 +3,109 @@ package main.java.model.move;
 import java.util.List;
 
 public class BaldEagleMove extends Move {
-    private int startRow;
-    private int startCol;
-    private int destRow;
-    private int destCol;
-    private int squaresMoved;
-    private String direction;
-    private List<Integer[]> paintInfo;
-    private List<Integer[]> route;
 
     public BaldEagleMove(int startRow, int startCol, int squaresMoved, String direction) {
-        this.startRow = startRow;
-        this.startCol = startCol;
-        this.squaresMoved = squaresMoved;
-        this.direction = direction;
+        super(startRow, startCol, squaresMoved, direction);
+        checkAndAttach();
     }
 
-    @Override
-    public List<Integer[]> getPaintInfo() {
-        return paintInfo;
+    private void checkAndAttach(){
+        // generate all info base on the direction
+        switch (direction) {
+            // forward direction for eagle
+            case "down":
+                // execute each command
+                for (String command : COMMANDS) {
+                    switch (command) {
+                        case PAINT:
+                            paintGeneration();
+                            break;
+
+                        case DEST:
+                            // the destination will be check first
+                            // record destination coordinate base on the steps and direction
+                            destination[0] = startRow + squaresMoved;
+                            destination[1] = startCol;
+                            break;
+
+                        case ROUTE:
+                            recordRoute();
+                            break;
+                    }
+                }
+                break;
+
+            case "up":
+                break;
+
+            case "left":
+                // execute each command
+                for (String command : COMMANDS) {
+                    switch (command) {
+                        case PAINT:
+                            paintGeneration();
+                            break;
+
+                        case DEST:
+                            // the destination will be check first
+                            // record destination coordinate base on the steps and direction
+                            destination[0] = startRow;
+                            destination[1] = startCol - squaresMoved;
+                            break;
+
+                        case ROUTE:
+                            recordRoute();
+                            break;
+                    }
+                }
+                break;
+            case "right":
+                // execute each command
+                for (String command : COMMANDS) {
+                    switch (command) {
+                        case PAINT:
+                            paintGeneration();
+                            break;
+
+                        case DEST:
+                            // the destination will be check first
+                            // record destination coordinate base on the steps and direction
+                            destination[0] = startRow;
+                            destination[1] = startCol + squaresMoved;
+                            break;
+
+                        case ROUTE:
+                            recordRoute();
+                            break;
+                    }
+                }
+                break;
+
+            case "diagonal up left":
+                break;
+
+            case "diagonal up right":
+                break;
+        }
     }
 
-    @Override
-    public int[] getFinalPosition() {
-        return super.getFinalPosition();
+    // record the coordinates for the squares around the piece
+    private void paintGeneration(){
+        // paint the three squares at the top of the piece
+        for (int col = destination[1] - 1; col <= destination[1] + 1; col++) {
+            paintInfo.add(new int[]{destination[0] - 1, col});
+        }
+        // paint the three squares at the bottom of the piece
+        for (int col = destination[1] - 1; col <= destination[1] + 1; col++) {
+            paintInfo.add(new int[]{destination[0] + 1, col});
+        }
+        // paint the two squares on the left and right of the piece
+        paintInfo.add(new int[]{destination[0], destination[1] - 1});
+        paintInfo.add(new int[]{destination[0], destination[1] + 1});
     }
 
-    @Override
-    public List<Integer[]> getRoute() {
-        return route;
+    private void recordRoute(){
+        route.add(new int[]{startRow, startCol});
+        route.add(destination);
     }
 }

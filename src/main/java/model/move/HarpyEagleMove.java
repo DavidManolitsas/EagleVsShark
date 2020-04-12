@@ -3,114 +3,133 @@ package main.java.model.move;
 import java.util.List;
 
 public class HarpyEagleMove extends Move {
-    private int startRow;
-    private int startCol;
-    private int destRow;
-    private int destCol;
-    private int squaresMoved;
-    private String direction;
-    private List<Integer[]> paintInfo;
-    private List<Integer[]> route;
 
     public HarpyEagleMove(int startRow, int startCol, int squaresMoved, String direction) {
-        this.startRow = startRow;
-        this.startCol = startCol;
-        this.squaresMoved = squaresMoved;
-        this.direction = direction;
-    }
-
-    @Override
-    public int[] getFinalPosition() {
-        return new int[]{destRow, destCol};
-    }
-
-    @Override
-    public List<Integer[]> getPaintInfo() {
-        return paintInfo;
-    }
-
-    @Override
-    public List<Integer[]> getRoute() {
-        return route;
-    }
-
-    @Override
-    public void checkValid() {
-
+        super(startRow, startCol, squaresMoved, direction);
+        checkAndAttach();
     }
 
     private void checkAndAttach(){
         // generate all info base on the direction
         switch(direction){
+            // forward direction for eagle
             case "down":
+                // execute each command
+                for(String command : COMMANDS){
+                    switch(command){
+                        case PAINT:
+                            paintTrack();
+                            // add the two squares at the top of the destination(according to the direction)
+                            paintInfo.add(new int[]{destination[0] + 1, destination[1] - 1});
+                            paintInfo.add(new int[]{destination[0] + 1, destination[1] + 1});
+                            break;
+
+                        case DEST:
+                            // record destination coordinate base on the steps and direction
+                            destination[0] = startRow + squaresMoved;
+                            destination[1] = startCol;
+                            break;
+
+                        case ROUTE:
+                            recordRoute();
+                            break;
+                    }
+                }
                 break;
 
+            // back direction for eagle
             case "up":
                 // execute each command
                 for(String command : COMMANDS){
                     switch(command){
-                        case "paint":
-                            //paintGeneration();
+                        case PAINT:
+                            paintTrack();
+                            // add the two squares at the top of the destination(according to the direction)
+                            paintInfo.add(new int[]{destination[0] - 1, destination[1] - 1});
+                            paintInfo.add(new int[]{destination[0] - 1, destination[1] + 1});
                             break;
-                        case "dest":
+                        case DEST:
                             // record destination coordinate base on the steps and direction
-                            destRow = startRow - squaresMoved;
-                            destCol = startCol;
+                            destination[0] = startRow - squaresMoved;
+                            destination[1] = startCol;
                             break;
-                        case "route":
-                            // record route based on the steps and direction
-                            for(int row = startRow; row <= destRow; row--){
-                                route.add(new Integer[]{row, startCol});
-                            }
+                        case ROUTE:
+                            recordRoute();
                             break;
                     }
                 }
                 break;
 
             case "left":
+                // execute each command
+                for (String command : COMMANDS) {
+                    switch (command) {
+                        case PAINT:
+                            paintTrack();
+                            // add the two squares at the top of the destination(according to the direction)
+                            paintInfo.add(new int[]{destination[0] + 1, destination[1] - 1});
+                            paintInfo.add(new int[]{destination[0] - 1, destination[1] - 1});
+                            break;
+
+                        case DEST:
+                            // the destination will be check first
+                            // record destination coordinate base on the steps and direction
+                            destination[0] = startRow;
+                            destination[1] = startCol - squaresMoved;
+                            break;
+
+                        case ROUTE:
+                            recordRoute();
+                            break;
+                    }
+                }
                 break;
+
             case "right":
+                // execute each command
+                for (String command : COMMANDS) {
+                    switch (command) {
+                        case PAINT:
+                            paintTrack();
+                            // add the two squares at the top of the destination(according to the direction)
+                            paintInfo.add(new int[]{destination[0] + 1, destination[1] + 1});
+                            paintInfo.add(new int[]{destination[0] - 1, destination[1] + 1});
+                            break;
+
+                        case DEST:
+                            // the destination will be check first
+                            // record destination coordinate base on the steps and direction
+                            destination[0] = startRow;
+                            destination[1] = startCol + squaresMoved;
+                            break;
+
+                        case ROUTE:
+                            recordRoute();
+                            break;
+                    }
+                }
                 break;
 
             case "diagonal up left":
-                for(String command : COMMANDS) {
-                    switch (command) {
-                        case "paint":
-                            //paintGeneration();
-                            break;
-                        case "dest":
-                            destRow = startRow - squaresMoved;
-                            destCol = startCol - squaresMoved;
-                            break;
-                        case "route":
-                            int col = startCol;
-                            for(int row = startRow; row >= destRow; row--, col-- ){
-                                route.add(new Integer[]{row, col});
-                            }
-                            break;
-                    }
-                }
                 break;
+
             case "diagonal up right":
-                for(String command : COMMANDS) {
-                    switch (command) {
-                        case "paint":
-                            //paintGeneration();
-                            break;
-                        case "dest":
-                            destRow = startRow - squaresMoved;
-                            destCol = startCol + squaresMoved;
-                            break;
-                        case "route":
-                            int col = startCol;
-                            for(int row = startRow; row >= destRow; row--, col++ ){
-                                route.add(new Integer[]{row, col});
-                            }
-                            break;
-                    }
-                }
                 break;
+
         }
 
+    }
+
+    // record the coordinate of the track
+    private void paintTrack(){
+        // copy all the coordinates in route
+        paintInfo.addAll(route);
+        // remove the first element aka the starting point
+        paintInfo.remove(1);
+    }
+
+    private void recordRoute(){
+        route.add(new int[]{startRow, startCol});
+        route.add(destination);
     }
 }
