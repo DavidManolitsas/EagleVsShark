@@ -30,6 +30,7 @@ public class BoardView
     public static final String COLOUR_EAGLE = "#ffebd9";
     public static final String COLOUR_SHARK = "#3282b8";
     public static final String COLOUR_NEUTRAL = "#f1f3f4";
+    public static final String COLOUR_ROUTE_PREVIEW = "rgba(237, 124, 124, 0.37)";
 
     public static final int SQUARE_SIZE = 40;
 
@@ -48,7 +49,7 @@ public class BoardView
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 Node route = new StackPane();
-                route.setStyle("-fx-background-color: rgba(51,153,204,0.6);");
+                route.setStyle("-fx-background-color: " + COLOUR_ROUTE_PREVIEW + ";");
                 route.setId(VIEW_ID_PREVIEW);
                 square.getChildren().add(route);
             }

@@ -66,9 +66,9 @@ public class GameViewController
     private List<Move> getTestMoves(int row, int col) {
         int direction;
         if (game.getTurnCount() % 2 == 0) {
-            direction = -1;
-        } else {
             direction = 1;
+        } else {
+            direction = -1;
         }
 
         List<Move> list = new ArrayList<>();
