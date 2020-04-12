@@ -3,32 +3,34 @@ package main.java.model.move;
 import java.util.List;
 
 public class GoldenEagleMove extends Move {
-    private int startRow;
-    private int startCol;
-    private int destRow;
-    private int destCol;
     private int[] sharkPos = new int[2];
-    private List<Integer[]> paintInfo;
-    private List<Integer[]> route;
 
     public GoldenEagleMove(int startRow, int startCol, int[] sharkPos) {
+        super(startRow, startCol, 0 , "");
         this.startRow = startRow;
         this.startCol = startCol;
         this.sharkPos = sharkPos;
+        checkAndAttach();
     }
 
-    @Override
-    public int[] getFinalPosition() {
-        return super.getFinalPosition();
-    }
+    private void checkAndAttach(){
+        // determine destination based on the shark location
+        destination[0] = sharkPos[0] + 1;
+        destination[1] = sharkPos[1];
 
-    @Override
-    public List<Integer[]> getPaintInfo() {
-        return paintInfo;
-    }
+        // add starting point and destination into route
+        route.add(new int[]{startRow, startCol});
+        route.add(destination);
 
-    @Override
-    public List<Integer[]> getRoute() {
-        return route;
+        // add paint area based on the destination and shark position
+
+        // paint at the destination point
+        paintInfo.add(new int[]{destination[0], destination[1]});
+        // paint on the left and right side of the shark
+        paintInfo.add(new int[]{sharkPos[0], sharkPos[1] - 1});
+        paintInfo.add(new int[]{sharkPos[0], sharkPos[1] + 1});
+        // paint on the left and right behind the destination
+        paintInfo.add(new int[]{destination[0] + 1, destination[1] - 1});
+        paintInfo.add(new int[]{destination[0] + 1, destination[1] + 1});
     }
 }
