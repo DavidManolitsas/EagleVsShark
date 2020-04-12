@@ -42,7 +42,7 @@ public class BoardView
 
     //region public BoardView methods
     public void showMovePreview(Move move) {
-        for (Integer[] position : move.getRoute()) {
+        for (int[] position : move.getRoute()) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 Node route = new StackPane();
@@ -54,7 +54,7 @@ public class BoardView
     }
 
     public void removeMovePreview(Move move) {
-        for (Integer[] position : move.getRoute()) {
+        for (int[] position : move.getRoute()) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_PREVIEW));
@@ -66,7 +66,7 @@ public class BoardView
     //region BoardModelEvent methods
     @Override
     public void onPiecePositionUpdated(Move move) {
-        Integer[] startPos = move.getRoute().get(0);
+        int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
 
         StackPane start = getSquareAt(startPos[0], startPos[1]);

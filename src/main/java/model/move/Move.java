@@ -1,5 +1,6 @@
 package main.java.model.move;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Move {
@@ -13,25 +14,25 @@ public abstract class Move {
     protected int[] destination = new int[2];
     protected int squaresMoved;
     protected String direction;
-    protected List<int[]> paintInfo;
-    protected List<int[]> route;
+    protected List<int[]> paintInfo = new ArrayList<>();
+    protected List<int[]> route = new ArrayList<>();
 
-    protected Move(int startRow, int startCol, int squaresMoved, String direction){
+    protected Move(int startRow, int startCol, int squaresMoved, String direction) {
         this.startRow = startRow;
         this.startCol = startCol;
         this.squaresMoved = squaresMoved;
         this.direction = direction;
     }
 
-    public List<int[]> getPaintInfo(){
+    public List<int[]> getPaintInfo() {
         return paintInfo;
     }
 
-    public List<int[]> getRoute(){
+    public List<int[]> getRoute() {
         return route;
     }
 
-    public int[] getFinalPosition(){
+    public int[] getFinalPosition() {
         return destination;
     }
 }

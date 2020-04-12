@@ -51,7 +51,7 @@ public class Board {
     }
 
     public void updatePiecePosition(Move move) {
-        Integer[] startPos = move.getRoute().get(0);
+        int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
 
         Square start = getSquareAt(startPos[0], startPos[1]);
