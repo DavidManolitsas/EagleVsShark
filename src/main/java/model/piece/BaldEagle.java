@@ -11,7 +11,7 @@ public class BaldEagle extends Eagle {
     private final int MOVE_TWO_SQUARES = 2;
     private final int MOVE_THREE_SQUARES = 3;
 
-    private String[] directions = {DIRECTION_DOWN, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_LEFT};
+    private String[] directions = {DIRECTION_DOWN, DIRECTION_RIGHT, DIRECTION_LEFT};
     private int[] numSquaresMoved = {MOVE_ONE_SQUARE, MOVE_TWO_SQUARES, MOVE_THREE_SQUARES};
 
     public BaldEagle() {
