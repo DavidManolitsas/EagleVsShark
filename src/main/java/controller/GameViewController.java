@@ -7,6 +7,7 @@ import main.java.model.Player;
 import main.java.model.move.HammerheadMove;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
+import main.java.util.MoveValidator;
 import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
@@ -60,8 +61,9 @@ public class GameViewController
         boardView.highlightSquare(row, col);
 
         board.setChosenPiece(piece);
-//        List<Move> allMoves = piece.getMovesList(row, col);
-        gameInfoView.showValidMoveList(getTestMoves(row, col));
+        List<Move> allMoves = piece.getMovesList(row, col);
+        allMoves = MoveValidator.validateMoves(allMoves);
+        gameInfoView.showValidMoveList(allMoves);
         gameInfoView.showChosenPiece(piece);
     }
     //endregion

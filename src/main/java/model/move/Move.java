@@ -28,6 +28,10 @@ public abstract class Move {
         return paintInfo;
     }
 
+    public void setPaintInfo(List<int[]> paintInfo) {
+        this.paintInfo = paintInfo;
+    }
+
     public List<int[]> getRoute() {
         return route;
     }
