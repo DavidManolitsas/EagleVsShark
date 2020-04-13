@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
 import main.java.model.Player;
-import main.java.model.move.HammerheadMove;
 import main.java.model.move.Move;
 import main.java.model.piece.GoldenEagle;
 import main.java.model.piece.Piece;
@@ -14,7 +13,6 @@ import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,63 +71,6 @@ public class GameViewController
         gameInfoView.showChosenPiece(piece);
     }
     //endregion
-
-    private List<Move> getTestMoves(int row, int col) {
-        int directions;
-        if (game.getTurnCount() % 2 == 0) {
-            directions = 1;
-        } else {
-            directions = -1;
-        }
-
-        List<Move> list = new ArrayList<>();
-        list.add(new HammerheadMove(row, col, 1, "") {
-            @Override
-            public List<int[]> getRoute() {
-                List<int[]> list = new ArrayList<>();
-
-
-                int[] rows =
-                        {row, row + directions, row + (2 * directions), row + (3 * directions), row + (3 * directions),
-                                row + (3 * directions)};
-                int[] cols = {col, col, col, col, col + 1, col - 1};
-
-                for (int i = 0; i < rows.length; i++) {
-                    int[] position = new int[2];
-                    position[0] = rows[i];
-                    position[1] = cols[i];
-                    list.add(position);
-                }
-                return list;
-            }
-
-            @Override
-            public int[] getFinalPosition() {
-                return new int[] {row + 3 * directions, col};
-            }
-
-            @Override
-            public List<int[]> getPaintInfo() {
-                List<int[]> list = new ArrayList<>();
-
-                int[] rows =
-                        {getFinalPosition()[0], getFinalPosition()[0], getFinalPosition()[0],
-                                getFinalPosition()[0] + 1, getFinalPosition()[0] + 1, getFinalPosition()[0] + 1,
-                                getFinalPosition()[0] - 1, getFinalPosition()[0] - 1, getFinalPosition()[0] - 1};
-                int[] cols = {getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1,
-                        getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1,
-                        getFinalPosition()[1], getFinalPosition()[1] + 1, getFinalPosition()[1] - 1};
-                for (int i = 0; i < rows.length; i++) {
-                    int[] position = new int[2];
-                    position[0] = rows[i];
-                    position[1] = cols[i];
-                    list.add(position);
-                }
-                return list;
-            }
-        });
-        return new ArrayList<>(list);
-    }
 
     //region GameInfoView Event
     @Override
