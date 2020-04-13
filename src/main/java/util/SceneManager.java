@@ -50,17 +50,23 @@ public class SceneManager {
         Menu eagleVsShark = new Menu("Menu");
         MenuItem newGame = new MenuItem("New Game");
         newGame.setOnAction(event -> {
-            game.getListener().deleteTimer();
+            if (game.getListener() != null) {
+                game.getListener().deleteTimer();
+            }
             showStartMenu();
         });
         MenuItem howTo = new MenuItem("How to play");
         howTo.setOnAction(event -> {
             try {
-                game.getListener().stopTimer();
+                if (game.getListener() != null) {
+                    game.getListener().stopTimer();
+                }
                 Stage howToStage = new HowToPlay();
 
                 howToStage.setOnHidden(e -> {
-                    game.getListener().startTimer();
+                    if (game.getListener() != null) {
+                        game.getListener().startTimer();
+                    }
                 });
 
                 howToStage.show();
