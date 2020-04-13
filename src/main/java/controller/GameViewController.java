@@ -6,6 +6,7 @@ import main.java.model.Game;
 import main.java.model.Player;
 import main.java.model.move.HammerheadMove;
 import main.java.model.move.Move;
+import main.java.model.piece.GoldenEagle;
 import main.java.model.piece.Piece;
 import main.java.util.MoveValidator;
 import main.java.view.BoardView;
@@ -55,6 +56,11 @@ public class GameViewController
 
         if (!game.pieceBelongsToPlayer(piece)) {
             return;
+        }
+
+        if (piece instanceof GoldenEagle) {
+            List<int[]> sharksPositions = board.getSharksPositions();
+            ((GoldenEagle) piece).setSharkList(sharksPositions);
         }
 
         boardView.removeMovePreview();

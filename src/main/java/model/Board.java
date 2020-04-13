@@ -3,7 +3,9 @@ package main.java.model;
 import main.java.model.move.Move;
 import main.java.model.piece.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,6 +56,7 @@ public class Board {
 
         Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
         destination.setPiece(piece);
+        pieceSquareMap.put(piece, destination);
 
         eventListener.onPiecePositionUpdated(move);
     }
@@ -64,13 +67,27 @@ public class Board {
             square.setOccupiedPlayer(player);
         }
     }
+
+    public List<int[]> getSharksPositions() {
+        List<int[]> list = new ArrayList<>();
+
+        for (Piece piece : pieceSquareMap.keySet()) {
+            if (piece instanceof Shark) {
+                Square square = pieceSquareMap.get(piece);
+                int row = square.getRow();
+                int col = square.getCol();
+                list.add(new int[] {row, col});
+            }
+        }
+        return list;
+    }
     //endregion
 
     //region private methods
     private void initSquare() {
         for (int row = 0; row < ROW; row++) {
             for (int col = 0; col < COLUMN; col++) {
-                Square square = new Square();
+                Square square = new Square(row, col);
                 squares[row][col] = square;
             }
         }
