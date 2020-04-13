@@ -5,14 +5,14 @@ import main.java.model.move.SawSharkMove;
 
 import java.util.List;
 
-public class SawShark extends Shark {
+public class SawShark
+        extends Shark {
 
     private final int NUM_SQUARES_MOVED = 2;
     private String[] directions = {DIRECTION_DIAGONAL_UP_RIGHT, DIRECTION_DIAGONAL_UP_LEFT};
 
-    public SawShark() {
-        super();
-
+    public SawShark(int startRow, int startCol) {
+        super(startRow, startCol);
     }
 
     @Override

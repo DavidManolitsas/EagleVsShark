@@ -3,7 +3,9 @@ package main.java.model;
 import main.java.model.move.Move;
 import main.java.model.piece.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,11 +28,10 @@ public class Board {
 
     private Piece chosenPiece = null;
 
-    private Move previewMove = null;
-
     public Board(BoardModelEventListener listener) {
         eventListener = listener;
         initSquare();
+        initPieces();
     }
 
     //region public Board methods
@@ -42,15 +43,11 @@ public class Board {
         this.chosenPiece = chosenPiece;
     }
 
-    public Move getPreviewMove() {
-        return previewMove;
+    public Piece getChosenPiece() {
+        return chosenPiece;
     }
 
-    public void setPreviewMove(Move previewMove) {
-        this.previewMove = previewMove;
-    }
-
-    public void updatePiecePosition(Move move) {
+    public void updatePiecePosition(Move move, Piece piece) {
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
 
@@ -58,44 +55,64 @@ public class Board {
         start.setPiece(null);
 
         Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
-        destination.setPiece(chosenPiece);
+        destination.setPiece(piece);
+        pieceSquareMap.put(piece, destination);
 
         eventListener.onPiecePositionUpdated(move);
     }
 
+    public void updateTerritory(Move move, Player player) {
+        for (int[] position : move.getPaintInfo()) {
+            Square square = getSquareAt(position[0], position[1]);
+            square.setOccupiedPlayer(player);
+        }
+    }
+
+    public List<int[]> getSharksPositions() {
+        List<int[]> list = new ArrayList<>();
+
+        for (Piece piece : pieceSquareMap.keySet()) {
+            if (piece instanceof Shark) {
+                Square square = pieceSquareMap.get(piece);
+                int row = square.getRow();
+                int col = square.getCol();
+                list.add(new int[] {row, col});
+            }
+        }
+        return list;
+    }
     //endregion
 
     //region private methods
     private void initSquare() {
         for (int row = 0; row < ROW; row++) {
             for (int col = 0; col < COLUMN; col++) {
-                Square square = new Square();
-
-                // TODO: Refactor test code
-                Piece piece = null;
-                if (row == 0) {
-                    if (col == 4) {
-                        piece = new GoblinShark();
-                    } else if (col == 5) {
-                        piece = new Hammerhead();
-                    } else if (col == 6) {
-                        piece = new SawShark();
-                    }
-                } else if (row == 14) {
-                    if (col == 4) {
-                        piece = new BaldEagle();
-                    } else if (col == 5) {
-                        piece = new GoldenEagle();
-                    } else if (col == 6) {
-                        piece = new HarpyEagle();
-                    }
-                }
-
-                if (piece != null) {
-                    square.setPiece(piece);
-                }
+                Square square = new Square(row, col);
                 squares[row][col] = square;
             }
+        }
+    }
+
+    private void initPieces() {
+        int topRow = 0;
+        int bottomRow = ROW - 1;
+        int[] pieceCols = {4, 5, 6};
+
+        // Adding pieces by order
+        Piece[] pieces = {
+                new BaldEagle(topRow, pieceCols[0]),
+                new GoldenEagle(topRow, pieceCols[1]),
+                new HarpyEagle(topRow, pieceCols[2]),
+                new GoblinShark(bottomRow, pieceCols[0]),
+                new Hammerhead(bottomRow, pieceCols[1]),
+                new SawShark(bottomRow, pieceCols[2]),
+        };
+
+        for (Piece piece : pieces) {
+            int[] pos = piece.getStartPos();
+            Square square = getSquareAt(pos[0], pos[1]);
+            square.setPiece(piece);
+            pieceSquareMap.put(piece, square);
         }
     }
 

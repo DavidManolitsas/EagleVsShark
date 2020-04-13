@@ -26,10 +26,17 @@ public class BoardView
 
     public static final String VIEW_ID_PIECE = "piece";
     public static final String VIEW_ID_PREVIEW = "preview";
+    public static final String VIEW_ID_HIGHLIGHT = "highlight";
 
     public static final String COLOUR_EAGLE = "#ffebd9";
     public static final String COLOUR_SHARK = "#3282b8";
     public static final String COLOUR_NEUTRAL = "#f1f3f4";
+    public static final String COLOUR_ROUTE_PREVIEW = "rgba(237, 124, 124, 0.37)";
+
+    public static final int SQUARE_SIZE = 40;
+
+    private int[] lastHighlightPos = null;
+    private Move lastPreviewMove = null;
 
     private BoardViewEventListener boardViewEventListener;
 
@@ -41,23 +48,78 @@ public class BoardView
     }
 
     //region public BoardView methods
+    public void highlightSquare(int row, int col) {
+        if (lastHighlightPos != null) {
+            removeHighlight();
+        }
+
+        StackPane square = getSquareAt(row, col);
+        Node highlight = new StackPane();
+        highlight.setId(VIEW_ID_HIGHLIGHT);
+        highlight.setStyle("-fx-background-color: " + COLOUR_ROUTE_PREVIEW + ";");
+        square.getChildren().add(highlight);
+
+        lastHighlightPos = new int[] {row, col};
+
+        removeMovePreview();
+    }
+
+    public void removeHighlight() {
+        if (lastHighlightPos == null) {
+            return;
+        }
+
+        StackPane square = getSquareAt(lastHighlightPos[0], lastHighlightPos[1]);
+        if (square != null) {
+            square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_HIGHLIGHT));
+        }
+        lastHighlightPos = null;
+    }
+
     public void showMovePreview(Move move) {
+        if (lastPreviewMove != null) {
+            removeMovePreview();
+        }
+
         for (int[] position : move.getRoute()) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 Node route = new StackPane();
-                route.setStyle("-fx-background-color: rgba(51,153,204,0.6);");
+                route.setStyle("-fx-background-color: " + COLOUR_ROUTE_PREVIEW + ";");
                 route.setId(VIEW_ID_PREVIEW);
                 square.getChildren().add(route);
             }
         }
+        lastPreviewMove = move;
     }
 
-    public void removeMovePreview(Move move) {
-        for (int[] position : move.getRoute()) {
+    public void removeMovePreview() {
+        if (lastPreviewMove == null) {
+            return;
+        }
+
+        for (int[] position : lastPreviewMove.getRoute()) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_PREVIEW));
+            }
+        }
+        lastPreviewMove = null;
+    }
+
+    public void updateTerritory(Move move, int turnCount) {
+        String color;
+
+        if (turnCount % 2 == 0) {
+            color = COLOUR_EAGLE;
+        } else {
+            color = COLOUR_SHARK;
+        }
+
+        for (int[] position : move.getPaintInfo()) {
+            StackPane square = getSquareAt(position[0], position[1]);
+            if (square != null) {
+                square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
             }
         }
     }
@@ -88,7 +150,7 @@ public class BoardView
         }
 
         for (int i = 0; i < COLUMN; i++) {
-            getColumnConstraints().add(new ColumnConstraints(50,
+            getColumnConstraints().add(new ColumnConstraints(SQUARE_SIZE,
                                                              Control.USE_COMPUTED_SIZE,
                                                              Double.POSITIVE_INFINITY,
                                                              Priority.ALWAYS,
@@ -98,7 +160,7 @@ public class BoardView
 
 
         for (int i = 0; i < ROW; i++) {
-            getRowConstraints().add(new RowConstraints(50,
+            getRowConstraints().add(new RowConstraints(SQUARE_SIZE,
                                                        Control.USE_COMPUTED_SIZE,
                                                        Double.POSITIVE_INFINITY,
                                                        Priority.ALWAYS,
@@ -108,30 +170,27 @@ public class BoardView
     }
 
     private void drawPieces() {
-        // TODO: Refactor test code
-        int[] row = {0, 14};
-        int[] col = {4, 5, 6};
-        String[] images = {ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMER_HEARD, ResPath.PIECE_SAW_SHARK,
-                ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,};
+        int topRow = 0;
+        int bottomRow = ROW - 1;
+        int[] pieceRows = {topRow, bottomRow};
+        int[] pieceCols = {4, 5, 6};
+
+        String[] images = {
+                ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,
+                ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMERHEAD, ResPath.PIECE_SAW_SHARK
+        };
 
         int index = 0;
-        for (int i : row) {
-            for (int j : col) {
-                addPiece(i, j, images[index++]);
+        for (int row : pieceRows) {
+            for (int col : pieceCols) {
+                addPiece(row, col, images[index++]);
             }
         }
     }
 
     private StackPane getSquare(int row, int col) {
         StackPane square = new StackPane();
-        String color;
-
-        if (row < 7) {
-            color = COLOUR_SHARK;
-        } else {
-            color = COLOUR_EAGLE;
-        }
-        square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
+        square.setStyle("-fx-border-color: black; -fx-background-color: " + COLOUR_NEUTRAL + ";");
         square.setOnMouseClicked(event -> getBoardViewEventListener().onSquareClicked(row, col));
         return square;
     }
@@ -152,7 +211,7 @@ public class BoardView
             return;
         }
 
-        Image image = new Image(pieceImgPath, 50, 50, true, false);
+        Image image = new Image(pieceImgPath, SQUARE_SIZE, SQUARE_SIZE, true, false);
         ImageView imageView = new ImageView(image);
         imageView.setId(VIEW_ID_PIECE);
         square.getChildren().add(imageView);

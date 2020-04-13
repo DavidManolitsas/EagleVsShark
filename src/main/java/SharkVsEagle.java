@@ -2,6 +2,7 @@ package main.java;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import main.java.model.Game;
 import main.java.util.SceneManager;
 
 /**
@@ -10,6 +11,8 @@ import main.java.util.SceneManager;
  */
 public class SharkVsEagle
         extends Application {
+
+    public static final boolean isDebug = true;
 
     public static final int WINDOW_WIDTH = 900;
     public static final int WINDOW_HEIGHT = 900;
@@ -29,11 +32,23 @@ public class SharkVsEagle
 
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.init(primaryStage);
-        sceneManager.showStartMenu();
+
+        if (SharkVsEagle.isDebug) {
+            Game game = Game.getInstance();
+            game.setTurnTime(60);
+            game.setPlayers("Shark", "Eagle");
+            sceneManager.showGameView();
+        } else {
+            sceneManager.showStartMenu();
+        }
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void skipStartMenu() {
+
     }
 
 }
