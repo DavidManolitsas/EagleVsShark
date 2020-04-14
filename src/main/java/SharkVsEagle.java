@@ -15,7 +15,7 @@ public class SharkVsEagle
     public static final boolean isDebug = true;
 
     public static final int WINDOW_WIDTH = 800;
-    public static final int WINDOW_HEIGHT = 800;
+    public static final int WINDOW_HEIGHT = 651;
     private static final String APP_NAME = "Eagle vs Shark";
 
     @Override

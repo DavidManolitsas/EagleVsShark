@@ -51,9 +51,9 @@ public class GameInfoView
 
     private GameInfoViewEventListener gameInfoViewEventListener;
 
-    private static final Font TITLE = Font.font("Impact", 28);
-    private static final Font HEADING = Font.font("Helvetica", 18);
-    private static final Font BODY = Font.font("Helvetica", 16);
+    private static final Font TITLE = Font.font("Impact", 24);
+    private static final Font HEADING = Font.font("Helvetica", 16);
+    private static final Font BODY = Font.font("Helvetica", 14);
     private ListView<Move> moveList;
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
     private int totalTurns;
@@ -85,9 +85,9 @@ public class GameInfoView
         movement = new VBox();
         moveList = new ListView<>();
         moveList.setFixedCellSize(50);
-        moveList.setPrefHeight(350);
+        moveList.setPrefHeight(263);
         movement.getChildren().add(moveList);
-        this.setBottom(movement);
+        this.setCenter(movement);
     }
 
     private void drawMoveButton() {
@@ -155,7 +155,7 @@ public class GameInfoView
     //start region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo.setSpacing(10);
-        titleInfo.setPadding(new Insets(30, 0, 0, 0));
+        titleInfo.setPadding(new Insets(15, 0, 0, 0));
         titleInfo.setAlignment(Pos.CENTER);
         drawTitle();
         drawPlayerNames(sharkPlayerName, eaglePlayerName);
