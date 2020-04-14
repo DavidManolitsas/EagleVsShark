@@ -85,7 +85,7 @@ public class GameInfoView
         movement = new VBox();
         moveList = new ListView<>();
         moveList.setFixedCellSize(50);
-        moveList.setPrefHeight(480);
+        moveList.setPrefHeight(470);
         movement.getChildren().add(moveList);
         this.setBottom(movement);
     }
@@ -269,7 +269,15 @@ public class GameInfoView
         chosenPiece.setSpacing(10);
         chosenPiece.setPadding(new Insets(0, 0, 15, 0));
         chosenPiece.setAlignment(Pos.CENTER);
+        drawChoosePiece();
         rootGameInfo.getChildren().add(chosenPiece);
+    }
+
+    public void drawChoosePiece() {
+        Text choosePieceText = new Text("\nChoose a piece to move");
+        choosePieceText.setFont(HEADING);
+        choosePieceText.setFill(Color.ORANGERED);
+        chosenPiece.getChildren().add(choosePieceText);
     }
 
     public void showChosenPiece(Piece piece) {
@@ -295,6 +303,7 @@ public class GameInfoView
         drawTimer();
         drawTurnCount(turnCount);
         drawScores(sharkScore, eagleScore);
+        drawChoosePiece();
     }
 
     private void clearView() {
