@@ -48,7 +48,8 @@ public class GameViewController
     @Override
     public void onSquareClicked(int row, int col) {
         Piece piece = board.getPiece(row, col);
-        if (piece == null) {
+        Piece prevChosenPiece = board.getChosenPiece();
+        if (piece == null || piece == prevChosenPiece) {
             return;
         }
 
