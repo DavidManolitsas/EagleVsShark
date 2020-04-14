@@ -20,13 +20,14 @@ public abstract class Piece {
     private int[] startPos;
 
     public Piece(int startRow, int startCol) {
-        startPos = new int[] {startRow, startCol};
+        startPos = new int[]{startRow, startCol};
+        allMovesList = new ArrayList<Move>();
     }
 
     protected abstract List<Move> getAllMoves(int startRow, int startCol);
 
     public List<Move> getMovesList(int startRow, int startCol) {
-        allMovesList = new ArrayList<Move>();
+        allMovesList.clear();
         getAllMoves(startRow, startCol);
         return allMovesList;
     }
