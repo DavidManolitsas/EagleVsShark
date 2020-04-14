@@ -34,6 +34,7 @@ public class BoardView
     public static final String COLOUR_ROUTE_PREVIEW = "rgba(237, 124, 124, 0.37)";
 
     public static final int SQUARE_SIZE = 40;
+    public static final int PIECE_SIZE = 35;
 
     private int[] lastHighlightPos = null;
     private Move lastPreviewMove = null;
@@ -162,7 +163,7 @@ public class BoardView
         for (int i = 0; i < ROW; i++) {
             getRowConstraints().add(new RowConstraints(SQUARE_SIZE,
                                                        Control.USE_COMPUTED_SIZE,
-                                                       Double.POSITIVE_INFINITY,
+                                                       SQUARE_SIZE,
                                                        Priority.ALWAYS,
                                                        VPos.CENTER,
                                                        true));
@@ -211,7 +212,7 @@ public class BoardView
             return;
         }
 
-        Image image = new Image(pieceImgPath, SQUARE_SIZE, SQUARE_SIZE, true, false);
+        Image image = new Image(pieceImgPath, PIECE_SIZE, PIECE_SIZE, true, false);
         ImageView imageView = new ImageView(image);
         imageView.setId(VIEW_ID_PIECE);
         square.getChildren().add(imageView);
