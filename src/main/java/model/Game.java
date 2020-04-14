@@ -32,7 +32,6 @@ public class Game {
     private static final double TOTAL_SQUARES = 150;
     private static final int TOTAL_TURNS = 30;
     private int turnTime;
-    private Board board;
     private Player sharkPlayer;
     private Player eaglePlayer;
     private double sharkSquareCount;
@@ -105,14 +104,6 @@ public class Game {
         } else {
             return sharkPlayer;
         }
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
     }
 
     public Player getSharkPlayer() {

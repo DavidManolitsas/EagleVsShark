@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import java.util.List;
+
 import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
@@ -12,8 +14,6 @@ import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
-
-import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -101,9 +101,11 @@ public class GameViewController
         board.updateTerritory(move, currentPlayer);
         boardView.updateTerritory(move, game.getTurnCount());
 
+        //the player moved their piece, change to next players turn
+        //TODO: add this to update the score each turn
+//        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
         game.nextTurn();
     }
-
 
     @Override
     public void timeRanOut() {
@@ -112,6 +114,7 @@ public class GameViewController
 
     @Override
     public void nextPlayerTurn() {
+        //the player ran out of time, change to next players turn
         game.nextTurn();
     }
     //endregion
