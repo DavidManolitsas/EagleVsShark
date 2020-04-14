@@ -3,6 +3,7 @@ package main.java.model.move;
 import java.util.List;
 
 public class SawSharkMove extends Move {
+    private int calculation = 0;
 
     public SawSharkMove(int startRow, int startCol, int squaresMoved, String direction) {
         super(startRow, startCol, squaresMoved, direction);
@@ -35,9 +36,7 @@ public class SawSharkMove extends Move {
                             for (int i = 0; i < squaresMoved; i++) {
                                 for (int m = i; m > -1; m--) {
                                     // check if the square is on the board
-                                    if (startRow - i >= 0 && startCol - m >= 0) {
-                                        paintInfo.add(new int[]{startRow - i, startCol - m});
-                                    }
+                                    paintInfo.add(new int[]{startRow - i, startCol - m});
                                 }
                             }
                             break;
@@ -63,11 +62,9 @@ public class SawSharkMove extends Move {
                         case PAINT:
                             // paint triangle shape
                             for (int i = 0; i < squaresMoved; i++) {
-                                for (int m = i; m > -1; m++) {
+                                for (int m = i; m > -1; m--) {
                                     // check if the square is on the board
-                                    if (startRow - i >= 0 && startCol - m >= 0) {
-                                        paintInfo.add(new int[]{startRow - i, startCol + m});
-                                    }
+                                    paintInfo.add(new int[]{startRow - i, startCol + m});
                                 }
                             }
                             break;

@@ -125,7 +125,7 @@ public class HarpyEagleMove extends Move {
         // copy all the coordinates in route
         paintInfo.addAll(route);
         // remove the first element aka the starting point
-        paintInfo.remove(1);
+        paintInfo.remove(0);
     }
 
     private void recordRoute(){

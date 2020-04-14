@@ -30,7 +30,7 @@ public class HammerheadMove extends Move {
                             break;
                         case ROUTE:
                             // record route based on the steps and direction
-                            for (int row = startRow; row <= destination[0]; row--) {
+                            for (int row = startRow; row >= destination[0]; row--) {
                                 route.add(new int[]{row, startCol});
                             }
                             break;
