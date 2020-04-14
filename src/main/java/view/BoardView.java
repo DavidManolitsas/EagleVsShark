@@ -34,7 +34,7 @@ public class BoardView
     public static final String COLOUR_ROUTE_PREVIEW = "rgba(237, 124, 124, 0.37)";
 
     public static final int SQUARE_SIZE = 40;
-    public static final int PIECE_SIZE = 35;
+    public static final int PIECE_SIZE = 38;
 
     private int[] lastHighlightPos = null;
     private Move lastPreviewMove = null;
