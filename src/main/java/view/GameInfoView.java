@@ -85,7 +85,7 @@ public class GameInfoView
         movement = new VBox();
         moveList = new ListView<>();
         moveList.setFixedCellSize(50);
-        moveList.setPrefHeight(360);
+        moveList.setPrefHeight(350);
         movement.getChildren().add(moveList);
         this.setBottom(movement);
     }
