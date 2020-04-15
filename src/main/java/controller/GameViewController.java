@@ -1,7 +1,5 @@
 package main.java.controller;
 
-import java.util.List;
-
 import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
@@ -9,11 +7,12 @@ import main.java.model.Player;
 import main.java.model.move.Move;
 import main.java.model.piece.GoldenEagle;
 import main.java.model.piece.Piece;
-import main.java.util.MoveValidator;
 import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
+
+import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -66,9 +65,10 @@ public class GameViewController
         boardView.highlightSquare(row, col);
 
         board.setChosenPiece(piece);
-        List<Move> allMoves = piece.getMovesList(row, col);
-        allMoves = MoveValidator.validateMoves(allMoves);
-        gameInfoView.showValidMoveList(allMoves);
+        List<Move> allPossibleMoves = piece.getMovesList(row, col);
+        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+
+        gameInfoView.showValidMoveList(allPossibleMoves);
         gameInfoView.showChosenPiece(piece);
     }
     //endregion

@@ -81,6 +81,19 @@ public class Board {
         }
         return list;
     }
+
+    public List<Move> validatePossibleMoves(List<Move> moves) {
+        List<Move> validatedMoves = new ArrayList<>();
+        for (Move move : moves) {
+            int[] finalPos = move.getFinalPosition();
+
+            if (isSquareValid(finalPos)) {
+                removeInvalidPaintSquare(move);
+                validatedMoves.add(move);
+            }
+        }
+        return validatedMoves;
+    }
     //endregion
 
     //region private methods
@@ -118,6 +131,34 @@ public class Board {
 
     private Square getSquareAt(int row, int col) {
         return squares[row][col];
+    }
+
+    /**
+     * @param position
+     *         Destination position
+     *
+     * @return true when:
+     * 1. destination square is on the board
+     * 2. destination square has no piece which belongs to the same player
+     */
+    private boolean isSquareValid(int[] position) {
+        if (isPositionOutOfBound(position)) {
+            return false;
+        }
+
+        // Check if the square already has piece on it
+        Piece piece = getSquareAt(position[0], position[1]).getPiece();
+        return piece == null || !piece.getClass().getSuperclass().equals(chosenPiece.getClass().getSuperclass());
+    }
+
+    private boolean isPositionOutOfBound(int[] position) {
+        return position[0] < 0 || position[0] >= ROW ||
+                position[1] < 0 || position[1] >= COLUMN;
+    }
+
+    private void removeInvalidPaintSquare(Move move) {
+        List<int[]> paintInfo = move.getPaintInfo();
+        paintInfo.removeIf(this::isPositionOutOfBound);
     }
     //endregion
 
