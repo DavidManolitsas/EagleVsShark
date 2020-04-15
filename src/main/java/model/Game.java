@@ -139,8 +139,8 @@ public class Game {
     }
 
     public void setPlayers(String sharkPlayerName, String eaglePlayerName) {
-        this.sharkPlayer = new Player(sharkPlayerName);
-        this.eaglePlayer = new Player(eaglePlayerName);
+        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
+        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
     }
 
     public GameModelEventListener getListener() {

@@ -102,8 +102,7 @@ public class GameViewController
         boardView.updateTerritory(move, game.getTurnCount());
 
         //the player moved their piece, change to next players turn
-        //TODO: add this to update the score each turn
-//        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
+        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
         game.nextTurn();
     }
 

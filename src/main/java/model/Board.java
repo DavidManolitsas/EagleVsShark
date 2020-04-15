@@ -35,6 +35,30 @@ public class Board {
     }
 
     //region public Board methods
+    public int getSharkSquareCount() {
+        int count = 0;
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
+                if (getSquareAt(row, col).getOccupiedPlayer() instanceof SharkPlayer) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public int getEagleSquareCount() {
+        int count = 0;
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
+                if (getSquareAt(row, col).getOccupiedPlayer() instanceof EaglePlayer) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     public Piece getPiece(int row, int col) {
         return getSquareAt(row, col).getPiece();
     }
