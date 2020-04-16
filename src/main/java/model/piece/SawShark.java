@@ -8,20 +8,13 @@ import java.util.List;
 public class SawShark
         extends Shark {
 
-    private final int NUM_SQUARES_MOVED = 3;
-    private String[] directions = {DIRECTION_DIAGONAL_UP_RIGHT, DIRECTION_DIAGONAL_UP_LEFT};
-
     public SawShark(int startRow, int startCol) {
         super(startRow, startCol);
     }
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        for (String direction : directions) {
-            Move move = new SawSharkMove(startRow, startCol, NUM_SQUARES_MOVED, direction);
-            allMovesList.add(move);
-        }
-        return allMovesList;
+        return new SawSharkMove(startRow, startCol, 3).getMoveList();
     }
 
 }

@@ -21,17 +21,10 @@ public class GoldenEagle
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        for (int[] sharksPos : sharkPosList) {
-            int[] sharkPos = sharksPos;
-            Move move = new GoldenEagleMove(startRow, startCol, sharkPos);
-            allMovesList.add(move);
-        }
-        return allMovesList;
+        return new GoldenEagleMove(startRow, startCol, sharkPosList).getMoveList();
     }
 
     public void setSharkList(List<int[]> sharksPos) {
         this.sharkPosList = sharksPos;
     }
-
-
 }
