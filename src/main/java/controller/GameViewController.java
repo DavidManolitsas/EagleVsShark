@@ -65,7 +65,7 @@ public class GameViewController
         boardView.highlightSquare(row, col);
 
         board.setChosenPiece(piece);
-        List<Move> allPossibleMoves = piece.getMovesList(row, col);
+        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
         allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
 
         gameInfoView.showValidMoveList(allPossibleMoves);

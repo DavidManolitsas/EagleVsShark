@@ -86,7 +86,7 @@ public class Board {
     }
 
     public void updateTerritory(Move move, Player player) {
-        for (int[] position : move.getPaintInfo()) {
+        for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
             square.setOccupiedPlayer(player);
         }
@@ -181,7 +181,7 @@ public class Board {
     }
 
     private void removeInvalidPaintSquare(Move move) {
-        List<int[]> paintInfo = move.getPaintInfo();
+        List<int[]> paintInfo = move.getPaintShape().getPaintInfo();
         paintInfo.removeIf(this::isPositionOutOfBound);
     }
     //endregion
