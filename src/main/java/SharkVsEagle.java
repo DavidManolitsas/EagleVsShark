@@ -36,7 +36,7 @@ public class SharkVsEagle
         if (SharkVsEagle.isDebug) {
             Game game = Game.getInstance();
             game.setTurnTime(60);
-            game.setPlayers("Jaws", "Bird Person");
+            game.initPlayers("Jaws", "Bird Person");
             sceneManager.showGameView();
         } else {
             sceneManager.showStartMenu();

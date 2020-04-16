@@ -136,6 +136,11 @@ public class Game {
         return eaglePlayer;
     }
 
+    public void initPlayers(String sharkPlayerName, String eaglePlayerName) {
+        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
+        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
+    }
+
     public void incrementTurnCount() {
         turnCount++;
     }
@@ -160,10 +165,6 @@ public class Game {
         return eagleSquareCount / TOTAL_SQUARES;
     }
 
-    public void setPlayers(String sharkPlayerName, String eaglePlayerName) {
-        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
-        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
-    }
 
     public GameModelEventListener getListener() {
         return listener;
@@ -180,6 +181,6 @@ public class Game {
 
         listener.gameInitialised(sharkPlayer.getPlayerName(),
                                  eaglePlayer.getPlayerName(),
-                                 turnCount, TOTAL_TURNS, turnTime, getSharkScore(), getEagleScore());
+                                 turnCount, TOTAL_TURNS, getTurnTime(), getSharkScore(), getEagleScore());
     }
 }
