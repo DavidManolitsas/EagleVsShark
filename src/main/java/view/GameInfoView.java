@@ -50,7 +50,7 @@ public class GameInfoView
     }
 
     private GameInfoViewEventListener gameInfoViewEventListener;
-
+    private static final double WIDTH = 250;
     private static final Font TITLE = Font.font("Impact", 24);
     private static final Font HEADING = Font.font("Helvetica", 16);
     private static final Font BODY = Font.font("Helvetica", 14);
@@ -74,6 +74,7 @@ public class GameInfoView
     }
 
     private void initGameInfo() {
+        this.setPrefWidth(WIDTH);
         rootGameInfo.setSpacing(10);
         rootGameInfo.setAlignment(Pos.CENTER);
         this.setTop(rootGameInfo);
@@ -85,7 +86,6 @@ public class GameInfoView
         movement = new VBox();
         moveList = new ListView<>();
         moveList.setFixedCellSize(50);
-        moveList.setPrefHeight(263);
         this.setCenter(movement);
     }
 
@@ -95,7 +95,7 @@ public class GameInfoView
             moveBt.setWrapText(true);
             moveBt.setFont(HEADING);
             moveBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
-            moveBt.setPrefWidth(250);
+            moveBt.setPrefWidth(WIDTH);
 
             moveBt.setOnAction(event -> {
                 deleteTimer();
@@ -154,7 +154,7 @@ public class GameInfoView
     //start region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo.setSpacing(10);
-        titleInfo.setPadding(new Insets(15, 25, 0, 30));
+        titleInfo.setPadding(new Insets(15, 0, 0, 0));
         titleInfo.setAlignment(Pos.CENTER);
         drawTitle();
         drawPlayerNames(sharkPlayerName, eaglePlayerName);
