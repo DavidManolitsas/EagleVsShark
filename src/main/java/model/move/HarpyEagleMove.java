@@ -1,135 +1,31 @@
 package main.java.model.move;
 
+import main.java.model.move.movements.*;
+import main.java.model.move.shape.TriangleShape;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class HarpyEagleMove extends Move {
+public class HarpyEagleMove {
 
-    public HarpyEagleMove(int startRow, int startCol, int squaresMoved, String direction) {
-        super(startRow, startCol, squaresMoved, direction);
-        checkAndAttach();
-    }
+    private List<Move> moveList;
 
-    private void checkAndAttach(){
-        // generate all info base on the direction
-        switch(direction){
-            // forward direction for eagle
-            case "down":
-                // execute each command
-                for(String command : COMMANDS){
-                    switch(command){
-                        case PAINT:
-                            paintTrack();
-                            // add the two squares at the top of the destination(according to the direction)
-                            paintInfo.add(new int[]{destination[0] + 1, destination[1] - 1});
-                            paintInfo.add(new int[]{destination[0] + 1, destination[1] + 1});
-                            break;
+    public HarpyEagleMove(int startRow, int startCol, int squaresMoved) {
+        moveList = new ArrayList<>();
 
-                        case DEST:
-                            // record destination coordinate base on the steps and direction
-                            destination[0] = startRow + squaresMoved;
-                            destination[1] = startCol;
-                            break;
+        Movements[] movements = {
+                new MoveLeft(startRow, startCol, squaresMoved),
+                new MoveRight(startRow, startCol, squaresMoved),
+                new MoveDown(startRow, startCol, squaresMoved),
+                new MoveUp(startRow, startCol, squaresMoved)
+        };
 
-                        case ROUTE:
-                            recordRoute();
-                            break;
-                    }
-                }
-                break;
-
-            // back direction for eagle
-            case "up":
-                // execute each command
-                for(String command : COMMANDS){
-                    switch(command){
-                        case PAINT:
-                            paintTrack();
-                            // add the two squares at the top of the destination(according to the direction)
-                            paintInfo.add(new int[]{destination[0] - 1, destination[1] - 1});
-                            paintInfo.add(new int[]{destination[0] - 1, destination[1] + 1});
-                            break;
-                        case DEST:
-                            // record destination coordinate base on the steps and direction
-                            destination[0] = startRow - squaresMoved;
-                            destination[1] = startCol;
-                            break;
-                        case ROUTE:
-                            recordRoute();
-                            break;
-                    }
-                }
-                break;
-
-            case "left":
-                // execute each command
-                for (String command : COMMANDS) {
-                    switch (command) {
-                        case PAINT:
-                            paintTrack();
-                            // add the two squares at the top of the destination(according to the direction)
-                            paintInfo.add(new int[]{destination[0] + 1, destination[1] - 1});
-                            paintInfo.add(new int[]{destination[0] - 1, destination[1] - 1});
-                            break;
-
-                        case DEST:
-                            // the destination will be check first
-                            // record destination coordinate base on the steps and direction
-                            destination[0] = startRow;
-                            destination[1] = startCol - squaresMoved;
-                            break;
-
-                        case ROUTE:
-                            recordRoute();
-                            break;
-                    }
-                }
-                break;
-
-            case "right":
-                // execute each command
-                for (String command : COMMANDS) {
-                    switch (command) {
-                        case PAINT:
-                            paintTrack();
-                            // add the two squares at the top of the destination(according to the direction)
-                            paintInfo.add(new int[]{destination[0] + 1, destination[1] + 1});
-                            paintInfo.add(new int[]{destination[0] - 1, destination[1] + 1});
-                            break;
-
-                        case DEST:
-                            // the destination will be check first
-                            // record destination coordinate base on the steps and direction
-                            destination[0] = startRow;
-                            destination[1] = startCol + squaresMoved;
-                            break;
-
-                        case ROUTE:
-                            recordRoute();
-                            break;
-                    }
-                }
-                break;
-
-            case "diagonal up left":
-                break;
-
-            case "diagonal up right":
-                break;
-
+        for (Movements movement : movements) {
+            moveList.add(new Move(movement, new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_LEFT)));
         }
-
     }
 
-    // record the coordinate of the track
-    private void paintTrack(){
-        // copy all the coordinates in route
-        paintInfo.addAll(route);
-        // remove the first element aka the starting point
-        paintInfo.remove(0);
-    }
-
-    private void recordRoute(){
-        route.add(new int[]{startRow, startCol});
-        route.add(destination);
+    public List<Move> getMoveList() {
+        return moveList;
     }
 }
