@@ -36,7 +36,7 @@ public class StartMenuController
                 game = Game.getInstance();
                 int turnTime = Integer.parseInt(timeLimit);
                 game.setTurnTime(turnTime);
-                game.setPlayers(sharkPlayerName, eaglePlayerName);
+                game.initPlayers(sharkPlayerName, eaglePlayerName);
                 startMenu.startGame();
             } catch (NumberFormatException e) {
                 startMenu.showError("Enter a number as the time limit to continue");

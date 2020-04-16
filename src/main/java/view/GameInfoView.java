@@ -60,11 +60,11 @@ public class GameInfoView
     private Integer startTime;
     private Integer timeRemaining;
     //Game Information components
-    private VBox rootGameInfo = new VBox();
-    private VBox titleInfo = new VBox();
-    private VBox whoseTurn = new VBox();
-    private VBox scoreInfo = new VBox();
-    private VBox chosenPiece = new VBox();
+    private VBox rootGameInfo;
+    private VBox titleInfo;
+    private VBox whoseTurn;
+    private VBox scoreInfo;
+    private VBox chosenPiece;
     private VBox movement;
     //timer
     Timeline time;
@@ -74,6 +74,7 @@ public class GameInfoView
     }
 
     private void initGameInfo() {
+        rootGameInfo = new VBox();
         this.setPrefWidth(WIDTH);
         rootGameInfo.setSpacing(10);
         rootGameInfo.setAlignment(Pos.CENTER);
@@ -153,6 +154,7 @@ public class GameInfoView
 
     //start region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
+        titleInfo = new VBox();
         titleInfo.setSpacing(10);
         titleInfo.setPadding(new Insets(15, 0, 0, 0));
         titleInfo.setAlignment(Pos.CENTER);
@@ -180,6 +182,7 @@ public class GameInfoView
 
     //start region whose turn and timer
     public void initWhoseTurn(int turnCount) {
+        whoseTurn = new VBox();
         whoseTurn.setSpacing(10);
         whoseTurn.setAlignment(Pos.CENTER);
         drawPlayersTurn(turnCount);
@@ -240,6 +243,7 @@ public class GameInfoView
 
     // start region score info
     public void initScoreInfo(int turnCount, double sharkScore, double eagleScore) {
+        scoreInfo = new VBox();
         scoreInfo.setSpacing(10);
         scoreInfo.setAlignment(Pos.CENTER);
         drawTurnCount(turnCount);
@@ -265,6 +269,7 @@ public class GameInfoView
 
     //start region chosen piece
     public void initChosenPiece() {
+        chosenPiece = new VBox();
         chosenPiece.setSpacing(10);
         chosenPiece.setPadding(new Insets(0, 0, 15, 0));
         chosenPiece.setAlignment(Pos.CENTER);
