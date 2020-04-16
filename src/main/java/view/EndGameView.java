@@ -33,7 +33,6 @@ public class EndGameView
         this.winner = winner;
         initStage();
         draw();
-        this.show();
     }
 
     private void draw() {

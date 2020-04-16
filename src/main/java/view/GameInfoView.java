@@ -360,20 +360,24 @@ public class GameInfoView
 
     @Override
     public void stopTimer() {
-        time.stop();
+        if (time != null) {
+            time.stop();
+        }
     }
 
     @Override
     public void startTimer() {
-        time.play();
+        if (time != null) {
+            time.play();
+        }
     }
 
     @Override
     public void deleteTimer() {
-        time.stop();
         if (time != null) {
-            time = null;
+            time.stop();
         }
+        time = null;
     }
     //end region
 
