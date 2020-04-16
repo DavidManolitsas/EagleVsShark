@@ -17,6 +17,11 @@ public class GoblinShark
         super(startRow, startCol);
     }
 
+    /**
+     * @param startRow
+     * @param startCol
+     * @return
+     */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
         for (String direction : directions) {
