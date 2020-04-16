@@ -11,15 +11,17 @@ import java.util.List;
 
 public class HammerheadMove {
 
+    private static final int SQUARE_MOVED = 1;
+
     private List<Move> moveList;
 
-    public HammerheadMove(int startRow, int startCol, int squaresMoved) {
+    public HammerheadMove(int startRow, int startCol) {
         moveList = new ArrayList<>();
 
         Movements[] movements = {
-                new MoveUp(startRow, startCol, squaresMoved),
-                new MoveDiagonalLeft(startRow, startCol, squaresMoved),
-                new MoveDiagonalRight(startRow, startCol, squaresMoved)
+                new MoveUp(startRow, startCol, SQUARE_MOVED),
+                new MoveDiagonalLeft(startRow, startCol, SQUARE_MOVED),
+                new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED)
         };
 
         for (Movements movement : movements) {

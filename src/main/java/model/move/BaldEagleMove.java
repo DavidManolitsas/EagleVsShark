@@ -11,15 +11,17 @@ import java.util.List;
 
 public class BaldEagleMove {
 
+    private static final int SQUARE_MOVED = 2;
+
     private List<Move> moveList;
 
-    public BaldEagleMove(int startRow, int startCol, int squaresMoved) {
+    public BaldEagleMove(int startRow, int startCol) {
         moveList = new ArrayList<>();
 
         Movements[] movements = {
-                new MoveLeft(startRow, startCol, squaresMoved),
-                new MoveRight(startRow, startCol, squaresMoved),
-                new MoveDown(startRow, startCol, squaresMoved)
+                new MoveLeft(startRow, startCol, SQUARE_MOVED),
+                new MoveRight(startRow, startCol, SQUARE_MOVED),
+                new MoveDown(startRow, startCol, SQUARE_MOVED)
         };
 
         for (Movements movement : movements) {

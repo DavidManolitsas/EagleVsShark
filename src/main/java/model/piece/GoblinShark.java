@@ -15,7 +15,7 @@ public class GoblinShark
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new GoblinSharkMove(startRow, startCol, 1).getMoveList();
+        return new GoblinSharkMove(startRow, startCol).getMoveList();
     }
 
 }

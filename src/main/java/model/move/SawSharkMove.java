@@ -9,13 +9,15 @@ import java.util.List;
 
 public class SawSharkMove {
 
+    private static final int SQUARE_MOVED = 3;
+
     private List<Move> moveList;
 
-    public SawSharkMove(int startRow, int startCol, int squaresMoved) {
+    public SawSharkMove(int startRow, int startCol) {
         moveList = new ArrayList<>();
-        moveList.add(new Move(new MoveDiagonalLeft(startRow, startCol, squaresMoved),
+        moveList.add(new Move(new MoveDiagonalLeft(startRow, startCol, SQUARE_MOVED),
                               new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_LEFT)));
-        moveList.add(new Move(new MoveDiagonalRight(startRow, startCol, squaresMoved),
+        moveList.add(new Move(new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED),
                               new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_RIGHT)));
     }
 

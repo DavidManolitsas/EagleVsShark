@@ -22,7 +22,7 @@ public class HarpyEagle
 
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new HarpyEagleMove(startRow, startCol, 3).getMoveList();
+        return new HarpyEagleMove(startRow, startCol).getMoveList();
     }
 
 }

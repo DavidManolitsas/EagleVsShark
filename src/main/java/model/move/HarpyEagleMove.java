@@ -8,16 +8,18 @@ import java.util.List;
 
 public class HarpyEagleMove {
 
+    private static final int SQUARE_MOVED = 3;
+
     private List<Move> moveList;
 
-    public HarpyEagleMove(int startRow, int startCol, int squaresMoved) {
+    public HarpyEagleMove(int startRow, int startCol) {
         moveList = new ArrayList<>();
 
         Movements[] movements = {
-                new MoveLeft(startRow, startCol, squaresMoved),
-                new MoveRight(startRow, startCol, squaresMoved),
-                new MoveDown(startRow, startCol, squaresMoved),
-                new MoveUp(startRow, startCol, squaresMoved)
+                new MoveLeft(startRow, startCol, SQUARE_MOVED),
+                new MoveRight(startRow, startCol, SQUARE_MOVED),
+                new MoveDown(startRow, startCol, SQUARE_MOVED),
+                new MoveUp(startRow, startCol, SQUARE_MOVED)
         };
 
         for (Movements movement : movements) {

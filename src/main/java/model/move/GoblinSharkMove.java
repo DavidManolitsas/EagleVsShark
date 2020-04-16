@@ -8,16 +8,18 @@ import java.util.List;
 
 public class GoblinSharkMove {
 
+    private static final int SQUARE_MOVED = 1;
+
     private List<Move> moveList;
 
-    public GoblinSharkMove(int startRow, int startCol, int squaresMoved) {
+    public GoblinSharkMove(int startRow, int startCol) {
         moveList = new ArrayList<>();
 
         Movements[] movements = {
-                new MoveLeft(startRow, startCol, squaresMoved),
-                new MoveRight(startRow, startCol, squaresMoved),
-                new MoveDiagonalLeft(startRow, startCol, squaresMoved),
-                new MoveDiagonalRight(startRow, startCol, squaresMoved)
+                new MoveLeft(startRow, startCol, SQUARE_MOVED),
+                new MoveRight(startRow, startCol, SQUARE_MOVED),
+                new MoveDiagonalLeft(startRow, startCol, SQUARE_MOVED),
+                new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED)
         };
 
         for (Movements movement : movements) {
