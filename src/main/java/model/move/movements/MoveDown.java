@@ -1,7 +1,9 @@
-package main.java.model.move;
+package main.java.model.move.movements;
 
-public class MoveDown extends Movements {
+public class MoveDown
+        extends Movements {
     public MoveDown(int startRow, int startCol, int squaresMoved) {
+        super(startRow, startCol);
         destination[0] = startRow + squaresMoved;
         destination[1] = startCol;
     }
