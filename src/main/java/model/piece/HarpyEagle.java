@@ -20,6 +20,11 @@ public class HarpyEagle
     // move 3 = [4, 7]
     // move 4 = [4,1]
 
+    /**
+     * @param startRow >=0 && <= 14
+     * @param startCol >= 0 && <= 9
+     * @return array list of harpy eagle move objects
+     */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
         return new HarpyEagleMove(startRow, startCol).getMoveList();
