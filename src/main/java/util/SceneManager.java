@@ -109,6 +109,7 @@ public class SceneManager {
             game.getListener().deleteTimer();
         }
         Stage endGameStage = new EndGameView(winner);
+        endGameStage.show();
     }
 
 }
