@@ -4,6 +4,7 @@ package main.java.model;
 import main.java.model.piece.Eagle;
 import main.java.model.piece.Piece;
 import main.java.model.piece.Shark;
+import main.java.util.SceneManager;
 
 /**
  * @author David Manolitsas
@@ -18,6 +19,8 @@ public class Game {
 
         void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore);
 
+        void endGame();
+
         //timer functions
         void stopTimer();
 
@@ -30,7 +33,7 @@ public class Game {
     private GameModelEventListener listener;
 
     private static final double TOTAL_SQUARES = 150;
-    private static final int TOTAL_TURNS = 40;
+    private static final int TOTAL_TURNS = 2;
     private int turnTime;
     private Player sharkPlayer;
     private Player eaglePlayer;
@@ -44,8 +47,11 @@ public class Game {
         return INSTANCE;
     }
 
+    /**
+     *
+     */
     public void nextTurn() {
-        if (turnCount == TOTAL_TURNS) {
+        if (turnCount >= TOTAL_TURNS) {
             endGame();
         } else if (isWinner()) {
             endGame();
@@ -70,24 +76,30 @@ public class Game {
     public void endGame() {
         if (sharkSquareCount > eagleSquareCount) {
             //sharks win the game
-            //TODO: placeholder
-            System.out.println("The Sharks Win");
+            SceneManager.getInstance().showEndGame("The Sharks Win!");
         } else if (eagleSquareCount > sharkSquareCount) {
             //eagles win the game
-            //TODO: placeholder
-            System.out.println("The Eagles Win");
+            SceneManager.getInstance().showEndGame("The Eagles Win!");
         } else {
             //its a draw
-            //TODO: placeholder
-            System.out.println("It's a Draw");
+            SceneManager.getInstance().showEndGame("It was a draw!");
         }
     }
 
+    /**
+     * @param sharkSquareCount
+     * @param eagleSquareCount
+     */
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
         this.sharkSquareCount = sharkSquareCount;
         this.eagleSquareCount = eagleSquareCount;
     }
 
+    /**
+     *
+     * @param piece
+     * @return
+     */
     public boolean pieceBelongsToPlayer(Piece piece) {
         if (turnCount % 2 == 0) {
             //eagles turn

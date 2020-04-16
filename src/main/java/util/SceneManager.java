@@ -13,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import main.java.ResPath;
 import main.java.model.Game;
+import main.java.view.EndGameView;
 import main.java.view.HowToPlay;
 
 /**
@@ -100,6 +101,10 @@ public class SceneManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showEndGame(String winner) {
+        Stage endGameStage = new EndGameView(winner);
     }
 
 }

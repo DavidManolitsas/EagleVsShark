@@ -371,9 +371,15 @@ public class GameInfoView
     @Override
     public void deleteTimer() {
         time.stop();
-        time = null;
+        if (time != null) {
+            time = null;
+        }
     }
     //end region
+
+    public void endGame() {
+        clearView();
+    }
 
     public GameInfoViewEventListener getGameInfoViewEventListener() {
         return Objects.requireNonNull(gameInfoViewEventListener);
