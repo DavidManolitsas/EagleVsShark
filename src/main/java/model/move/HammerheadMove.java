@@ -1,101 +1,33 @@
 package main.java.model.move;
 
+import main.java.model.move.movements.MoveDiagonalLeft;
+import main.java.model.move.movements.MoveDiagonalRight;
+import main.java.model.move.movements.MoveUp;
+import main.java.model.move.movements.Movements;
+import main.java.model.move.shape.TShape;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class HammerheadMove extends Move {
+public class HammerheadMove {
 
+    private List<Move> moveList;
 
-    public HammerheadMove(int startRow, int startCol, int squaresMoved, String direction) {
-        super(startRow, startCol, squaresMoved, direction);
-        checkAndAttach();
-    }
+    public HammerheadMove(int startRow, int startCol, int squaresMoved) {
+        moveList = new ArrayList<>();
 
-    private void checkAndAttach(){
-        // generate all info base on the direction
-        switch (direction) {
-            case "down":
-                break;
+        Movements[] movements = {
+                new MoveUp(startRow, startCol, squaresMoved),
+                new MoveDiagonalLeft(startRow, startCol, squaresMoved),
+                new MoveDiagonalRight(startRow, startCol, squaresMoved)
+        };
 
-            case "up":
-                // execute each command
-                for (String command : COMMANDS) {
-                    switch (command) {
-                        case PAINT:
-                            paintGeneration();
-                            break;
-                        case DEST:
-                            // record destination coordinate base on the steps and direction
-                            destination[0] = startRow - squaresMoved;
-                            destination[1] = startCol;
-                            break;
-                        case ROUTE:
-                            // record route based on the steps and direction
-                            for (int row = startRow; row >= destination[0]; row--) {
-                                route.add(new int[]{row, startCol});
-                            }
-                            break;
-                    }
-                }
-                break;
-
-            case "left":
-                break;
-
-            case "right":
-                break;
-
-            case "diagonal up left":
-                for (String command : COMMANDS) {
-                    switch (command) {
-                        case PAINT:
-                            paintGeneration();
-                            break;
-
-                        case DEST:
-                            destination[0] = startRow - squaresMoved;
-                            destination[1] = startCol - squaresMoved;
-                            break;
-
-                        case ROUTE:
-                            int col = startCol;
-                            for (int row = startRow; row >= destination[0]; row--, col--) {
-                                route.add(new int[]{row, col});
-                            }
-                            break;
-                    }
-                }
-                break;
-            case "diagonal up right":
-                for (String command : COMMANDS) {
-                    switch (command) {
-                        case PAINT:
-                            paintGeneration();
-                            break;
-
-                        case DEST:
-                            destination[0] = startRow - squaresMoved;
-                            destination[1] = startCol + squaresMoved;
-                            break;
-
-                        case ROUTE:
-                            int col = startCol;
-                            for (int row = startRow; row >= destination[0]; row--, col++) {
-                                route.add(new int[]{row, col});
-                            }
-                            break;
-                    }
-                }
-                break;
+        for (Movements movement : movements) {
+            moveList.add(new Move(movement, new TShape(movement.getDestination())));
         }
     }
 
-
-    // record the coordinates for shape "T" paint
-    private void paintGeneration(){
-        for(int row = destination[0]; row >= destination[0] - 3; row--){
-            paintInfo.add(new int[]{row, destination[1]});
-        }
-        paintInfo.add(new int[]{destination[0] - 3, destination[1] + 1});
-        paintInfo.add(new int[]{destination[0] - 3, destination[1] - 1});
+    public List<Move> getMoveList() {
+        return moveList;
     }
 }
