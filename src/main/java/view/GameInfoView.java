@@ -376,8 +376,8 @@ public class GameInfoView
     public void deleteTimer() {
         if (time != null) {
             time.stop();
-            time = null;
         }
+        time = null;
     }
     //end region
 

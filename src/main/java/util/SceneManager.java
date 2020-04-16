@@ -104,6 +104,10 @@ public class SceneManager {
     }
 
     public void showEndGame(String winner) {
+        Game game = Game.getInstance();
+        if (game.getListener() != null) {
+            game.getListener().deleteTimer();
+        }
         Stage endGameStage = new EndGameView(winner);
     }
 
