@@ -13,7 +13,7 @@ public class TriangleShape
     public static final int DIRECTION_RIGHT = 1;
     public static final int DIRECTION_LEFT = -1;
 
-    private static final int WIDTH = 4;
+    private static final int WIDTH = 3;
 
     public TriangleShape(int startRow, int startCol, int direction) {
         for (int i = 0; i < WIDTH; i++) {

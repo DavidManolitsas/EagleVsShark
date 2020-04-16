@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SawSharkMove {
 
-    private static final int SQUARE_MOVED = 3;
+    private static final int SQUARE_MOVED = 2;
 
     private List<Move> moveList;
 
