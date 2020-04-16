@@ -1,5 +1,6 @@
 package main.java.view;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -22,7 +23,7 @@ public class EndGameView
 
     private final static int WIDTH = 300;
     private final static int HEIGHT = 300;
-    private final static String STAGE_NAME = "Winner!";
+    private final static String STAGE_NAME = "Game Over";
     private String winner;
     BorderPane root = new BorderPane();
     private static final Font TITLE = Font.font("Impact", 24);
@@ -43,18 +44,30 @@ public class EndGameView
         Text winner = new Text(this.winner);
         winner.setFont(TITLE);
         winner.setFill(Color.ORANGERED);
+        //play again button
         Button playAgainBt = new Button("Play Again");
         playAgainBt.setFont(BODY);
         playAgainBt.setCursor(Cursor.HAND);
         playAgainBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
 
-
-        details.getChildren().addAll(winner, playAgainBt);
-
         playAgainBt.setOnAction(event -> {
             SceneManager.getInstance().showStartMenu();
             this.close();
         });
+
+        //quit button
+        Button quitBt = new Button("Quit");
+        quitBt.setFont(BODY);
+        quitBt.setCursor(Cursor.HAND);
+        quitBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+
+        quitBt.setOnAction(event -> {
+            Platform.exit();
+        });
+
+        details.getChildren().addAll(winner, playAgainBt, quitBt);
+
+
 
         root.setCenter(details);
     }

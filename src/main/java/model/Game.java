@@ -31,7 +31,7 @@ public class Game {
     private GameModelEventListener listener;
 
     private static final double TOTAL_SQUARES = 150;
-    private static final int TOTAL_TURNS = 2;
+    private static final int TOTAL_TURNS = 40;
     private int turnTime;
     private Player sharkPlayer;
     private Player eaglePlayer;
@@ -46,6 +46,7 @@ public class Game {
     }
 
     /**
+     * Check to see if the game has finished, if not continue to the next players turn
      *
      */
     public void nextTurn() {
@@ -59,7 +60,11 @@ public class Game {
         }
     }
 
-
+    /**
+     * Checks to see if a player has met the required win conditions before the final turn
+     *
+     * @return true if a player has captured more than 60% of the territory, other wise return false
+     */
     public boolean isWinner() {
         if (sharkSquareCount / TOTAL_SQUARES > 0.6) {
             //sharks win
@@ -71,6 +76,10 @@ public class Game {
         return false;
     }
 
+    /**
+     * Check to see which player has the most number of squares captured to declare them the winner.
+     * Then show the end of game stage and announce the winner.
+     */
     public void endGame() {
         if (sharkSquareCount > eagleSquareCount) {
             //sharks win the game
@@ -85,8 +94,10 @@ public class Game {
     }
 
     /**
-     * @param sharkSquareCount
-     * @param eagleSquareCount
+     * Updates the number of squares each player controls
+     *
+     * @param sharkSquareCount number of squares the shark player controls
+     * @param eagleSquareCount number of squares the eagle player controls
      */
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
         this.sharkSquareCount = sharkSquareCount;
@@ -94,9 +105,10 @@ public class Game {
     }
 
     /**
+     * On a given turn check to see if a piece belongs to the player of whose turn it is
      *
-     * @param piece
-     * @return
+     * @param piece The chosen piece that the player has selected
+     * @return true if the piece belongs to the player whose turn it is, otherwise return false
      */
     public boolean pieceBelongsToPlayer(Piece piece) {
         if (turnCount % 2 == 0) {
