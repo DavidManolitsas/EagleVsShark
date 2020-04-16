@@ -30,7 +30,7 @@ public class Game {
     private GameModelEventListener listener;
 
     private static final double TOTAL_SQUARES = 150;
-    private static final int TOTAL_TURNS = 30;
+    private static final int TOTAL_TURNS = 40;
     private int turnTime;
     private Player sharkPlayer;
     private Player eaglePlayer;

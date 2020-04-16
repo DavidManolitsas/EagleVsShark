@@ -78,7 +78,7 @@ public class StartMenu
         mango.setFill(Color.ORANGERED);
         titleBox.getChildren().addAll(title, mango);
         titleBox.setAlignment(Pos.CENTER);
-        titleBox.setPadding(new Insets(210, 0, 0, 0));
+        titleBox.setPadding(new Insets(40, 0, 0, 0));
         titleBox.setSpacing(10);
         root.setTop(titleBox);
     }
@@ -120,7 +120,7 @@ public class StartMenu
         //Menu
         VBox menuList = new VBox();
         menuList.setSpacing(20);
-        menuList.setPadding(new Insets(0, 270, 180, 270));
+        menuList.setPadding(new Insets(60, 270, 180, 270));
         menuList.getChildren()
                 .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, timeLimitText,
                         timeLimitField, startBt);
