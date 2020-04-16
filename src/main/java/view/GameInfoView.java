@@ -377,9 +377,6 @@ public class GameInfoView
     }
     //end region
 
-    public void endGame() {
-        clearView();
-    }
 
     public GameInfoViewEventListener getGameInfoViewEventListener() {
         return Objects.requireNonNull(gameInfoViewEventListener);
