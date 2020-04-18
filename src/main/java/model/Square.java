@@ -2,6 +2,11 @@ package main.java.model;
 
 import main.java.model.piece.Piece;
 
+/**
+ * Invariant:
+ * 1. row >= 0 && col >= 0
+ * 2. row < Board.ROW && col < Board.COL
+ */
 public class Square {
 
     private int row;
@@ -12,6 +17,11 @@ public class Square {
 
     private Player occupiedPlayer;
 
+    /**
+     * Requires:
+     * 1. row >= 0 && col >= 0
+     * 2. row < Board.ROW && col < Board.COL
+     */
     public Square(int row, int col) {
         this.row = row;
         this.col = col;
