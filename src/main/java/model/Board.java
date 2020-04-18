@@ -11,6 +11,10 @@ import java.util.Map;
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
+ *
+ * Invariant:
+ * 1. square != null && square
+ * 2. pieceSquareMap != null && pieceSquareMap.size == 6
  */
 public class Board {
 
@@ -28,6 +32,10 @@ public class Board {
 
     private Piece chosenPiece = null;
 
+    /**
+     * Requires:
+     * listener != null
+     */
     public Board(BoardModelEventListener listener) {
         eventListener = listener;
         initSquare();
@@ -59,6 +67,11 @@ public class Board {
         return count;
     }
 
+    /**
+     * Requires:
+     * 1. row >= 0 && col >= 0
+     * 2. row < ROW && col < COL
+     */
     public Piece getPiece(int row, int col) {
         return getSquareAt(row, col).getPiece();
     }
@@ -71,6 +84,15 @@ public class Board {
         return chosenPiece;
     }
 
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. piece != null
+     * <p>
+     * Ensures:
+     * 1. pieceSquareMap.get(piece) == destination
+     * 2. start.getPiece == null
+     */
     public void updatePiecePosition(Move move, Piece piece) {
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
@@ -85,6 +107,14 @@ public class Board {
         eventListener.onPiecePositionUpdated(move);
     }
 
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. player != null
+     * <p>
+     * Ensures:
+     * 1. squares of PaintInfo are occupied by the player
+     */
     public void updateTerritory(Move move, Player player) {
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
@@ -106,6 +136,10 @@ public class Board {
         return list;
     }
 
+    /**
+     * Requires:
+     * 1. moves != null
+     */
     public List<Move> validatePossibleMoves(List<Move> moves) {
         List<Move> validatedMoves = new ArrayList<>();
         for (Move move : moves) {
@@ -153,11 +187,19 @@ public class Board {
         }
     }
 
+    /**
+     * Requires:
+     * 1. row >= 0 && col >= 0
+     * 2. row < ROW && col < COL
+     */
     private Square getSquareAt(int row, int col) {
         return squares[row][col];
     }
 
     /**
+     * Requires:
+     * 1. position != null
+     *
      * @param position
      *         Destination position
      *
@@ -175,11 +217,19 @@ public class Board {
         return piece == null || !piece.getClass().getSuperclass().equals(chosenPiece.getClass().getSuperclass());
     }
 
+    /**
+     * Requires:
+     * 1. position != null
+     */
     private boolean isPositionOutOfBound(int[] position) {
         return position[0] < 0 || position[0] >= ROW ||
                 position[1] < 0 || position[1] >= COLUMN;
     }
 
+    /**
+     * Requires:
+     * 1. move != null
+     */
     private void removeInvalidPaintSquare(Move move) {
         List<int[]> paintInfo = move.getPaintShape().getPaintInfo();
         paintInfo.removeIf(this::isPositionOutOfBound);
