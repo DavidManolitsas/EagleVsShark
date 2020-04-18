@@ -17,6 +17,12 @@ import java.util.List;
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
+ *
+ * Invariant:
+ * 1. boardView !=null
+ * 1. gameInfoView !=null
+ * 1. game !=null
+ * 1. board !=null
  */
 public class GameViewController
         implements BoardViewEventListener,
@@ -44,6 +50,12 @@ public class GameViewController
     }
 
     //region BoardView Event
+
+    /**
+     * Requires:
+     * 1. row >= 0 && col >= 0
+     * 2. row < ROW && col < COL
+     */
     @Override
     public void onSquareClicked(int row, int col) {
         Piece piece = board.getPiece(row, col);

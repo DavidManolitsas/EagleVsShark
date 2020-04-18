@@ -13,7 +13,7 @@ import java.util.Map;
  * @date 2020-03-23
  *
  * Invariant:
- * 1. square != null && square
+ * 1. square != null
  * 2. pieceSquareMap != null && pieceSquareMap.size == 6
  */
 public class Board {
