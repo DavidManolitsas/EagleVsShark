@@ -12,7 +12,7 @@ import main.java.util.SceneManager;
 public class SharkVsEagle
         extends Application {
 
-    public static final boolean isDebug = true;
+    public static final boolean isDebug = false;
 
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 651;

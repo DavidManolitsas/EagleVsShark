@@ -1,5 +1,9 @@
 package main.java.view;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Objects;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -8,8 +12,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,10 +29,6 @@ import javafx.util.Duration;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -121,7 +126,7 @@ public class GameInfoView
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.toString());
+                    setText(item.toString().replaceAll("(.)([A-Z])", "$1 $2"));
                     setTextAlignment(TextAlignment.CENTER);
                     setFont(BODY);
 
