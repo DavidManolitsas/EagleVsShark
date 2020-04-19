@@ -11,7 +11,7 @@ import main.java.ResPath;
 import main.java.model.Board.BoardModelEventListener;
 import main.java.model.move.Move;
 
-import java.util.Objects;
+import java.util.*;
 
 import static main.java.model.Board.COLUMN;
 import static main.java.model.Board.ROW;
@@ -32,6 +32,7 @@ public class BoardView
     public static final String COLOUR_SHARK = "#3282b8";
     public static final String COLOUR_NEUTRAL = "#f1f3f4";
     public static final String COLOUR_ROUTE_PREVIEW = "rgba(237, 124, 124, 0.37)";
+    public static final String COLOUR_PAINT_AREA_PREVIEW = "rgba(193, 193, 193, 0.6)";
 
     public static final int SQUARE_SIZE = 40;
     public static final int PIECE_SIZE = 38;
@@ -82,14 +83,12 @@ public class BoardView
             removeMovePreview();
         }
 
+        for (int[] position : move.getPaintShape().getPaintInfo()) {
+            paintSquare(position, COLOUR_PAINT_AREA_PREVIEW);
+        }
+
         for (int[] position : move.getRoute()) {
-            StackPane square = getSquareAt(position[0], position[1]);
-            if (square != null) {
-                Node route = new StackPane();
-                route.setStyle("-fx-background-color: " + COLOUR_ROUTE_PREVIEW + ";");
-                route.setId(VIEW_ID_PREVIEW);
-                square.getChildren().add(route);
-            }
+            paintSquare(position, COLOUR_ROUTE_PREVIEW);
         }
         lastPreviewMove = move;
     }
@@ -99,7 +98,12 @@ public class BoardView
             return;
         }
 
-        for (int[] position : lastPreviewMove.getRoute()) {
+        // Remove duplicated positions
+        Set<int[]> paintInfo = new LinkedHashSet<>(lastPreviewMove.getPaintShape().getPaintInfo());
+        paintInfo.addAll(lastPreviewMove.getRoute());
+        List<int[]> allPositions = new ArrayList<>(paintInfo);
+
+        for (int[] position : allPositions) {
             StackPane square = getSquareAt(position[0], position[1]);
             if (square != null) {
                 square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_PREVIEW));
@@ -216,6 +220,16 @@ public class BoardView
         ImageView imageView = new ImageView(image);
         imageView.setId(VIEW_ID_PIECE);
         square.getChildren().add(imageView);
+    }
+
+    private void paintSquare(int[] position, String color) {
+        StackPane square = getSquareAt(position[0], position[1]);
+        if (square != null) {
+            Node route = new StackPane();
+            route.setStyle("-fx-background-color: " + color + ";");
+            route.setId(VIEW_ID_PREVIEW);
+            square.getChildren().add(route);
+        }
     }
     //endregion
 
