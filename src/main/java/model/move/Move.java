@@ -25,4 +25,9 @@ public class Move {
     public List<int[]> getRoute() {
         return movements.getRoute();
     }
+
+    @Override
+    public String toString() {
+        return movements.toString();
+    }
 }
