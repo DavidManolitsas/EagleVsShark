@@ -11,20 +11,7 @@ public class HarpyEagle
     public HarpyEagle(int startRow, int startCol) {
         super(startRow, startCol);
     }
-    // flies forward, back, left or right 3 spaces
-    // moves 4 times
 
-    // start [4,4]
-    // move 1 = [7,4]
-    // move 2 = [1,4]
-    // move 3 = [4, 7]
-    // move 4 = [4,1]
-
-    /**
-     * @param startRow >=0 && <= 14
-     * @param startCol >= 0 && <= 9
-     * @return array list of harpy eagle move objects
-     */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
         return new HarpyEagleMove(startRow, startCol).getMoveList();
