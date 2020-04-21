@@ -12,7 +12,7 @@ import main.java.util.SceneManager;
 public class SharkVsEagle
         extends Application {
 
-    public static final boolean isDebug = false;
+    public static final boolean IS_DEBUG = false;
 
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 651;
@@ -33,7 +33,7 @@ public class SharkVsEagle
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.init(primaryStage);
 
-        if (SharkVsEagle.isDebug) {
+        if (SharkVsEagle.IS_DEBUG) {
             Game game = Game.getInstance();
             game.setTurnTime(60);
             game.initPlayers("Jaws", "Bird Person");
