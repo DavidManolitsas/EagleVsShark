@@ -9,16 +9,13 @@ import main.java.model.move.shape.SquareShape;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaldEagleMove {
+public class BaldEagleMove extends MoveFactory{
 
     private static final int SQUARE_MOVED_ONE = 1;
     private static final int SQUARE_MOVED_TWO = 2;
     private static final int SQUARE_MOVED_THREE = 3;
 
-    private List<Move> moveList;
-
     public BaldEagleMove(int startRow, int startCol) {
-        moveList = new ArrayList<>();
 
         Movements[] movements = {
                 new MoveLeft(startRow, startCol, SQUARE_MOVED_ONE),
@@ -35,9 +32,5 @@ public class BaldEagleMove {
         for (Movements movement : movements) {
             moveList.add(new Move(movement, new SquareShape(movement.getDestination())));
         }
-    }
-
-    public List<Move> getMoveList() {
-        return moveList;
     }
 }

@@ -7,11 +7,9 @@ import main.java.model.move.shape.TriangleShape;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SawSharkMove {
+public class SawSharkMove extends MoveFactory{
 
     private static final int SQUARE_MOVED = 2;
-
-    private List<Move> moveList;
 
     public SawSharkMove(int startRow, int startCol) {
         moveList = new ArrayList<>();
@@ -19,9 +17,5 @@ public class SawSharkMove {
                               new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_LEFT)));
         moveList.add(new Move(new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED),
                               new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_RIGHT)));
-    }
-
-    public List<Move> getMoveList() {
-        return moveList;
     }
 }
