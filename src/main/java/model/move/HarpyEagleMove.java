@@ -1,21 +1,13 @@
 package main.java.model.move;
 
 import main.java.model.move.movements.*;
-import main.java.model.move.shape.TriangleShape;
 import main.java.model.move.shape.VShape;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class HarpyEagleMove {
+public class HarpyEagleMove extends PieceMove {
 
     private static final int SQUARE_MOVED = 3;
 
-    private List<Move> moveList;
-
     public HarpyEagleMove(int startRow, int startCol) {
-        moveList = new ArrayList<>();
-
         MoveLeft left = new MoveLeft(startRow, startCol, SQUARE_MOVED);
         MoveRight right = new MoveRight(startRow, startCol, SQUARE_MOVED);
         MoveDown down = new MoveDown(startRow, startCol, SQUARE_MOVED);
@@ -31,7 +23,4 @@ public class HarpyEagleMove {
                 new VShape(down.getDestination(), VShape.DIRECTION_DOWN)));
     }
 
-    public List<Move> getMoveList() {
-        return moveList;
-    }
 }
