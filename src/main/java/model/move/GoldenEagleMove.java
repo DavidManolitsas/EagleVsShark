@@ -2,12 +2,10 @@ package main.java.model.move;
 
 import main.java.model.move.movements.MoveBehindPiece;
 import main.java.model.move.shape.CrossShape;
-import main.java.model.move.shape.TriangleShape;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class GoldenEagleMove extends MoveFactory{
+public class GoldenEagleMove extends PieceMove {
 
     public GoldenEagleMove(int startRow, int startCol, List<int[]> piecePositionList) {
         MoveBehindPiece move;

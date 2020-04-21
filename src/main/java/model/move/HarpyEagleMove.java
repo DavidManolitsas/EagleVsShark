@@ -1,13 +1,9 @@
 package main.java.model.move;
 
 import main.java.model.move.movements.*;
-import main.java.model.move.shape.TriangleShape;
 import main.java.model.move.shape.VShape;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class HarpyEagleMove extends MoveFactory{
+public class HarpyEagleMove extends PieceMove {
 
     private static final int SQUARE_MOVED = 3;
 

@@ -3,10 +3,7 @@ package main.java.model.move;
 import main.java.model.move.movements.*;
 import main.java.model.move.shape.SquareShape;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class GoblinSharkMove extends MoveFactory{
+public class GoblinSharkMove extends PieceMove {
 
     private static final int SQUARE_MOVED = 1;
 
