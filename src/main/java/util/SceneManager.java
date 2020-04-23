@@ -62,6 +62,7 @@ public class SceneManager {
         newGame.setOnAction(event -> {
             if (game.getListener() != null) {
                 game.getListener().deleteTimer();
+                game.resetGame();
             }
             showStartMenu();
         });
