@@ -3,6 +3,11 @@ package main.java.model.move;
 import main.java.model.move.movements.*;
 import main.java.model.move.shape.VShape;
 
+/*
+ * Precondition: none
+ *              Starting point of the piece
+ * Postcondition: a list of move
+ */
 public class HarpyEagleMove extends PieceMove {
 
     private static final int SQUARE_MOVED = 3;

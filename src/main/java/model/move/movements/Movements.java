@@ -3,6 +3,11 @@ package main.java.model.move.movements;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Precondition: none
+ *              starting point of the piece, step that need to move
+ * Postcondition: an int array of the destination
+ */
 public class Movements {
 
     protected int[] startPosition = new int[2];

@@ -24,18 +24,21 @@ public class VShape extends PaintShape{
                         paintInfo.add(new int[] {row, col});
                     }
                     break;
+                    // left up
                 case 2:
                     col = destination[1] - 1;
                     for (int row = destination[0] - 1; row >= destination[0] - STAIRS; row--, col--){
                         paintInfo.add(new int[] {row, col});
                     }
                     break;
+                // bottom left
                 case 3:
                     col = destination[1] - 1;
                     for (int row = destination[0] + 1; row <= destination[0] + STAIRS; row++, col--){
                         paintInfo.add(new int[] {row, col});
                     }
                     break;
+                //bottom right
                 case 4:
                     col = destination[1] + 1;
                     for (int row = destination[0] + 1; row <= destination[0] + STAIRS; row++, col++){
@@ -46,9 +49,5 @@ public class VShape extends PaintShape{
         }
 
         paintInfo.add(new int[] {destination[0], destination[1]});
-    }
-
-    public List<int[]> getPaintInfo() {
-        return paintInfo;
     }
 }

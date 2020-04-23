@@ -6,6 +6,11 @@ import main.java.model.move.shape.TriangleShape;
 
 import java.util.ArrayList;
 
+/*
+ * Precondition: none
+ *              Starting point of the piece
+ * Postcondition: a list of move
+ */
 public class SawSharkMove extends PieceMove {
 
     private static final int SQUARE_MOVED = 2;

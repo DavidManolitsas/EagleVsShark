@@ -6,6 +6,12 @@ import java.util.List;
  * @author WeiYi Yu
  * @date 2020-04-16
  */
+
+/*
+ * Precondition: none
+ *              destination of the piece
+ * Postcondition: a list of paint square locations
+ */
 public class TShape
         extends PaintShape {
 
@@ -14,13 +20,9 @@ public class TShape
 
     public TShape(int[] destination) {
         for (int row = destination[0]; row >= destination[0] - LENGTH; row--) {
-            paintInfo.add(new int[] {row, destination[1]});
+            paintInfo.add(new int[]{row, destination[1]});
         }
         paintInfo.add(new int[] {destination[0] - LENGTH, destination[1] + WIDTH});
         paintInfo.add(new int[] {destination[0] - LENGTH, destination[1] - WIDTH});
-    }
-
-    public List<int[]> getPaintInfo() {
-        return paintInfo;
     }
 }

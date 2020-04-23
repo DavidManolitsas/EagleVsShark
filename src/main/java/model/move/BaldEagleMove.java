@@ -12,6 +12,11 @@ public class BaldEagleMove extends PieceMove {
     private static final int SQUARE_MOVED_TWO = 2;
     private static final int SQUARE_MOVED_THREE = 3;
 
+    /*
+     * Precondition: none
+     *              Starting point of the piece
+     * Postcondition: a list of move
+     */
     public BaldEagleMove(int startRow, int startCol) {
 
         Movements[] movements = {

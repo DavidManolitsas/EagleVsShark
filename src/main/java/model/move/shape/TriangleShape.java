@@ -6,6 +6,12 @@ import java.util.List;
  * @author WeiYi Yu
  * @date 2020-04-16
  */
+
+/*
+ * Precondition: none
+ *              starting point of the piece, direction of the move
+ * Postcondition: a list of paint square locations
+ */
 public class TriangleShape
         extends PaintShape {
 
@@ -21,9 +27,5 @@ public class TriangleShape
                 paintInfo.add(new int[] {startRow - i, startCol + m * direction});
             }
         }
-    }
-
-    public List<int[]> getPaintInfo() {
-        return paintInfo;
     }
 }

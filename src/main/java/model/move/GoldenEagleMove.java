@@ -5,6 +5,11 @@ import main.java.model.move.shape.CrossShape;
 
 import java.util.List;
 
+/*
+ * Precondition: none
+ *              Starting point of the piece
+ * Postcondition: a list of move
+ */
 public class GoldenEagleMove extends PieceMove {
 
     public GoldenEagleMove(int startRow, int startCol, List<int[]> piecePositionList) {

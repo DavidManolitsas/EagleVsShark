@@ -6,6 +6,11 @@ import main.java.model.move.movements.MoveUp;
 import main.java.model.move.movements.Movements;
 import main.java.model.move.shape.TShape;
 
+/*
+ * Precondition: none
+ *              Starting point of the piece
+ * Postcondition: a list of move
+ */
 public class HammerheadMove extends PieceMove {
 
     private static final int SQUARE_MOVED = 1;
