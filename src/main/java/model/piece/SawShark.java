@@ -12,6 +12,10 @@ public class SawShark
         super(startRow, startCol);
     }
 
+    /**
+     * Ensures:
+     * moveList of SawSharkMove objects
+     */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
         return new SawSharkMove(startRow, startCol).getMoveList();

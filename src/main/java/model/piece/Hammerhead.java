@@ -13,6 +13,10 @@ public class Hammerhead
         super(startRow, startCol);
     }
 
+    /**
+     * Ensures:
+     * moveList of HammerheadMove objects
+     */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
         return new HammerheadMove(startRow, startCol).getMoveList();
