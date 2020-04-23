@@ -23,14 +23,23 @@ import main.java.view.HowToPlay;
  */
 public class SceneManager {
 
-    private static final SceneManager INSTANCE = new SceneManager();
 
-    public static SceneManager getInstance() {
-        return INSTANCE;
-    }
+    private static SceneManager instance;
 
     private Stage stage;
     private BorderPane root;
+
+    public static SceneManager getInstance() {
+        if (instance == null) {
+            instance = new SceneManager();
+        }
+
+        return instance;
+    }
+
+    private SceneManager() {
+
+    }
 
     public void init(Stage stage) {
         this.stage = stage;
@@ -78,6 +87,7 @@ public class SceneManager {
         MenuItem quit = new MenuItem("Quit");
         quit.setOnAction(event -> {
             Platform.exit();
+            System.exit(0);
         });
         eagleVsShark.getItems().addAll(newGame, howTo, quit);
         menu.getMenus().add(eagleVsShark);

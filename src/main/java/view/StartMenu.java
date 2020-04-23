@@ -23,7 +23,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import main.java.ResPath;
-import main.java.util.SceneManager;
 
 /**
  * @author David Manolitsas
@@ -129,9 +128,6 @@ public class StartMenu
         menuList.setAlignment(Pos.CENTER);
     }
 
-    public void startGame() {
-        SceneManager.getInstance().showGameView();
-    }
 
     public StartMenuListener getStartMenuListener() {
         return Objects.requireNonNull(this.startMenuListener);
