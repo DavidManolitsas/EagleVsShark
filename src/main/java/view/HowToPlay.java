@@ -57,7 +57,7 @@ public class HowToPlay
         while (input.hasNextLine()) {
             howTo += input.nextLine() + "\n";
         }
-
+        input.close();
     }
 
     private void initStage() {

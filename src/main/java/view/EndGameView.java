@@ -25,7 +25,7 @@ public class EndGameView
     private final static int HEIGHT = 300;
     private final static String STAGE_NAME = "Game Over";
     private String winner;
-    BorderPane root = new BorderPane();
+    private BorderPane root = new BorderPane();
     private static final Font TITLE = Font.font("Impact", 24);
     private static final Font BODY = Font.font("Helvetica", 16);
 
