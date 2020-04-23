@@ -46,9 +46,4 @@ public class SharkVsEagle
     public static void main(String[] args) {
         launch(args);
     }
-
-    private void skipStartMenu() {
-
-    }
-
 }

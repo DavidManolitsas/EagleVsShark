@@ -12,6 +12,10 @@ public class HarpyEagle
         super(startRow, startCol);
     }
 
+    /**
+     * Ensures:
+     * moveList of HarpyEagleMove objects
+     */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
         return new HarpyEagleMove(startRow, startCol).getMoveList();
