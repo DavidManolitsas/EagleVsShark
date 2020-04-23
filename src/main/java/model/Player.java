@@ -1,6 +1,6 @@
 package main.java.model;
 
-public class Player {
+public abstract class Player {
     private String name;
 
     public Player(String name){
