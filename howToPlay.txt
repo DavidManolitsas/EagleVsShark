@@ -7,7 +7,7 @@ challenge, 20 seconds will lead to some fast-paced action
 
 How To Win:
 To win Eagle vs. Shark capture more territory than your opponent before
-the 30th turn or capture 60% of the total board area.
+the 40th turn or capture 60% of the total board area.
 
 How To Move Your Pieces:
 When its your turn select one of you piece on the board. On the left
