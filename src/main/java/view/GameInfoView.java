@@ -118,7 +118,7 @@ public class GameInfoView
         moveList.setStyle("-fx-selection-bar: rgba(255,69,0,0.33)");
 
         // assign name to each Move object
-        moveList.setCellFactory(e -> new ListCell<>() {
+        moveList.setCellFactory(e -> new ListCell<Move>() {
 
             protected void updateItem(Move item, boolean empty) {
                 super.updateItem(item, empty);
