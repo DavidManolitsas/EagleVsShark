@@ -23,8 +23,8 @@ public class HowToPlay
         extends Stage {
 
 
-    private final static int WIDTH = 500;
-    private final static int HEIGHT = 700;
+    private final static int WIDTH = 550;
+    private final static int HEIGHT = 550;
     private final static String STAGE_NAME = "How to play: Eagle vs. Shark";
     private String howTo = "";
     BorderPane root = new BorderPane();
@@ -57,7 +57,7 @@ public class HowToPlay
         while (input.hasNextLine()) {
             howTo += input.nextLine() + "\n";
         }
-
+        input.close();
     }
 
     private void initStage() {

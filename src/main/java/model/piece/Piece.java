@@ -18,7 +18,7 @@ public abstract class Piece {
      * Requires:
      * 1. startRow >= 0 && < BOARD.ROW (15)
      * 2. startCol >= 0 && < BOARD.COLUMN (10)
-     * <p>
+     *
      * Ensures:
      * 1. moveList !null
      */
