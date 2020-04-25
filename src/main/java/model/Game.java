@@ -49,7 +49,8 @@ public class Game {
     /**
      * Singleton Game constructor
      */
-    public Game() {
+    public Game(GameModelEventListener listener) {
+        this.listener = listener;
         this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
         this.turnCount = 0;
@@ -244,14 +245,6 @@ public class Game {
 
     private void setTurnTime(int turnTime) {
         this.turnTime = turnTime;
-    }
-
-    public GameModelEventListener getListener() {
-        return listener;
-    }
-
-    public void setListener(GameModelEventListener listener) {
-        this.listener = listener;
     }
 
     private void initPlayers(String sharkPlayerName, String eaglePlayerName) {

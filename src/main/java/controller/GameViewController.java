@@ -49,8 +49,7 @@ public class GameViewController
     @FXML
     public void initialize() {
         board = new Board(boardView);
-        game = new Game();
-        game.setListener(gameInfoView);
+        game = new Game(gameInfoView);
 
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
