@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
- *
+ * <p>
  * Invariant:
  * 1. boardView !=null
  * 1. gameInfoView !=null
@@ -41,12 +41,17 @@ public class GameViewController
     @FXML
     public void initialize() {
         board = new Board(boardView);
-        game = Game.getInstance();
+        game = new Game();
         game.setListener(gameInfoView);
         game.initGameListener();
 
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
+    }
+
+    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
+        game.initPlayers(sharkPlayerName, eaglePlayerName);
+        game.setTurnTime(timeLimit);
     }
 
     //region BoardView Event

@@ -1,7 +1,7 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import main.java.model.Game;
+import main.java.util.SceneManager;
 import main.java.view.StartMenu;
 import main.java.view.StartMenu.StartMenuListener;
 
@@ -9,9 +9,7 @@ import main.java.view.StartMenu.StartMenuListener;
  * @author David Manolitsas
  * @project OOSD-A1
  * @date 2020-03-30
- *
- * @invariant
- * 1. startMenu != null
+ * @invariant 1. startMenu != null
  * 2. game != null
  */
 public class StartMenuController
@@ -20,12 +18,9 @@ public class StartMenuController
     @FXML
     private StartMenu startMenu;
 
-    private Game game;
-
     @FXML
     public void initialize() {
         startMenu.setStartMenuListener(this);
-        game = Game.getInstance();
     }
 
     /**
@@ -59,15 +54,14 @@ public class StartMenuController
                 if (turnTime < 10) {
                     startMenu.showError("Set a time limit of 10 seconds or more");
                 } else {
-                    //setup the turn time and player names
-                    game.setTurnTime(turnTime);
-                    game.initPlayers(sharkPlayerName, eaglePlayerName);
-                    game.startGame();
+                    SceneManager.getInstance().showGameView(
+                            sharkPlayerName, eaglePlayerName,
+                            turnTime
+                    );
                 }
             } catch (NumberFormatException e) {
                 startMenu.showError("Enter a number as the time limit to continue");
             }
-
         }
     }
 }

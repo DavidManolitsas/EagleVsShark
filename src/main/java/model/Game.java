@@ -44,41 +44,14 @@ public class Game {
     private double sharkSquareCount;
     private double eagleSquareCount;
     private int turnCount;
-    //singleton
-    private static Game instance;
 
     /**
      * Singleton Game constructor
      */
-    private Game() {
+    public Game() {
         this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
         this.turnCount = 1;
-    }
-
-
-    /**
-     * Get the singleton instance of game
-     *
-     * @return a singleton instance of Game
-     *
-     * @ensure
-     * 1. Game != null
-     */
-    public static Game getInstance() {
-        if (instance == null) {
-            instance = new Game();
-        }
-        return instance;
-    }
-
-
-    /**
-     * Start the game, show the game view containing the boardView
-     * and gameInfoView
-     */
-    public void startGame() {
-        SceneManager.getInstance().showGameView();
     }
 
     /**
@@ -116,6 +89,7 @@ public class Game {
     public void resetGame() {
         updateSquareCount(0, 0);
         setTurnCount(1);
+        listener.deleteTimer();
     }
 
     /**
