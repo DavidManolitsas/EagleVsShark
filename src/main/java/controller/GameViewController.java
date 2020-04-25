@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import main.java.model.Board;
 import main.java.model.Game;
@@ -7,10 +8,13 @@ import main.java.model.Player;
 import main.java.model.move.Move;
 import main.java.model.piece.GoldenEagle;
 import main.java.model.piece.Piece;
+import main.java.util.SceneManager;
 import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
+import main.java.view.MenuView;
+import main.java.view.MenuView.MenuBarEventListener;
 
 import java.util.List;
 
@@ -26,13 +30,17 @@ import java.util.List;
  */
 public class GameViewController
         implements BoardViewEventListener,
-                   GameInfoViewEventListener {
+                   GameInfoViewEventListener,
+                   MenuBarEventListener {
 
     @FXML
     private BoardView boardView;
 
     @FXML
     private GameInfoView gameInfoView;
+
+    @FXML
+    private MenuView menuView;
 
     private Game game;
 
@@ -46,6 +54,7 @@ public class GameViewController
 
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
+        menuView.setListener(this);
     }
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
@@ -132,4 +141,29 @@ public class GameViewController
         game.nextTurn();
     }
     //endregion
+
+    // region BoardView Event
+    @Override
+    public void onNewGameClicked() {
+        game.stopTimer();
+        SceneManager.getInstance().showStartMenu();
+    }
+
+    @Override
+    public void onHowToClicked() {
+        game.pauseTimer();
+    }
+
+    @Override
+    public void onHowToWindowClosed() {
+        game.resumeTimer();
+    }
+
+    @Override
+    public void onQuitClicked() {
+        game.stopTimer();
+        Platform.exit();
+        System.exit(0);
+    }
+    // endregion
 }

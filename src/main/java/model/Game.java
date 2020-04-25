@@ -72,6 +72,7 @@ public class Game {
      */
     public void nextTurn() {
         if (turnCount >= TOTAL_TURNS || isWinner()) {
+            stopTimer();
             endGame();
         } else {
             incrementTurnCount();
@@ -209,17 +210,17 @@ public class Game {
         listener.timeRemainingChanged(timeRemaining);
     }
 
-//    public void pauseTimer() {
-//        timer.pause();
-//    }
-//
-//    public void resumeTimer() {
-//        timer.play();
-//    }
-//
-//    public void stopTimer() {
-//        timer.stop();
-//    }
+    public void pauseTimer() {
+        timer.pause();
+    }
+
+    public void resumeTimer() {
+        timer.play();
+    }
+
+    public void stopTimer() {
+        timer.stop();
+    }
 
     public Player getSharkPlayer() {
         return sharkPlayer;
