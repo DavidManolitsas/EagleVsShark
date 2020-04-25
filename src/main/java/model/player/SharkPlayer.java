@@ -1,4 +1,4 @@
-package main.java.model;
+package main.java.model.player;
 
 public class SharkPlayer
         extends Player {

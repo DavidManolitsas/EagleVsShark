@@ -2,6 +2,9 @@ package main.java.model;
 
 import main.java.model.move.Move;
 import main.java.model.piece.*;
+import main.java.model.player.EaglePlayer;
+import main.java.model.player.Player;
+import main.java.model.player.SharkPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

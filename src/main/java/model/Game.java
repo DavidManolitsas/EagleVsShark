@@ -7,6 +7,9 @@ import javafx.util.Duration;
 import main.java.model.piece.Eagle;
 import main.java.model.piece.Piece;
 import main.java.model.piece.Shark;
+import main.java.model.player.EaglePlayer;
+import main.java.model.player.Player;
+import main.java.model.player.SharkPlayer;
 import main.java.util.SceneManager;
 
 /**
