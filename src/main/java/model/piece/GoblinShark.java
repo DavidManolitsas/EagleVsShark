@@ -1,7 +1,8 @@
 package main.java.model.piece;
 
-import main.java.model.move.GoblinSharkMove;
 import main.java.model.move.Move;
+import main.java.model.move.MoveBuilder;
+import main.java.model.move.shape.PaintShapeType;
 
 import java.util.List;
 
@@ -19,7 +20,13 @@ public class GoblinShark
      */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new GoblinSharkMove(startRow, startCol).getMoveList();
+        return new MoveBuilder(startRow, startCol, PaintShapeType.SQUARE)
+                .addAvailableStep(1)
+                .addMoveLeft()
+                .addMoveRight()
+                .addMoveDiagonalLeft()
+                .addMoveDiagonalRight()
+                .build();
     }
 
 }

@@ -1,8 +1,9 @@
 package main.java.model.piece;
 
 
-import main.java.model.move.BaldEagleMove;
 import main.java.model.move.Move;
+import main.java.model.move.MoveBuilder;
+import main.java.model.move.shape.PaintShapeType;
 
 import java.util.List;
 
@@ -19,7 +20,12 @@ public class BaldEagle
      */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new BaldEagleMove(startRow, startCol).getMoveList();
+        return new MoveBuilder(startRow, startCol, PaintShapeType.SQUARE)
+                .addAvailableStep(1, 2, 3)
+                .addMoveLeft()
+                .addMoveRight()
+                .addMoveDown()
+                .build();
     }
 
 }
