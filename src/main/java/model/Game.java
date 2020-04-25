@@ -57,8 +57,9 @@ public class Game {
     }
 
     public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int turnTime) {
-        initPlayers(sharkPlayerName, eaglePlayerName);
-        setTurnTime(turnTime);
+        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
+        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
+        this.turnTime = turnTime;
 
         listener.gameInitialised(sharkPlayerName,
                                  eaglePlayerName,
@@ -96,19 +97,10 @@ public class Game {
     }
 
     /**
-     * Reset the square count and turn count
-     */
-    public void resetGame() {
-        updateSquareCount(0, 0);
-        setTurnCount(1);
-    }
-
-    /**
      * Check to see which player has the most number of squares captured to declare them the winner.
      * Then show the end of game stage and announce the winner.
      */
     public void endGame() {
-        resetGame();
         if (sharkSquareCount > eagleSquareCount) {
             //sharks win the game
             SceneManager.getInstance().showEndGame("The Sharks Win!");
@@ -237,18 +229,5 @@ public class Game {
 
     public int getTurnCount() {
         return turnCount;
-    }
-
-    public void setTurnCount(int turnCount) {
-        this.turnCount = turnCount;
-    }
-
-    private void setTurnTime(int turnTime) {
-        this.turnTime = turnTime;
-    }
-
-    private void initPlayers(String sharkPlayerName, String eaglePlayerName) {
-        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
-        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
     }
 }
