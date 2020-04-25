@@ -43,15 +43,14 @@ public class GameViewController
         board = new Board(boardView);
         game = new Game();
         game.setListener(gameInfoView);
-        game.initGameListener();
 
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
     }
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
-        game.initPlayers(sharkPlayerName, eaglePlayerName);
-        game.setTurnTime(timeLimit);
+        game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit);
+        game.nextTurn();
     }
 
     //region BoardView Event
@@ -125,11 +124,6 @@ public class GameViewController
         //the player moved their piece, change to next players turn
         game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
         game.nextTurn();
-    }
-
-    @Override
-    public void timeRanOut() {
-        gameInfoView.showTimeRanOutAlert();
     }
 
     @Override

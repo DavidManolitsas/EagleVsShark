@@ -1,8 +1,5 @@
 package main.java.util;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,9 +9,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import main.java.ResPath;
-import main.java.model.Game;
+import main.java.controller.GameViewController;
 import main.java.view.EndGameView;
 import main.java.view.HowToPlay;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author David Manolitsas
@@ -55,30 +55,30 @@ public class SceneManager {
     }
 
     public void initMenuBar() {
-        Game game = Game.getInstance();
+//        Game game = Game.getInstance();
         MenuBar menu = new MenuBar();
         Menu eagleVsShark = new Menu("Menu");
         MenuItem newGame = new MenuItem("New Game");
         newGame.setOnAction(event -> {
-            if (game.getListener() != null) {
-                game.getListener().deleteTimer();
-                game.resetGame();
-            }
+//            if (game.getListener() != null) {
+//                game.getListener().deleteTimer();
+//                game.resetGame();
+//            }
             showStartMenu();
         });
         MenuItem howTo = new MenuItem("How to play");
         howTo.setOnAction(event -> {
             try {
-                if (game.getListener() != null) {
-                    game.getListener().stopTimer();
-                }
+//                if (game.getListener() != null) {
+//                    game.getListener().stopTimer();
+//                }
                 Stage howToStage = new HowToPlay();
 
-                howToStage.setOnHidden(e -> {
-                    if (game.getListener() != null) {
-                        game.getListener().startTimer();
-                    }
-                });
+//                howToStage.setOnHidden(e -> {
+//                    if (game.getListener() != null) {
+//                        game.getListener().startTimer();
+//                    }
+//                });
 
                 howToStage.show();
             } catch (FileNotFoundException e) {
@@ -105,20 +105,23 @@ public class SceneManager {
         }
     }
 
-    public void showGameView() {
+    public void showGameView(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
         try {
             root.setCenter(gameLoader.load());
+
+            GameViewController controller = gameLoader.getController();
+            controller.initGameData(sharkPlayerName, eaglePlayerName, timeLimit);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void showEndGame(String winner) {
-        Game game = Game.getInstance();
-        if (game.getListener() != null) {
-            game.getListener().deleteTimer();
-        }
+//        Game game = Game.getInstance();
+//        if (game.getListener() != null) {
+//            game.getListener().deleteTimer();
+//        }
         Stage endGameStage = new EndGameView(winner);
         endGameStage.show();
     }
