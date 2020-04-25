@@ -1,8 +1,13 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import main.java.view.BoardView?>
 <?import main.java.view.GameInfoView?>
+<?import main.java.view.MenuView?>
 <BorderPane fx:controller="main.java.controller.GameViewController"
             xmlns:fx="http://javafx.com/fxml">
+
+    <top>
+        <MenuView fx:id="menuView"/>
+    </top>
 
     <center>
         <BoardView fx:id="boardView"/>

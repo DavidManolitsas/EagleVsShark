@@ -1,34 +1,24 @@
 package main.java.view;
 
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Objects;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.util.Duration;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
+
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -44,8 +34,6 @@ public class GameInfoView
 
         void onMoveButtonClicked(Move move);
 
-        void timeRanOut();
-
         void nextPlayerTurn();
     }
 
@@ -57,8 +45,6 @@ public class GameInfoView
     private ListView<Move> moveList;
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
     private int totalTurns;
-    private Integer startTime;
-    private Integer timeRemaining;
     //Game Information components
     private VBox rootGameInfo;
     private VBox titleInfo;
@@ -66,8 +52,8 @@ public class GameInfoView
     private VBox scoreInfo;
     private VBox chosenPiece;
     private VBox movement;
-    //timer
-    Timeline time;
+    private Text timeRemainingText;
+    private Text playersTurnText;
 
     public GameInfoView() {
         initGameInfo();
@@ -99,7 +85,6 @@ public class GameInfoView
             moveBt.setPrefWidth(WIDTH);
 
             moveBt.setOnAction(event -> {
-                deleteTimer();
                 gameInfoViewEventListener.onMoveButtonClicked(getSelectedMove());
             });
 
@@ -185,16 +170,24 @@ public class GameInfoView
         whoseTurn = new VBox();
         whoseTurn.setSpacing(10);
         whoseTurn.setAlignment(Pos.CENTER);
-        drawPlayersTurn(turnCount);
-        drawTimer();
+
+        // Player turn text
+        playersTurnText = new Text(getPlayerTurnText(turnCount));
+        playersTurnText.setFont(HEADING);
+        playersTurnText.setFill(Color.ORANGERED);
+        whoseTurn.getChildren().add(playersTurnText);
+
+        // Timer text
+        timeRemainingText = new Text("Time remaining");
+        timeRemainingText.setFont(HEADING);
+        timeRemainingText.setFill(Color.ORANGERED);
+        whoseTurn.getChildren().add(timeRemainingText);
+
         rootGameInfo.getChildren().add(whoseTurn);
     }
 
     private void drawPlayersTurn(int turnCount) {
-        Text playersTurn = new Text(getPlayerTurnText(turnCount));
-        playersTurn.setFont(HEADING);
-        playersTurn.setFill(Color.ORANGERED);
-        whoseTurn.getChildren().add(playersTurn);
+        playersTurnText.setText(getPlayerTurnText(turnCount));
     }
 
     private String getPlayerTurnText(int turnCount) {
@@ -203,40 +196,6 @@ public class GameInfoView
         } else {
             return "It's the Shark's turn!";
         }
-    }
-
-    private void drawTimer() {
-        Text timeRemainingText = new Text(timeRemaining.toString() + " seconds\n");
-        timeRemainingText.setFont(HEADING);
-        timeRemainingText.setFill(Color.ORANGERED);
-        whoseTurn.getChildren().add(timeRemainingText);
-
-        time = new Timeline();
-        time.setCycleCount(startTime);
-
-        KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //decrement time
-                timeRemaining--;
-                //draw time remaining
-                timeRemainingText.setText(timeRemaining.toString() + " seconds\n");
-                //check if timer has finished
-                if (timeRemaining <= 0) {
-                    time.stop();
-                    gameInfoViewEventListener.timeRanOut();
-                }
-            }
-
-        });
-
-        time.getKeyFrames().add(frame);
-        time.playFromStart();
-    }
-
-    public void resetTimer() {
-        timeRemaining = startTime;
     }
     //end region
 
@@ -303,15 +262,12 @@ public class GameInfoView
     private void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
         clearView();
         drawPlayersTurn(turnCount);
-        resetTimer();
-        drawTimer();
         drawTurnCount(turnCount);
         drawScores(sharkScore, eagleScore);
         drawChoosePiece();
     }
 
     private void clearView() {
-        whoseTurn.getChildren().clear();
         scoreInfo.getChildren().clear();
         chosenPiece.getChildren().clear();
         movement.getChildren().clear();
@@ -344,10 +300,8 @@ public class GameInfoView
     public void gameInitialised(String sharkPlayerName, String eaglePlayerName,
                                 int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore) {
 
-        //initialise number of turns and time per turn
+        //initialise number of turns
         this.totalTurns = totalTurns;
-        this.startTime = turnTime;
-        this.timeRemaining = turnTime;
         //initialise game information
         initTitleInfo(sharkPlayerName, eaglePlayerName);
         initWhoseTurn(turnCount);
@@ -362,25 +316,13 @@ public class GameInfoView
     }
 
     @Override
-    public void stopTimer() {
-        if (time != null) {
-            time.stop();
-        }
+    public void timeRemainingChanged(int timeRemaining) {
+        timeRemainingText.setText(timeRemaining + " seconds\n");
     }
 
     @Override
-    public void startTimer() {
-        if (time != null) {
-            time.play();
-        }
-    }
-
-    @Override
-    public void deleteTimer() {
-        if (time != null) {
-            time.stop();
-        }
-        time = null;
+    public void timeRanOut() {
+        showTimeRanOutAlert();
     }
     //end region
 

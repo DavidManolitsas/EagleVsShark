@@ -2,7 +2,6 @@ package main.java;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import main.java.model.Game;
 import main.java.util.SceneManager;
 
 /**
@@ -34,10 +33,7 @@ public class SharkVsEagle
         sceneManager.init(primaryStage);
 
         if (SharkVsEagle.IS_DEBUG) {
-            Game game = Game.getInstance();
-            game.setTurnTime(60);
-            game.initPlayers("Jaws", "Bird Person");
-            sceneManager.showGameView();
+            sceneManager.showGameView("Jaws", "Bird Person", 60);
         } else {
             sceneManager.showStartMenu();
         }

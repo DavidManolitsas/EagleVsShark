@@ -1,6 +1,9 @@
 package main.java.model;
 
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import main.java.model.piece.Eagle;
 import main.java.model.piece.Piece;
 import main.java.model.piece.Shark;
@@ -10,11 +13,8 @@ import main.java.util.SceneManager;
  * @author David Manolitsas
  * @project OOSD-A1
  * @date 2020-04-06
- *
- * @invariant
- * 1. turnCount >= 1
+ * @invariant 1. turnCount >= 1
  * 2. eagleSquareCount >= 0 && sharkSquareCount >= 0
- *
  */
 public class Game {
 
@@ -25,11 +25,9 @@ public class Game {
         void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore);
 
         //timer functions
-        void stopTimer();
+        void timeRemainingChanged(int timeRemaining);
 
-        void startTimer();
-
-        void deleteTimer();
+        void timeRanOut();
     }
 
     //listener
@@ -44,55 +42,43 @@ public class Game {
     private double sharkSquareCount;
     private double eagleSquareCount;
     private int turnCount;
-    //singleton
-    private static Game instance;
+
+    private Timeline timer;
+    private int timeRemaining;
 
     /**
      * Singleton Game constructor
      */
-    private Game() {
+    public Game(GameModelEventListener listener) {
+        this.listener = listener;
         this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
-        this.turnCount = 1;
+        this.turnCount = 0;
     }
 
+    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int turnTime) {
+        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
+        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
+        this.turnTime = turnTime;
 
-    /**
-     * Get the singleton instance of game
-     *
-     * @return a singleton instance of Game
-     *
-     * @ensure
-     * 1. Game != null
-     */
-    public static Game getInstance() {
-        if (instance == null) {
-            instance = new Game();
-        }
-        return instance;
-    }
-
-
-    /**
-     * Start the game, show the game view containing the boardView
-     * and gameInfoView
-     */
-    public void startGame() {
-        SceneManager.getInstance().showGameView();
+        listener.gameInitialised(sharkPlayerName,
+                                 eaglePlayerName,
+                                 turnCount, TOTAL_TURNS, turnTime, getSharkScore(), getEagleScore());
     }
 
     /**
      * Check to see if the game has finished, if not continue to the next players turn
      *
-     * @ensure
-     * 1. if game is not over, turn is incremented by 1
+     * @ensure 1. if game is not over, turn is incremented by 1
      * 2. otherwise, the game is ended
      */
     public void nextTurn() {
         if (turnCount >= TOTAL_TURNS || isWinner()) {
+            stopTimer();
             endGame();
         } else {
             incrementTurnCount();
+            startTimer();
             listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore());
         }
     }
@@ -111,20 +97,10 @@ public class Game {
     }
 
     /**
-     * Reset the square count and turn count
-     */
-    public void resetGame() {
-        updateSquareCount(0, 0);
-        setTurnCount(1);
-    }
-
-    /**
      * Check to see which player has the most number of squares captured to declare them the winner.
      * Then show the end of game stage and announce the winner.
-     *
      */
     public void endGame() {
-        resetGame();
         if (sharkSquareCount > eagleSquareCount) {
             //sharks win the game
             SceneManager.getInstance().showEndGame("The Sharks Win!");
@@ -140,15 +116,13 @@ public class Game {
     /**
      * Updates the number of squares each player controls
      *
-     * @param sharkSquareCount number of squares the shark player controls
-     * @param eagleSquareCount number of squares the eagle player controls
+     * @param sharkSquareCount
+     *         number of squares the shark player controls
+     * @param eagleSquareCount
+     *         number of squares the eagle player controls
      *
-     * @require
-     * 1. int sharkSquareCount >= 0 && sharkSquareCount >= 0
-     *
-     * @ensure
-     * 1. the sharkSquareCount and eagleSquareCount are updated
-     *
+     * @require 1. int sharkSquareCount >= 0 && sharkSquareCount >= 0
+     * @ensure 1. the sharkSquareCount and eagleSquareCount are updated
      */
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
         this.sharkSquareCount = sharkSquareCount;
@@ -156,7 +130,6 @@ public class Game {
     }
 
     /**
-     *
      * @return the percentage of territory the sharks control
      */
     public double getSharkScore() {
@@ -173,15 +146,13 @@ public class Game {
     /**
      * On a given turn check to see if a piece belongs to the player of whose turn it is
      *
-     * @param piece The chosen piece that the player has selected
+     * @param piece
+     *         The chosen piece that the player has selected
+     *
      * @return true if the piece belongs to the player whose turn it is, otherwise return false
      *
-     * @require
-     * 1. piece != null
-     *
-     * @ensure
-     * 1. Determines whether the piece parsed in belongs to the current player or not
-     *
+     * @require 1. piece != null
+     * @ensure 1. Determines whether the piece parsed in belongs to the current player or not
      */
     public boolean pieceBelongsToPlayer(Piece piece) {
         if (turnCount % 2 == 0) {
@@ -198,12 +169,8 @@ public class Game {
      *
      * @return the player whose turn it is
      *
-     * @require
-     * 1. eaglePlayer != null && sharkPlayer != null
-     *
-     * @ensure
-     * 1. the returned Player != null
-     *
+     * @require 1. eaglePlayer != null && sharkPlayer != null
+     * @ensure 1. the returned Player != null
      */
     public Player getCurrentPlayer() {
         if (turnCount % 2 == 0) {
@@ -211,6 +178,41 @@ public class Game {
         } else {
             return sharkPlayer;
         }
+    }
+
+    public void startTimer() {
+        if (timer == null) {
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), actionEvent -> {
+                //decrement time
+                timeRemaining--;
+
+                listener.timeRemainingChanged(timeRemaining);
+
+                if (timeRemaining <= 0) {
+                    timer.stop();
+                    listener.timeRanOut();
+                }
+            }));
+        }
+        timer.stop();
+
+        timeRemaining = turnTime;
+        timer.setCycleCount(turnTime);
+        timer.playFromStart();
+
+        listener.timeRemainingChanged(timeRemaining);
+    }
+
+    public void pauseTimer() {
+        timer.pause();
+    }
+
+    public void resumeTimer() {
+        timer.play();
+    }
+
+    public void stopTimer() {
+        timer.stop();
     }
 
     public Player getSharkPlayer() {
@@ -227,37 +229,5 @@ public class Game {
 
     public int getTurnCount() {
         return turnCount;
-    }
-
-    public void setTurnCount(int turnCount) {
-        this.turnCount = turnCount;
-    }
-
-    public int getTurnTime() {
-        return turnTime;
-    }
-
-    public void setTurnTime(int turnTime) {
-        this.turnTime = turnTime;
-    }
-
-    public GameModelEventListener getListener() {
-        return listener;
-    }
-
-    public void setListener(GameModelEventListener listener) {
-        this.listener = listener;
-    }
-
-    public void initGameListener() {
-        listener.gameInitialised(sharkPlayer.getPlayerName(),
-                                 eaglePlayer.getPlayerName(),
-                                 turnCount, TOTAL_TURNS, getTurnTime(), getSharkScore(), getEagleScore());
-
-    }
-
-    public void initPlayers(String sharkPlayerName, String eaglePlayerName) {
-        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
-        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
     }
 }
