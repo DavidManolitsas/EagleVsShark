@@ -34,7 +34,7 @@ public class Game {
     private GameModelEventListener listener;
 
     private static final double TOTAL_SQUARES = 150;
-    private static final int TOTAL_TURNS = 2;
+    private static final int TOTAL_TURNS = 40;
     private static final double WIN_PERCENTAGE = 0.6;
     private int turnTime;
     private Player sharkPlayer;
