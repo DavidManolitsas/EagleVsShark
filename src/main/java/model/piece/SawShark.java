@@ -1,8 +1,7 @@
 package main.java.model.piece;
 
 import main.java.model.move.Move;
-import main.java.model.move.MoveBuilder;
-import main.java.model.move.shape.PaintShapeType;
+import main.java.model.move.SawSharkMove;
 
 import java.util.List;
 
@@ -19,11 +18,7 @@ public class SawShark
      */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new MoveBuilder(startRow, startCol, PaintShapeType.TRIANGLE)
-                .addAvailableStep(2)
-                .addMoveLeft()
-                .addMoveRight()
-                .build();
+        return new SawSharkMove(startRow, startCol).getMoveList();
     }
 
 }
