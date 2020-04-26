@@ -1,8 +1,7 @@
 package main.java.model.piece;
 
+import main.java.model.move.GoldenEagleMove;
 import main.java.model.move.Move;
-import main.java.model.move.MoveBuilder;
-import main.java.model.move.shape.PaintShapeType;
 
 import java.util.List;
 
@@ -24,9 +23,7 @@ public class GoldenEagle
      */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new MoveBuilder(startRow, startCol, PaintShapeType.CROSS)
-                .addMoveBehindPiece(sharkPosList)
-                .build();
+        return new GoldenEagleMove(startRow, startCol, sharkPosList).getMoveList();
     }
 
     public void setSharkList(List<int[]> sharksPos) {

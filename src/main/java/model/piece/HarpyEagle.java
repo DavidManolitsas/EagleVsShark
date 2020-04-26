@@ -1,8 +1,7 @@
 package main.java.model.piece;
 
+import main.java.model.move.HarpyEagleMove;
 import main.java.model.move.Move;
-import main.java.model.move.MoveBuilder;
-import main.java.model.move.shape.PaintShapeType;
 
 import java.util.List;
 
@@ -19,13 +18,7 @@ public class HarpyEagle
      */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new MoveBuilder(startRow, startCol, PaintShapeType.VSHAPE)
-                .addAvailableStep(3)
-                .addMoveUp()
-                .addMoveDown()
-                .addMoveLeft()
-                .addMoveRight()
-                .build();
+        return new HarpyEagleMove(startRow, startCol).getMoveList();
     }
 
 }
