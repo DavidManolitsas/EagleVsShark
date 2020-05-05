@@ -56,12 +56,16 @@ public class StartMenuController
                 } else {
                     SceneManager.getInstance().showGameView(
                             sharkPlayerName, eaglePlayerName,
-                            turnTime
-                    );
+                            turnTime);
                 }
             } catch (NumberFormatException e) {
                 startMenu.showError("Enter a number as the time limit to continue");
             }
         }
+    }
+
+    @Override
+    public void onStartCustomGameBtClick() {
+
     }
 }

@@ -36,6 +36,8 @@ public class StartMenu
 
     public interface StartMenuListener {
         void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit);
+
+        void onStartCustomGameBtClick();
     }
 
     private StartMenuListener startMenuListener;
@@ -116,13 +118,24 @@ public class StartMenu
             getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName, timeLimit);
         });
 
+        //Custom Game Start Button
+        Button customStartBt = new Button("Start Custom Game");
+        customStartBt.setFont(BODY);
+        customStartBt.setCursor(Cursor.HAND);
+        customStartBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+
+        customStartBt.setOnAction(event -> {
+            getStartMenuListener().onStartCustomGameBtClick();
+        });
+
+
         //Menu
         VBox menuList = new VBox();
         menuList.setSpacing(20);
         menuList.setPadding(new Insets(60, 270, 180, 270));
         menuList.getChildren()
                 .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, timeLimitText,
-                        timeLimitField, startBt);
+                        timeLimitField, startBt, customStartBt);
 
         root.setCenter(menuList);
         menuList.setAlignment(Pos.CENTER);
