@@ -2,8 +2,8 @@ package main.java.controller;
 
 import javafx.fxml.FXML;
 import main.java.util.SceneManager;
-import main.java.view.StartMenu;
-import main.java.view.StartMenu.StartMenuListener;
+import main.java.view.startGame.StartGameMenu;
+import main.java.view.startGame.StartGameMenu.StartGameMenuListener;
 
 /**
  * @author David Manolitsas
@@ -13,14 +13,14 @@ import main.java.view.StartMenu.StartMenuListener;
  * 2. game != null
  */
 public class StartMenuController
-        implements StartMenuListener {
+        implements StartGameMenuListener {
 
     @FXML
-    private StartMenu startMenu;
+    private StartGameMenu startGameMenu;
 
     @FXML
     public void initialize() {
-        startMenu.setStartMenuListener(this);
+        startGameMenu.setStartMenuListener(this);
     }
 
     /**
@@ -31,8 +31,6 @@ public class StartMenuController
      *         the shark players name
      * @param eaglePlayerName
      *         the eagle players name
-     * @param timeLimit
-     *         amount of time per turn
      *
      * @require 1. sharkPlayerName != null
      * 2. eaglePlayerName != null
@@ -42,30 +40,17 @@ public class StartMenuController
      * 3. !eaglePlayerName.trim().isEmpty() && !sharkPlayerName.trim().isEmpty()
      */
     @Override
-    public void onStartBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit) {
+    public void onStartBtClick(String sharkPlayerName, String eaglePlayerName) {
         //check all game details are correct
         if (sharkPlayerName.trim().isEmpty() || eaglePlayerName.trim().isEmpty()) {
-            startMenu.showError("Enter both player names to start the game");
-        } else if (timeLimit.trim().isEmpty()) {
-            startMenu.showError("Enter a time limit to start the game");
+            startGameMenu.showError("Enter both player names to start the game");
         } else {
-            try {
-                int turnTime = Integer.parseInt(timeLimit);
-                if (turnTime < 10) {
-                    startMenu.showError("Set a time limit of 10 seconds or more");
-                } else {
-                    SceneManager.getInstance().showGameView(
-                            sharkPlayerName, eaglePlayerName,
-                            turnTime);
-                }
-            } catch (NumberFormatException e) {
-                startMenu.showError("Enter a number as the time limit to continue");
-            }
+            SceneManager.getInstance().showGameView(sharkPlayerName, eaglePlayerName);
         }
     }
 
     @Override
-    public void onStartCustomGameBtClick() {
-
+    public void onCreateCustomGameBtClick() {
+        SceneManager.getInstance().showCustomGameMenu();
     }
 }

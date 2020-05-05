@@ -59,10 +59,24 @@ public class Game {
         this.turnCount = 0;
     }
 
-    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int turnTime) {
+    public void initialiseGame(String sharkPlayerName, String eaglePlayerName) {
         this.sharkPlayer = new SharkPlayer(sharkPlayerName);
         this.eaglePlayer = new EaglePlayer(eaglePlayerName);
-        this.turnTime = turnTime;
+        this.turnTime = 60;
+
+        listener.gameInitialised(sharkPlayerName,
+                                 eaglePlayerName,
+                                 turnCount, TOTAL_TURNS, turnTime, getSharkScore(), getEagleScore());
+    }
+
+    public void initialiseCustomGame(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows,
+                                     int cols) {
+        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
+        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
+        this.turnTime = timeLimit;
+
+        //TODO: initialise board size
+        System.out.println("Board size is " + rows + " x " + cols);
 
         listener.gameInitialised(sharkPlayerName,
                                  eaglePlayerName,
