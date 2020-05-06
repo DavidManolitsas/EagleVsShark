@@ -13,9 +13,6 @@ import main.java.model.move.Move;
 
 import java.util.*;
 
-import static main.java.model.Board.COLUMN;
-import static main.java.model.Board.ROW;
-
 public class BoardView
         extends GridPane
         implements BoardModelEventListener {
@@ -37,6 +34,9 @@ public class BoardView
     public static final int SQUARE_SIZE = 40;
     public static final int PIECE_SIZE = 38;
 
+    private int totalRows;
+    private int totalCols;
+
     private int[] lastHighlightPos = null;
     private Move lastPreviewMove = null;
 
@@ -44,12 +44,20 @@ public class BoardView
 
     public BoardView() {
         super();
-        drawBoard();
-
-        drawPieces();
     }
 
     //region public BoardView methods
+    public void initBoardView(int rows, int cols) {
+        totalRows = rows;
+        totalCols = cols;
+
+        lastHighlightPos = null;
+        lastPreviewMove = null;
+
+        drawBoard();
+        drawPieces();
+    }
+
     public void highlightSquare(int row, int col) {
         if (lastHighlightPos != null) {
             removeHighlight();
@@ -147,14 +155,14 @@ public class BoardView
 
     //region private methods
     private void drawBoard() {
-        for (int row = 0; row < ROW; row++) {
-            for (int col = 0; col < COLUMN; col++) {
+        for (int row = 0; row < totalRows; row++) {
+            for (int col = 0; col < totalCols; col++) {
                 StackPane square = getSquare(row, col);
                 add(square, col, row);
             }
         }
 
-        for (int i = 0; i < COLUMN; i++) {
+        for (int i = 0; i < totalCols; i++) {
             getColumnConstraints().add(new ColumnConstraints(SQUARE_SIZE,
                                                              Control.USE_COMPUTED_SIZE,
                                                              Double.POSITIVE_INFINITY,
@@ -164,7 +172,7 @@ public class BoardView
         }
 
 
-        for (int i = 0; i < ROW; i++) {
+        for (int i = 0; i < totalRows; i++) {
             getRowConstraints().add(new RowConstraints(SQUARE_SIZE,
                                                        Control.USE_COMPUTED_SIZE,
                                                        SQUARE_SIZE,
@@ -176,7 +184,7 @@ public class BoardView
 
     private void drawPieces() {
         int topRow = 0;
-        int bottomRow = ROW - 1;
+        int bottomRow = totalRows - 1;
         int[] pieceRows = {topRow, bottomRow};
         int[] pieceCols = {4, 5, 6};
 

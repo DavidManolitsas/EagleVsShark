@@ -56,17 +56,23 @@ public class GameViewController
         menuView.setListener(this);
     }
 
+
     public void initGameData(String sharkPlayerName, String eaglePlayerName) {
         game.initialiseGame(sharkPlayerName, eaglePlayerName);
         game.nextTurn();
     }
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
+
+       //TODO: initialise board size
+        System.out.println("Board size is " + rows + " x " + cols);      
+  
+        // TODO: set custom board size
+        board.initBoard(15, 10);
+        boardView.initBoardView(15, 10);
+
+
         game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit);
-
-        //TODO: initialise board size
-        System.out.println("Board size is " + rows + " x " + cols);
-
         game.nextTurn();
     }
 
