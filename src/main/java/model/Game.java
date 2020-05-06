@@ -56,16 +56,6 @@ public class Game {
         this.turnCount = 0;
     }
 
-    public void initialiseGame(String sharkPlayerName, String eaglePlayerName) {
-        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
-        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
-        this.turnTime = 60;
-
-        listener.gameInitialised(sharkPlayerName,
-                                 eaglePlayerName,
-                                 turnCount, TOTAL_TURNS, turnTime, getSharkScore(), getEagleScore());
-    }
-
     /**
      * This overloaded method initialises a custom game where the player can set the time limit
      * for each turn as
