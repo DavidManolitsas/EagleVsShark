@@ -4,8 +4,9 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import main.java.model.Board;
 import main.java.model.Game;
+import main.java.model.board.Board;
+import main.java.model.board.BoardImpl;
 import main.java.model.move.Move;
 import main.java.model.piece.GoldenEagle;
 import main.java.model.piece.Piece;
@@ -48,7 +49,7 @@ public class GameViewController
 
     @FXML
     public void initialize() {
-        board = new Board(boardView);
+        board = new BoardImpl(boardView);
         game = new Game(gameInfoView);
 
         boardView.setBoardViewEventListener(this);

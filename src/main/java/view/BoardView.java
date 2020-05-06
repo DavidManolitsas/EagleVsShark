@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.ResPath;
-import main.java.model.Board.BoardModelEventListener;
+import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 
 import java.util.*;

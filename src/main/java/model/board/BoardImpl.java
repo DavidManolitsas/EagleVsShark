@@ -1,5 +1,6 @@
-package main.java.model;
+package main.java.model.board;
 
+import main.java.model.Square;
 import main.java.model.move.Move;
 import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
@@ -19,7 +20,8 @@ import java.util.Map;
  * 1. square != null
  * 2. pieceSquareMap != null && pieceSquareMap.size == 6
  */
-public class Board {
+public class BoardImpl
+        implements Board {
 
     public interface BoardModelEventListener {
         void onPiecePositionUpdated(Move move);
@@ -39,10 +41,12 @@ public class Board {
      * Requires:
      * listener != null
      */
-    public Board(BoardModelEventListener listener) {
+    public BoardImpl(BoardModelEventListener listener) {
         eventListener = listener;
     }
 
+    // region public Board methods
+    @Override
     public void initBoard(int rows, int cols) {
         totalRows = rows;
         totalCols = cols;
@@ -52,7 +56,7 @@ public class Board {
         initPieces();
     }
 
-    //region public Board methods
+    @Override
     public int getSharkSquareCount() {
         int count = 0;
         for (int row = 0; row < squares.length; row++) {
@@ -65,6 +69,7 @@ public class Board {
         return count;
     }
 
+    @Override
     public int getEagleSquareCount() {
         int count = 0;
         for (int row = 0; row < squares.length; row++) {
@@ -82,14 +87,17 @@ public class Board {
      * 1. row >= 0 && col >= 0
      * 2. row < ROW && col < COL
      */
+    @Override
     public Piece getPiece(int row, int col) {
         return getSquareAt(row, col).getPiece();
     }
 
+    @Override
     public void setChosenPiece(Piece chosenPiece) {
         this.chosenPiece = chosenPiece;
     }
 
+    @Override
     public Piece getChosenPiece() {
         return chosenPiece;
     }
@@ -103,6 +111,7 @@ public class Board {
      * 1. pieceSquareMap.get(piece) == destination
      * 2. start.getPiece == null
      */
+    @Override
     public void updatePiecePosition(Move move, Piece piece) {
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
@@ -125,6 +134,7 @@ public class Board {
      * Ensures:
      * 1. squares of PaintInfo are occupied by the player
      */
+    @Override
     public void updateTerritory(Move move, Player player) {
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
@@ -132,6 +142,7 @@ public class Board {
         }
     }
 
+    @Override
     public List<int[]> getSharksPositions() {
         List<int[]> list = new ArrayList<>();
 
@@ -150,6 +161,7 @@ public class Board {
      * Requires:
      * 1. moves != null
      */
+    @Override
     public List<Move> validatePossibleMoves(List<Move> moves) {
         List<Move> validatedMoves = new ArrayList<>();
         for (Move move : moves) {
@@ -162,9 +174,9 @@ public class Board {
         }
         return validatedMoves;
     }
-    //endregion
+    // endregion
 
-    //region private methods
+    // region private methods
     private void initSquare() {
         squares = new Square[totalRows][totalCols];
 
@@ -248,6 +260,6 @@ public class Board {
         List<int[]> paintInfo = move.getPaintShape().getPaintInfo();
         paintInfo.removeIf(this::isPositionOutOfBound);
     }
-    //endregion
+    // endregion
 
 }
