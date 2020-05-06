@@ -85,7 +85,7 @@ public class SceneManager {
         try {
             root.setCenter(gameLoader.load());
             GameViewController controller = gameLoader.getController();
-            controller.initCustomGameData(sharkPlayerName, eaglePlayerName, timeLimit, cols, rows);
+            controller.initGameData(sharkPlayerName, eaglePlayerName, timeLimit, cols, rows);
 
         } catch (IOException e) {
             e.printStackTrace();
