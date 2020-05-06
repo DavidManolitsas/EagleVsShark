@@ -57,6 +57,10 @@ public class GameViewController
     }
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
+        // TODO: set custom board size
+        board.initBoard(15, 10);
+        boardView.initBoardView(15, 10);
+
         game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit);
         game.nextTurn();
     }

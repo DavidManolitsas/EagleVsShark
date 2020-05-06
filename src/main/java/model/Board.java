@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
- *
+ * <p>
  * Invariant:
  * 1. square != null
  * 2. pieceSquareMap != null && pieceSquareMap.size == 6
@@ -25,15 +25,15 @@ public class Board {
         void onPiecePositionUpdated(Move move);
     }
 
-    public static final int ROW = 15;
-    public static final int COLUMN = 10;
-
     private BoardModelEventListener eventListener;
 
-    private Square[][] squares = new Square[ROW][COLUMN];
-    private Map<Piece, Square> pieceSquareMap = new HashMap<>();
+    private int totalRows;
+    private int totalCols;
 
-    private Piece chosenPiece = null;
+    private Square[][] squares;
+    private Map<Piece, Square> pieceSquareMap;
+
+    private Piece chosenPiece;
 
     /**
      * Requires:
@@ -41,6 +41,13 @@ public class Board {
      */
     public Board(BoardModelEventListener listener) {
         eventListener = listener;
+    }
+
+    public void initBoard(int rows, int cols) {
+        totalRows = rows;
+        totalCols = cols;
+        chosenPiece = null;
+
         initSquare();
         initPieces();
     }
@@ -159,8 +166,10 @@ public class Board {
 
     //region private methods
     private void initSquare() {
-        for (int row = 0; row < ROW; row++) {
-            for (int col = 0; col < COLUMN; col++) {
+        squares = new Square[totalRows][totalCols];
+
+        for (int row = 0; row < totalRows; row++) {
+            for (int col = 0; col < totalCols; col++) {
                 Square square = new Square(row, col);
                 squares[row][col] = square;
             }
@@ -168,8 +177,10 @@ public class Board {
     }
 
     private void initPieces() {
+        pieceSquareMap = new HashMap<>();
+
         int topRow = 0;
-        int bottomRow = ROW - 1;
+        int bottomRow = totalRows - 1;
         int[] pieceCols = {4, 5, 6};
 
         // Adding pieces by order
@@ -225,8 +236,8 @@ public class Board {
      * 1. position != null
      */
     private boolean isPositionOutOfBound(int[] position) {
-        return position[0] < 0 || position[0] >= ROW ||
-                position[1] < 0 || position[1] >= COLUMN;
+        return position[0] < 0 || position[0] >= totalRows ||
+                position[1] < 0 || position[1] >= totalCols;
     }
 
     /**
