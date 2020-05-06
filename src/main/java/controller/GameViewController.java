@@ -62,7 +62,11 @@ public class GameViewController
     }
 
     public void initCustomGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
-        game.initialiseCustomGame(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols);
+        game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit);
+
+        //TODO: initialise board size
+        System.out.println("Board size is " + rows + " x " + cols);
+
         game.nextTurn();
     }
 
