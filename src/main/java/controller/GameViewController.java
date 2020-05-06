@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import main.java.model.Game;
 import main.java.model.board.Board;
 import main.java.model.board.BoardImpl;
+import main.java.model.board.RockDecorator;
 import main.java.model.move.Move;
 import main.java.model.piece.GoldenEagle;
 import main.java.model.piece.Piece;
@@ -63,6 +64,7 @@ public class GameViewController
     }
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
+        board = new RockDecorator(board);
         board.initBoard(rows, cols);
         boardView.initBoardView(rows, cols);
 

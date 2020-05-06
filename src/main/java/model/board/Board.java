@@ -30,4 +30,10 @@ public interface Board {
     List<int[]> getSharksPositions();
 
     List<Move> validatePossibleMoves(List<Move> moves);
+
+    boolean isSquareValid(int[] position);
+
+    int getTotalRows();
+
+    int getTotalCols();
 }

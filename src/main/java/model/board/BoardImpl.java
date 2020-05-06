@@ -174,6 +174,40 @@ public class BoardImpl
         }
         return validatedMoves;
     }
+
+    /**
+     * Requires:
+     * 1. position != null
+     *
+     * @param position
+     *         Destination position
+     *
+     * @return true when:
+     * 1. destination square is on the board
+     * 2. destination square has no piece which belongs to the same player
+     */
+    public boolean isSquareValid(int[] position) {
+        if (isPositionOutOfBound(position)) {
+            return false;
+        }
+
+        // Check if the square already has piece on it
+        Piece piece = getSquareAt(position[0], position[1]).getPiece();
+        return piece == null ||
+                (chosenPiece != null &&
+                        !piece.getClass().getSuperclass().equals(chosenPiece.getClass().getSuperclass()));
+    }
+
+    @Override
+    public int getTotalRows() {
+        return totalRows;
+    }
+
+    @Override
+    public int getTotalCols() {
+        return totalCols;
+    }
+
     // endregion
 
     // region private methods
@@ -220,27 +254,6 @@ public class BoardImpl
      */
     private Square getSquareAt(int row, int col) {
         return squares[row][col];
-    }
-
-    /**
-     * Requires:
-     * 1. position != null
-     *
-     * @param position
-     *         Destination position
-     *
-     * @return true when:
-     * 1. destination square is on the board
-     * 2. destination square has no piece which belongs to the same player
-     */
-    private boolean isSquareValid(int[] position) {
-        if (isPositionOutOfBound(position)) {
-            return false;
-        }
-
-        // Check if the square already has piece on it
-        Piece piece = getSquareAt(position[0], position[1]).getPiece();
-        return piece == null || !piece.getClass().getSuperclass().equals(chosenPiece.getClass().getSuperclass());
     }
 
     /**
