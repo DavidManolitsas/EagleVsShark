@@ -23,7 +23,7 @@ public class StartCustomGameMenu
 
     public interface StartCustomGameMenuListener {
         void onStartGameBtClick(String sharkPlayerName, String eaglePlayerName, String timeLimit, String rows,
-                                String cols);
+                                String cols, String sharkCount, String eagleCount);
     }
 
     private StartCustomGameMenuListener startCustomGameMenuListener;
@@ -48,8 +48,6 @@ public class StartCustomGameMenu
 
     @Override
     public void drawGameDetails() {
-
-
         //Shark Player
         Text sharkPlayerText = new Text("Shark Player: ");
         sharkPlayerText.setFont(BODY);
@@ -73,9 +71,9 @@ public class StartCustomGameMenu
         //Board size
         Text enterBoard = new Text("Size of the Board:");
         enterBoard.setFont(BODY);
-
         HBox rowCol = new HBox();
         rowCol.setSpacing(2);
+        rowCol.setAlignment(Pos.CENTER);
         TextField rowsText = new TextField();
         rowsText.setFont(BODY);
         rowsText.setPromptText("Rows");
@@ -85,6 +83,19 @@ public class StartCustomGameMenu
         colsText.setFont(BODY);
         colsText.setPromptText("Columns");
         rowCol.getChildren().addAll(rowsText, by, colsText);
+
+        Text enterPieces = new Text("Number of pieces:");
+        enterPieces.setFont(BODY);
+        HBox sharkEagle = new HBox();
+        sharkEagle.setSpacing(5);
+        sharkEagle.setAlignment(Pos.CENTER);
+        TextField sharkField = new TextField();
+        sharkField.setFont(BODY);
+        sharkField.setPromptText("Sharks");
+        TextField eagleField = new TextField();
+        eagleField.setFont(BODY);
+        eagleField.setPromptText("Eagles");
+        sharkEagle.getChildren().addAll(sharkField, eagleField);
 
         //Start Game Button
         Button startBt = new Button("Start Game");
@@ -99,17 +110,21 @@ public class StartCustomGameMenu
             String timeLimit = timeLimitField.getText();
             String rows = rowsText.getText();
             String cols = colsText.getText();
+            String sharkCount = sharkField.getText();
+            String eagleCount = eagleField.getText();
 
-            getCustomGameMenuListener().onStartGameBtClick(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols);
+            getCustomGameMenuListener()
+                    .onStartGameBtClick(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols, sharkCount,
+                                        eagleCount);
         });
 
         //Menu
         VBox menuList = new VBox();
-        menuList.setSpacing(20);
-        menuList.setPadding(new Insets(60, 270, 180, 270));
+        menuList.setSpacing(15);
+        menuList.setPadding(new Insets(30, 270, 180, 270));
         menuList.getChildren()
                 .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, timeLimitText,
-                        timeLimitField, enterBoard, rowCol, startBt);
+                        timeLimitField, enterBoard, rowCol, enterPieces, sharkEagle, startBt);
 
         getRoot().setCenter(menuList);
         menuList.setAlignment(Pos.CENTER);

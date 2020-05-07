@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import main.java.model.Game;
@@ -17,8 +19,6 @@ import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 import main.java.view.MenuView;
 import main.java.view.MenuView.MenuBarEventListener;
-
-import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -60,10 +60,16 @@ public class GameViewController
 
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName) {
-        initGameData(sharkPlayerName, eaglePlayerName, 60, 15, 10);
+        initGameData(sharkPlayerName, eaglePlayerName, 60, 15, 10, 3, 3);
     }
 
-    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
+    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols,
+                             int sharks, int eagles) {
+        //TODO: implement initialising each number of pieces
+        //does this happen in the board class?
+        System.out.println("No. of Piece, Sharks:" + sharks + " Eagles:" + eagles);
+
+        board.initBoard(rows, cols);
         boardView.initBoardView(rows, cols);
 
         board = new RockDecorator(board);

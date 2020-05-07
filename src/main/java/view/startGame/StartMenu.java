@@ -53,7 +53,7 @@ public abstract class StartMenu
         mango.setFill(Color.ORANGERED);
         titleBox.getChildren().addAll(title, mango);
         titleBox.setAlignment(Pos.CENTER);
-        titleBox.setPadding(new Insets(40, 0, 0, 0));
+        titleBox.setPadding(new Insets(30, 0, 0, 0));
         titleBox.setSpacing(10);
         root.setTop(titleBox);
     }
