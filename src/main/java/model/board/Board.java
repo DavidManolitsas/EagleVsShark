@@ -2,6 +2,7 @@ package main.java.model.board;
 
 import java.util.List;
 
+import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
@@ -39,4 +40,8 @@ public interface Board {
     int getTotalCols();
 
     BoardModelEventListener getEventListener();
+
+    Square[] getTopRow();
+
+    Square[] getBottomRow();
 }

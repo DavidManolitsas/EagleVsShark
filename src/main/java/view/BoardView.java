@@ -1,17 +1,34 @@
 package main.java.view;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import main.java.ResPath;
+import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
-
-import java.util.*;
+import main.java.model.piece.BaldEagle;
+import main.java.model.piece.GoblinShark;
+import main.java.model.piece.GoldenEagle;
+import main.java.model.piece.Hammerhead;
+import main.java.model.piece.HarpyEagle;
+import main.java.model.piece.Piece;
+import main.java.model.piece.SawShark;
 
 public class BoardView
         extends GridPane
@@ -49,7 +66,7 @@ public class BoardView
     }
 
     //region public BoardView methods
-    public void initBoardView(int rows, int cols) {
+    public void initBoardView(int rows, int cols, Square[] topRow, Square[] bottomRow) {
         totalRows = rows;
         totalCols = cols;
 
@@ -57,7 +74,7 @@ public class BoardView
         lastPreviewMove = null;
 
         drawBoard();
-        drawPieces();
+        drawPieces(topRow, bottomRow);
     }
 
     public void highlightSquare(int row, int col) {
@@ -160,6 +177,8 @@ public class BoardView
             addRocks(position[0], position[1], ResPath.ROCKS);
         }
     }
+
+
     //endregion
 
     //region private methods
@@ -191,21 +210,33 @@ public class BoardView
         }
     }
 
-    private void drawPieces() {
-        int topRow = 0;
-        int bottomRow = totalRows - 1;
-        int[] pieceRows = {topRow, bottomRow};
-        int[] pieceCols = {4, 5, 6};
+    private void drawPieces(Square[] topRow, Square[] bottomRow) {
+        String baldEagle = ResPath.PIECE_BALD_EAGLE, goldenEagle = ResPath.PIECE_GOLDEN_EAGLE, harpyEagle =
+                ResPath.PIECE_HARPY_EAGLE, goblinShark = ResPath.PIECE_GOBLIN_SHARK, hammerhead =
+                ResPath.PIECE_HAMMERHEAD, sawShark = ResPath.PIECE_SAW_SHARK;
 
-        String[] images = {
-                ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,
-                ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMERHEAD, ResPath.PIECE_SAW_SHARK
-        };
 
-        int index = 0;
-        for (int row : pieceRows) {
-            for (int col : pieceCols) {
-                addPiece(row, col, images[index++]);
+        for (Square square : topRow) {
+            Piece piece = square.getPiece();
+
+            if (piece instanceof BaldEagle) {
+                addPiece(square.getRow(), square.getCol(), baldEagle);
+            } else if (piece instanceof HarpyEagle) {
+                addPiece(square.getRow(), square.getCol(), harpyEagle);
+            } else if (piece instanceof GoldenEagle) {
+                addPiece(square.getRow(), square.getCol(), goldenEagle);
+            }
+        }
+
+        for (Square square : bottomRow) {
+            Piece piece = square.getPiece();
+
+            if (piece instanceof Hammerhead) {
+                addPiece(square.getRow(), square.getCol(), hammerhead);
+            } else if (piece instanceof GoblinShark) {
+                addPiece(square.getRow(), square.getCol(), goblinShark);
+            } else if (piece instanceof SawShark) {
+                addPiece(square.getRow(), square.getCol(), sawShark);
             }
         }
     }

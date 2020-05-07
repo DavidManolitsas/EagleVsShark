@@ -2,6 +2,7 @@ package main.java.model.board;
 
 import java.util.List;
 
+import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
@@ -91,5 +92,15 @@ public abstract class AbstractBoardDecorator
     @Override
     public BoardModelEventListener getEventListener() {
         return board.getEventListener();
+    }
+
+    @Override
+    public Square[] getTopRow() {
+        return board.getTopRow();
+    }
+
+    @Override
+    public Square[] getBottomRow() {
+        return board.getBottomRow();
     }
 }
