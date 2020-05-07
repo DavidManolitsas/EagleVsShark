@@ -36,9 +36,9 @@ public class Game {
     //listener
     private GameModelEventListener listener;
 
-    private static final double TOTAL_SQUARES = 150;
-    private static final int TOTAL_TURNS = 2;
+    private static final int TOTAL_TURNS = 40;
     private static final double WIN_PERCENTAGE = 0.6;
+    private double totalSquares;
     private int turnTime;
     private Player sharkPlayer;
     private Player eaglePlayer;
@@ -67,10 +67,11 @@ public class Game {
      * @param timeLimit
      *         amount of time per turn
      */
-    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
+    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
         this.sharkPlayer = new SharkPlayer(sharkPlayerName);
         this.eaglePlayer = new EaglePlayer(eaglePlayerName);
         this.turnTime = timeLimit;
+        this.totalSquares = rows * cols;
 
         listener.gameInitialised(sharkPlayerName,
                                  eaglePlayerName,
@@ -100,7 +101,7 @@ public class Game {
      * @return true if a player has captured more than 60% of the territory, other wise return false
      */
     public boolean isWinner() {
-        if (sharkSquareCount / TOTAL_SQUARES > WIN_PERCENTAGE || eagleSquareCount / TOTAL_SQUARES > WIN_PERCENTAGE) {
+        if (sharkSquareCount / totalSquares > WIN_PERCENTAGE || eagleSquareCount / totalSquares > WIN_PERCENTAGE) {
             //sharks or eagle win
             return true;
         }
@@ -144,14 +145,14 @@ public class Game {
      * @return the percentage of territory the sharks control
      */
     public double getSharkScore() {
-        return sharkSquareCount / TOTAL_SQUARES;
+        return sharkSquareCount / totalSquares;
     }
 
     /**
      * @return the percentage of territory the eagles control
      */
     public double getEagleScore() {
-        return eagleSquareCount / TOTAL_SQUARES;
+        return eagleSquareCount / totalSquares;
     }
 
     /**
