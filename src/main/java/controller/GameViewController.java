@@ -1,7 +1,5 @@
 package main.java.controller;
 
-import java.util.List;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import main.java.model.Game;
@@ -19,6 +17,8 @@ import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 import main.java.view.MenuView;
 import main.java.view.MenuView.MenuBarEventListener;
+
+import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -64,9 +64,10 @@ public class GameViewController
     }
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
+        boardView.initBoardView(rows, cols);
+
         board = new RockDecorator(board);
         board.initBoard(rows, cols);
-        boardView.initBoardView(rows, cols);
 
         game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols);
         game.nextTurn();

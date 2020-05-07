@@ -153,6 +153,13 @@ public class BoardView
         StackPane destination = getSquareAt(destinationPos[0], destinationPos[1]);
         destination.getChildren().add(piece);
     }
+
+    @Override
+    public void onRocksAdded(Collection<int[]> rockPositionList) {
+        for (int[] position : rockPositionList) {
+            addRocks(position[0], position[1], ResPath.ROCKS);
+        }
+    }
     //endregion
 
     //region private methods

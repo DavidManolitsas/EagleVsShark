@@ -1,5 +1,6 @@
 package main.java.model.board;
 
+import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.model.player.Player;
@@ -85,5 +86,10 @@ public abstract class AbstractBoardDecorator
     @Override
     public int getTotalCols() {
         return board.getTotalCols();
+    }
+
+    @Override
+    public BoardModelEventListener getEventListener() {
+        return board.getEventListener();
     }
 }

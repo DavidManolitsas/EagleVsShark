@@ -24,6 +24,7 @@ public class RockDecorator
     public void initBoard(int rows, int cols) {
         super.initBoard(rows, cols);
         generateObstacles();
+        getEventListener().onRocksAdded(rockSquareMap.values());
     }
 
     @Override
@@ -48,10 +49,6 @@ public class RockDecorator
             if (isSquareValid(position)) {
                 rockSquareMap.put(Arrays.toString(position), position);
             }
-        }
-
-        for (String s : rockSquareMap.keySet()) {
-            System.out.println(s);
         }
     }
 }

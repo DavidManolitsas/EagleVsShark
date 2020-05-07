@@ -1,5 +1,6 @@
 package main.java.model.board;
 
+import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.model.player.Player;
@@ -36,4 +37,6 @@ public interface Board {
     int getTotalRows();
 
     int getTotalCols();
+
+    BoardModelEventListener getEventListener();
 }

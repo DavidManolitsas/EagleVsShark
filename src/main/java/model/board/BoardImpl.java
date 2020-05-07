@@ -7,10 +7,7 @@ import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author WeiYi Yu
@@ -25,6 +22,8 @@ public class BoardImpl
 
     public interface BoardModelEventListener {
         void onPiecePositionUpdated(Move move);
+
+        void onRocksAdded(Collection<int[]> rockPositionList);
     }
 
     private BoardModelEventListener eventListener;
@@ -208,6 +207,9 @@ public class BoardImpl
         return totalCols;
     }
 
+    public BoardModelEventListener getEventListener() {
+        return eventListener;
+    }
     // endregion
 
     // region private methods
