@@ -40,7 +40,7 @@ public class CustomGameMenuController
 
                 if (turnTime < 10) {
                     customGameMenu.showError("The minimum time limit is 10 seconds");
-                } else if (row < 5 || col < 5) {
+                } else if (row < 7 || col < 7) {
                     customGameMenu.showError("Enter a row or column of 5 or higher");
                 } else {
                     SceneManager.getInstance().showCustomGameView(sharkPlayerName, eaglePlayerName, turnTime, row, col);
