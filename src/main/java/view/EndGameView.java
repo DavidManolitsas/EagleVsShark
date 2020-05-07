@@ -1,5 +1,7 @@
 package main.java.view;
 
+import java.text.DecimalFormat;
+
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -25,13 +27,18 @@ public class EndGameView
     private final static int HEIGHT = 300;
     private final static String STAGE_NAME = "Game Over";
     private String winner;
+    private double sharkScore;
+    private double eagleScore;
     private BorderPane root = new BorderPane();
     private static final Font TITLE = Font.font("Impact", 24);
     private static final Font BODY = Font.font("Helvetica", 16);
+    private DecimalFormat decimalFormat = new DecimalFormat("#%");
 
 
-    public EndGameView(String winner) {
+    public EndGameView(String winner, double sharkScore, double eagleScore) {
         this.winner = winner;
+        this.sharkScore = sharkScore;
+        this.eagleScore = eagleScore;
         initStage();
         draw();
     }
@@ -41,9 +48,17 @@ public class EndGameView
         details.setSpacing(20);
         details.setAlignment(Pos.CENTER);
 
+        //winner
         Text winner = new Text(this.winner);
         winner.setFont(TITLE);
         winner.setFill(Color.ORANGERED);
+
+        //score
+        Text sharkPercentage = new Text("Shark Score: " + decimalFormat.format(sharkScore));
+        sharkPercentage.setFont(BODY);
+        Text eaglePercentage = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
+        eaglePercentage.setFont(BODY);
+
         //play again button
         Button playAgainBt = new Button("Play Again");
         playAgainBt.setFont(BODY);
@@ -63,11 +78,10 @@ public class EndGameView
 
         quitBt.setOnAction(event -> {
             Platform.exit();
+            System.exit(0);
         });
 
-        details.getChildren().addAll(winner, playAgainBt, quitBt);
-
-
+        details.getChildren().addAll(winner, sharkPercentage, eaglePercentage, playAgainBt, quitBt);
 
         root.setCenter(details);
     }

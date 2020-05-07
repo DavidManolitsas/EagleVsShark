@@ -92,8 +92,8 @@ public class SceneManager {
         }
     }
 
-    public void showEndGame(String winner) {
-        Stage endGameStage = new EndGameView(winner);
+    public void showEndGame(String winner, double sharkScore, double eagleScore) {
+        Stage endGameStage = new EndGameView(winner, sharkScore, eagleScore);
         endGameStage.show();
     }
 

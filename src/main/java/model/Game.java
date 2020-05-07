@@ -115,13 +115,13 @@ public class Game {
     public void endGame() {
         if (sharkSquareCount > eagleSquareCount) {
             //sharks win the game
-            SceneManager.getInstance().showEndGame("The Sharks Win!");
+            SceneManager.getInstance().showEndGame("The Sharks Win!", getSharkScore(), getEagleScore());
         } else if (eagleSquareCount > sharkSquareCount) {
             //eagles win the game
-            SceneManager.getInstance().showEndGame("The Eagles Win!");
+            SceneManager.getInstance().showEndGame("The Eagles Win!", getSharkScore(), getEagleScore());
         } else {
             //its a draw
-            SceneManager.getInstance().showEndGame("It was a draw!");
+            SceneManager.getInstance().showEndGame("It was a draw!", getSharkScore(), getEagleScore());
         }
     }
 
