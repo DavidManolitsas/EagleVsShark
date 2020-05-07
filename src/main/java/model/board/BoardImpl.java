@@ -1,13 +1,24 @@
 package main.java.model.board;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import main.java.model.Square;
 import main.java.model.move.Move;
-import main.java.model.piece.*;
+import main.java.model.piece.BaldEagle;
+import main.java.model.piece.GoblinShark;
+import main.java.model.piece.GoldenEagle;
+import main.java.model.piece.Hammerhead;
+import main.java.model.piece.HarpyEagle;
+import main.java.model.piece.Piece;
+import main.java.model.piece.SawShark;
+import main.java.model.piece.Shark;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
-
-import java.util.*;
 
 /**
  * @author WeiYi Yu
@@ -21,6 +32,7 @@ public class BoardImpl
         implements Board {
 
     public interface BoardModelEventListener {
+
         void onPiecePositionUpdated(Move move);
 
         void onRocksAdded(Collection<int[]> rockPositionList);
@@ -46,13 +58,13 @@ public class BoardImpl
 
     // region public Board methods
     @Override
-    public void initBoard(int rows, int cols) {
+    public void initBoard(int rows, int cols, int sharks, int eagles) {
         totalRows = rows;
         totalCols = cols;
         chosenPiece = null;
 
         initSquare();
-        initPieces();
+        initPieces(sharks, eagles);
     }
 
     @Override
@@ -224,7 +236,7 @@ public class BoardImpl
         }
     }
 
-    private void initPieces() {
+    private void initPieces(int sharks, int eagles) {
         pieceSquareMap = new HashMap<>();
 
         int topRow = 0;

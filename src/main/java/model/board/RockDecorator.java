@@ -1,8 +1,12 @@
 package main.java.model.board;
 
-import main.java.model.move.Move;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-import java.util.*;
+import main.java.model.move.Move;
 
 /**
  * @author WeiYi Yu
@@ -21,8 +25,8 @@ public class RockDecorator
     }
 
     @Override
-    public void initBoard(int rows, int cols) {
-        super.initBoard(rows, cols);
+    public void initBoard(int rows, int cols, int sharks, int eagles) {
+        super.initBoard(rows, cols, sharks, eagles);
         generateObstacles();
         getEventListener().onRocksAdded(rockSquareMap.values());
     }

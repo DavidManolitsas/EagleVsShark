@@ -69,11 +69,10 @@ public class GameViewController
         //does this happen in the board class?
         System.out.println("No. of Piece, Sharks:" + sharks + " Eagles:" + eagles);
 
-        board.initBoard(rows, cols);
+        board.initBoard(rows, cols, sharks, eagles);
         boardView.initBoardView(rows, cols);
 
         board = new RockDecorator(board);
-        board.initBoard(rows, cols);
 
         game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols);
         game.nextTurn();

@@ -1,11 +1,11 @@
 package main.java.model.board;
 
+import java.util.List;
+
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.model.player.Player;
-
-import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -24,8 +24,8 @@ public abstract class AbstractBoardDecorator
     }
 
     @Override
-    public void initBoard(int rows, int cols) {
-        board.initBoard(rows, cols);
+    public void initBoard(int rows, int cols, int sharks, int eagles) {
+        board.initBoard(rows, cols, sharks, eagles);
     }
 
     @Override
