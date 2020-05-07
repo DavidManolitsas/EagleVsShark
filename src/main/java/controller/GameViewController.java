@@ -1,11 +1,11 @@
 package main.java.controller;
 
-import java.util.List;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import main.java.model.Board;
 import main.java.model.Game;
+import main.java.model.board.Board;
+import main.java.model.board.BoardImpl;
+import main.java.model.board.RockDecorator;
 import main.java.model.move.Move;
 import main.java.model.piece.GoldenEagle;
 import main.java.model.piece.Piece;
@@ -17,6 +17,8 @@ import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 import main.java.view.MenuView;
 import main.java.view.MenuView.MenuBarEventListener;
+
+import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -48,7 +50,7 @@ public class GameViewController
 
     @FXML
     public void initialize() {
-        board = new Board(boardView);
+        board = new BoardImpl(boardView);
         game = new Game(gameInfoView);
 
         boardView.setBoardViewEventListener(this);
@@ -62,8 +64,10 @@ public class GameViewController
     }
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
-        board.initBoard(rows, cols);
         boardView.initBoardView(rows, cols);
+
+        board = new RockDecorator(board);
+        board.initBoard(rows, cols);
 
         game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols);
         game.nextTurn();

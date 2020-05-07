@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.ResPath;
-import main.java.model.Board.BoardModelEventListener;
+import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 
 import java.util.*;
@@ -22,6 +22,7 @@ public class BoardView
     }
 
     public static final String VIEW_ID_PIECE = "piece";
+    public static final String VIEW_ID_ROCKS = "rocks";
     public static final String VIEW_ID_PREVIEW = "preview";
     public static final String VIEW_ID_HIGHLIGHT = "highlight";
 
@@ -33,6 +34,7 @@ public class BoardView
 
     public static final int SQUARE_SIZE = 40;
     public static final int PIECE_SIZE = 38;
+    public static final int ROCKS_SIZE = 38;
 
     private int totalRows;
     private int totalCols;
@@ -151,6 +153,13 @@ public class BoardView
         StackPane destination = getSquareAt(destinationPos[0], destinationPos[1]);
         destination.getChildren().add(piece);
     }
+
+    @Override
+    public void onRocksAdded(Collection<int[]> rockPositionList) {
+        for (int[] position : rockPositionList) {
+            addRocks(position[0], position[1], ResPath.ROCKS);
+        }
+    }
     //endregion
 
     //region private methods
@@ -238,6 +247,19 @@ public class BoardView
             route.setId(VIEW_ID_PREVIEW);
             square.getChildren().add(route);
         }
+    }
+
+    private void addRocks(int row, int col, String rockImgPath) {
+        StackPane square = getSquareAt(row, col);
+
+        if (square == null) {
+            return;
+        }
+
+        Image image = new Image(rockImgPath, ROCKS_SIZE, ROCKS_SIZE, true, false);
+        ImageView imageView = new ImageView(image);
+        imageView.setId(VIEW_ID_ROCKS);
+        square.getChildren().add(imageView);
     }
     //endregion
 
