@@ -1,5 +1,5 @@
-<?import main.java.view.StartMenu?>
-<StartMenu fx:controller="main.java.controller.StartMenuController"
-           fx:id="startMenu"
+<?import main.java.view.startGame.StartGameMenu?>
+<StartGameMenu fx:controller="main.java.controller.StartMenuController"
+    fx:id="startGameMenu"
            xmlns:fx="http://javafx.com/fxml">
-</StartMenu>
+</StartGameMenu>

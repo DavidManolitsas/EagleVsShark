@@ -1,5 +1,7 @@
 package main.java.util;
 
+import java.io.IOException;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -7,8 +9,6 @@ import javafx.stage.Stage;
 import main.java.ResPath;
 import main.java.controller.GameViewController;
 import main.java.view.EndGameView;
-
-import java.io.IOException;
 
 /**
  * @author David Manolitsas
@@ -56,13 +56,37 @@ public class SceneManager {
         }
     }
 
-    public void showGameView(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
+
+    public void showCustomGameMenu() {
+        FXMLLoader customGameMenuLoader =
+                new FXMLLoader(getClass().getClassLoader().getResource(ResPath.CUSTOM_GAME_MENU));
+        try {
+            root.setCenter(customGameMenuLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void showGameView(String sharkPlayerName, String eaglePlayerName) {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
         try {
             root.setCenter(gameLoader.load());
 
             GameViewController controller = gameLoader.getController();
-            controller.initGameData(sharkPlayerName, eaglePlayerName, timeLimit);
+            controller.initGameData(sharkPlayerName, eaglePlayerName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showCustomGameView(String sharkPlayerName, String eaglePlayerName, int timeLimit, int cols, int rows) {
+        FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
+        try {
+            root.setCenter(gameLoader.load());
+            GameViewController controller = gameLoader.getController();
+            controller.initGameData(sharkPlayerName, eaglePlayerName, timeLimit, cols, rows);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

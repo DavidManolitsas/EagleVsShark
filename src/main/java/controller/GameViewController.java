@@ -56,10 +56,14 @@ public class GameViewController
         menuView.setListener(this);
     }
 
-    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
-        // TODO: set custom board size
-        board.initBoard(15, 10);
-        boardView.initBoardView(15, 10);
+
+    public void initGameData(String sharkPlayerName, String eaglePlayerName) {
+        initGameData(sharkPlayerName, eaglePlayerName, 60, 15, 10);
+    }
+
+    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
+        board.initBoard(rows, cols);
+        boardView.initBoardView(rows, cols);
 
         game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit);
         game.nextTurn();

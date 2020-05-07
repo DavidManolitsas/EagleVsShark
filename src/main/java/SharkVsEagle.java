@@ -33,7 +33,7 @@ public class SharkVsEagle
         sceneManager.init(primaryStage);
 
         if (SharkVsEagle.IS_DEBUG) {
-            sceneManager.showGameView("Jaws", "Bird Person", 60);
+            sceneManager.showGameView("Jaws", "Bird Person");
         } else {
             sceneManager.showStartMenu();
         }

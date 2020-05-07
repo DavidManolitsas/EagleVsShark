@@ -49,9 +49,6 @@ public class Game {
     private Timeline timer;
     private int timeRemaining;
 
-    /**
-     * Singleton Game constructor
-     */
     public Game(GameModelEventListener listener) {
         this.listener = listener;
         this.sharkSquareCount = 0;
@@ -59,10 +56,21 @@ public class Game {
         this.turnCount = 0;
     }
 
-    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int turnTime) {
+    /**
+     * This overloaded method initialises a custom game where the player can set the time limit
+     * for each turn as
+     *
+     * @param sharkPlayerName
+     *         name of the shark player
+     * @param eaglePlayerName
+     *         name of the eagle player
+     * @param timeLimit
+     *         amount of time per turn
+     */
+    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int timeLimit) {
         this.sharkPlayer = new SharkPlayer(sharkPlayerName);
         this.eaglePlayer = new EaglePlayer(eaglePlayerName);
-        this.turnTime = turnTime;
+        this.turnTime = timeLimit;
 
         listener.gameInitialised(sharkPlayerName,
                                  eaglePlayerName,
