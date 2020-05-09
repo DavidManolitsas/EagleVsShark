@@ -39,7 +39,7 @@ public class BoardImpl
 
         Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
 
-        checkEnemyOccupation(piece, destination);
+        checkSquareEnemyOccupation(piece, destination);
 
         destination.setPiece(piece);
 
@@ -127,36 +127,39 @@ public class BoardImpl
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
         // check if piece is eagle or shark for start pos
         // TODO randomly generate column number
-        System.out.println("Piece to be sent back " + attackedPiece);
-        Square startSquare = getSquareAt(0, 2);
+        Random r = new Random();
+        int minCol = 0;
+        int maxCol = 7;
+        int randomCol = r.nextInt(maxCol-minCol) + minCol;
+
+        Square startSquare = getSquareAt(attackedPiece.getStartPos()[0], randomCol);
+
         startSquare.setPiece(attackedPiece);
 
-
         pieceSquareMap.put(attackedPiece, startSquare);
-        eventListener.onPieceAttacked(attackedSquare.getRow(), attackedSquare.getCol(), 0, 2);
+        eventListener.onPieceAttacked(attackedSquare.getRow(), attackedSquare.getCol(), attackedPiece.getStartPos()[0], randomCol);
 
     }
 
-    private void checkEnemyOccupation(Piece attackingPiece, Square attackedSquare){
+    //
+    private void checkSquareEnemyOccupation(Piece attackingPiece, Square attackedSquare){
         if (attackingPiece instanceof Eagle && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Eagle)) {
-
-            System.out.println(attackedSquare.getPiece());
-            attackedSquare.setPiece(null);
             attackPiece(attackedSquare.getPiece(), attackedSquare);
         } else if (attackingPiece instanceof Shark && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Shark)) {
-            System.out.println("a shark landed on eagle");
+            attackPiece(attackedSquare.getPiece(), attackedSquare);
         }
     }
 
     //TODO: refactor redundancy
-    private void checkEnemyOccupation(Player attackingPlayer, Square attackedSquare){
-        if (attackingPlayer instanceof EaglePlayer && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Eagle)) {
-            System.out.println(attackedSquare.getPiece());
-            attackPiece(attackedSquare.getPiece(), attackedSquare);
-        } else if (attackingPlayer instanceof SharkPlayer && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Shark)) {
-            System.out.println("a shark landed on eagle");
-        }
-    }
+
+//    private void checkColourEnemyOccupation(Player attackingPlayer, Square attackedSquare){
+//        if (attackingPlayer instanceof EaglePlayer && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Eagle)) {
+//            System.out.println(attackedSquare.getPiece());
+//            attackPiece(attackedSquare.getPiece(), attackedSquare);
+//        } else if (attackingPlayer instanceof SharkPlayer && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Shark)) {
+//            System.out.println("a shark landed on eagle");
+//        }
+//    }
 
     /**
      * Requires:
@@ -170,7 +173,7 @@ public class BoardImpl
     public void updateTerritory(Move move, Player player) {
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
-            checkEnemyOccupation(player, square);
+//            checkColourEnemyOccupation(player, square);
             square.setOccupiedPlayer(player);
         }
     }
