@@ -154,6 +154,15 @@ public class BoardView
         destination.getChildren().add(piece);
     }
 
+    public void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol){
+        StackPane start = getSquareAt(attackedRow, attackedCol);
+        Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);
+        start.getChildren().remove(piece);
+
+        StackPane destination = getSquareAt(resetRow, resetCol);
+        destination.getChildren().add(piece);
+    }
+
     @Override
     public void onRocksAdded(Collection<int[]> rockPositionList) {
         for (int[] position : rockPositionList) {

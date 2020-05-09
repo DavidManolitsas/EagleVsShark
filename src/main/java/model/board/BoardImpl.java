@@ -1,24 +1,13 @@
 package main.java.model.board;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import main.java.model.Square;
 import main.java.model.move.Move;
-import main.java.model.piece.BaldEagle;
-import main.java.model.piece.GoblinShark;
-import main.java.model.piece.GoldenEagle;
-import main.java.model.piece.Hammerhead;
-import main.java.model.piece.HarpyEagle;
-import main.java.model.piece.Piece;
-import main.java.model.piece.SawShark;
-import main.java.model.piece.Shark;
+import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
+
+import java.util.*;
 
 /**
  * @author WeiYi Yu
@@ -31,11 +20,32 @@ import main.java.model.player.SharkPlayer;
 public class BoardImpl
         implements Board {
 
-    public interface BoardModelEventListener {
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. piece != null
+     * <p>
+     * Ensures:
+     * 1. pieceSquareMap.get(piece) == destination
+     * 2. start.getPiece == null
+     */
+    @Override
+    public void updatePiecePosition(Move move, Piece piece) {
+        int[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
 
-        void onPiecePositionUpdated(Move move);
+        Square start = getSquareAt(startPos[0], startPos[1]);
+        start.setPiece(null);
 
-        void onRocksAdded(Collection<int[]> rockPositionList);
+        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
+
+        checkEnemyOccupation(piece, destination);
+
+        destination.setPiece(piece);
+
+        pieceSquareMap.put(piece, destination);
+
+        eventListener.onPiecePositionUpdated(move);
     }
 
     private BoardModelEventListener eventListener;
@@ -113,28 +123,39 @@ public class BoardImpl
         return chosenPiece;
     }
 
-    /**
-     * Requires:
-     * 1. move != null
-     * 2. piece != null
-     * <p>
-     * Ensures:
-     * 1. pieceSquareMap.get(piece) == destination
-     * 2. start.getPiece == null
-     */
-    @Override
-    public void updatePiecePosition(Move move, Piece piece) {
-        int[] startPos = move.getRoute().get(0);
-        int[] destinationPos = move.getFinalPosition();
+    //TODO reorganise to private region
+    private void attackPiece(Piece attackedPiece, Square attackedSquare) {
+        // check if piece is eagle or shark for start pos
+        // TODO randomly generate column number
+        System.out.println("Piece to be sent back " + attackedPiece);
+        Square startSquare = getSquareAt(0, 2);
+        startSquare.setPiece(attackedPiece);
 
-        Square start = getSquareAt(startPos[0], startPos[1]);
-        start.setPiece(null);
 
-        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
-        destination.setPiece(piece);
-        pieceSquareMap.put(piece, destination);
+        pieceSquareMap.put(attackedPiece, startSquare);
+        eventListener.onPieceAttacked(attackedSquare.getRow(), attackedSquare.getCol(), 0, 2);
 
-        eventListener.onPiecePositionUpdated(move);
+    }
+
+    private void checkEnemyOccupation(Piece attackingPiece, Square attackedSquare){
+        if (attackingPiece instanceof Eagle && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Eagle)) {
+
+            System.out.println(attackedSquare.getPiece());
+            attackedSquare.setPiece(null);
+            attackPiece(attackedSquare.getPiece(), attackedSquare);
+        } else if (attackingPiece instanceof Shark && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Shark)) {
+            System.out.println("a shark landed on eagle");
+        }
+    }
+
+    //TODO: refactor redundancy
+    private void checkEnemyOccupation(Player attackingPlayer, Square attackedSquare){
+        if (attackingPlayer instanceof EaglePlayer && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Eagle)) {
+            System.out.println(attackedSquare.getPiece());
+            attackPiece(attackedSquare.getPiece(), attackedSquare);
+        } else if (attackingPlayer instanceof SharkPlayer && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Shark)) {
+            System.out.println("a shark landed on eagle");
+        }
     }
 
     /**
@@ -149,8 +170,18 @@ public class BoardImpl
     public void updateTerritory(Move move, Player player) {
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
+            checkEnemyOccupation(player, square);
             square.setOccupiedPlayer(player);
         }
+    }
+
+    public interface BoardModelEventListener {
+
+        void onPiecePositionUpdated(Move move);
+
+        void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol);
+
+        void onRocksAdded(Collection<int[]> rockPositionList);
     }
 
     @Override
