@@ -154,6 +154,7 @@ public class BoardView
         destination.getChildren().add(piece);
     }
 
+    @Override
     public void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol){
         StackPane start = getSquareAt(attackedRow, attackedCol);
         Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);

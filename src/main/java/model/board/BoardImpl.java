@@ -147,7 +147,7 @@ public class BoardImpl
     }
 
 //    //
-//    private void checkSquareEnemyOccupation(Piece attackingPiece, Square attackedSquare){
+//    private void checkEnemyOccupation(Piece attackingPiece, Square attackedSquare){
 //        if (attackingPiece instanceof Eagle && !(attackedSquare.getPiece() instanceof Eagle)) {
 //            attackPiece(attackedSquare.getPiece(), attackedSquare);
 //        } else if (attackingPiece instanceof Shark && !(attackedSquare.getPiece() instanceof Shark)) {
@@ -179,6 +179,13 @@ public class BoardImpl
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
 //            checkColourEnemyOccupation(player, square);
+            if (square.getPiece() != null) {
+                if (player instanceof EaglePlayer && !(square.getPiece() instanceof Eagle)) {
+                    attackPiece(square.getPiece(), square);
+                } else if (player instanceof SharkPlayer && !(square.getPiece() instanceof Shark)) {
+                    attackPiece(square.getPiece(), square);
+                }
+            }
             square.setOccupiedPlayer(player);
         }
     }
