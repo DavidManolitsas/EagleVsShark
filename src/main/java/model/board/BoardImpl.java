@@ -39,7 +39,13 @@ public class BoardImpl
 
         Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
 
-        checkSquareEnemyOccupation(piece, destination);
+        if (destination.getPiece() != null) {
+            if (piece instanceof Eagle && !(destination.getPiece() instanceof Eagle)) {
+                attackPiece(destination.getPiece(), destination);
+            } else if (piece instanceof Shark && !(destination.getPiece() instanceof Shark)) {
+                attackPiece(destination.getPiece(), destination);
+            }
+        }
 
         destination.setPiece(piece);
 
@@ -125,7 +131,6 @@ public class BoardImpl
 
     //TODO reorganise to private region
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
-        // check if piece is eagle or shark for start pos
         // TODO randomly generate column number
         Random r = new Random();
         int minCol = 0;
@@ -133,22 +138,22 @@ public class BoardImpl
         int randomCol = r.nextInt(maxCol-minCol) + minCol;
 
         Square startSquare = getSquareAt(attackedPiece.getStartPos()[0], randomCol);
-
         startSquare.setPiece(attackedPiece);
 
         pieceSquareMap.put(attackedPiece, startSquare);
+
         eventListener.onPieceAttacked(attackedSquare.getRow(), attackedSquare.getCol(), attackedPiece.getStartPos()[0], randomCol);
 
     }
 
-    //
-    private void checkSquareEnemyOccupation(Piece attackingPiece, Square attackedSquare){
-        if (attackingPiece instanceof Eagle && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Eagle)) {
-            attackPiece(attackedSquare.getPiece(), attackedSquare);
-        } else if (attackingPiece instanceof Shark && attackedSquare.getPiece() != null && !(attackedSquare.getPiece() instanceof Shark)) {
-            attackPiece(attackedSquare.getPiece(), attackedSquare);
-        }
-    }
+//    //
+//    private void checkSquareEnemyOccupation(Piece attackingPiece, Square attackedSquare){
+//        if (attackingPiece instanceof Eagle && !(attackedSquare.getPiece() instanceof Eagle)) {
+//            attackPiece(attackedSquare.getPiece(), attackedSquare);
+//        } else if (attackingPiece instanceof Shark && !(attackedSquare.getPiece() instanceof Shark)) {
+//            attackPiece(attackedSquare.getPiece(), attackedSquare);
+//        }
+//    }
 
     //TODO: refactor redundancy
 
