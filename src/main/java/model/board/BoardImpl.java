@@ -241,6 +241,7 @@ public class BoardImpl
     private void initPieces(int sharks, int eagles) {
         pieceSquareMap = new HashMap<>();
 
+        int typesOfPieces = 3;
         int topRow = 0;
         int bottomRow = totalRows - 1;
         // Gaps between each piece
@@ -249,37 +250,35 @@ public class BoardImpl
         int eagleSplit = totalCols / eagles;
         int eaglePosCount = eagleSplit;
 
-
         // Get each number of sharks
         int goblinSharks, sawSharks, hammerHeads, goldenEagles, baldEagles, harpyEagles;
-        ;
-        if (sharks % 3 == 0) {
-            goblinSharks = sharks / 3;
-            sawSharks = sharks / 3;
-            hammerHeads = sharks / 3;
-        } else if (sharks % 3 == 1) {
-            goblinSharks = sharks / 3;
-            sawSharks = sharks / 3;
-            hammerHeads = sharks / 3 + 1;
+        if (sharks % typesOfPieces == 0) {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces;
+            hammerHeads = sharks / typesOfPieces;
+        } else if (sharks % typesOfPieces == 1) {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces;
+            hammerHeads = sharks / typesOfPieces + 1;
         } else {
-            goblinSharks = sharks / 3;
-            sawSharks = sharks / 3 + 1;
-            hammerHeads = sharks / 3 + 1;
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces + 1;
+            hammerHeads = sharks / typesOfPieces + 1;
         }
 
         //  Get each number of eagles
-        if (eagles % 3 == 0) {
-            goldenEagles = eagles / 3;
-            baldEagles = eagles / 3;
-            harpyEagles = eagles / 3;
-        } else if (eagles % 3 == 1) {
-            goldenEagles = eagles / 3;
-            baldEagles = eagles / 3;
-            harpyEagles = eagles / 3 + 1;
+        if (eagles % typesOfPieces == 0) {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces;
+            harpyEagles = eagles / typesOfPieces;
+        } else if (eagles % typesOfPieces == 1) {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces;
+            harpyEagles = eagles / typesOfPieces + 1;
         } else {
-            goldenEagles = eagles / 3;
-            baldEagles = eagles / 3 + 1;
-            harpyEagles = eagles / 3 + 1;
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces + 1;
+            harpyEagles = eagles / typesOfPieces + 1;
         }
 
         ArrayList<Piece> pieces = new ArrayList<Piece>();
@@ -360,6 +359,5 @@ public class BoardImpl
         paintInfo.removeIf(this::isPositionOutOfBound);
     }
     // endregion
-
 
 }

@@ -86,6 +86,7 @@ public class SceneManager {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
         try {
             root.setCenter(gameLoader.load());
+
             GameViewController controller = gameLoader.getController();
             controller.initGameData(sharkPlayerName, eaglePlayerName, timeLimit, turnCount, cols, rows, sharks, eagles);
 

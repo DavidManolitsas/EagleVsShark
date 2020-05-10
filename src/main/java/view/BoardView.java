@@ -211,20 +211,23 @@ public class BoardView
     }
 
     private void drawPieces(Square[] topRow, Square[] bottomRow) {
-        String baldEagle = ResPath.PIECE_BALD_EAGLE, goldenEagle = ResPath.PIECE_GOLDEN_EAGLE, harpyEagle =
-                ResPath.PIECE_HARPY_EAGLE, goblinShark = ResPath.PIECE_GOBLIN_SHARK, hammerhead =
-                ResPath.PIECE_HAMMERHEAD, sawShark = ResPath.PIECE_SAW_SHARK;
+        String baldEagleImgPath = ResPath.PIECE_BALD_EAGLE;
+        String goldenEagleImgPath = ResPath.PIECE_GOLDEN_EAGLE;
+        String harpyEagleImgPath = ResPath.PIECE_HARPY_EAGLE;
+        String goblinSharkImgPath = ResPath.PIECE_GOBLIN_SHARK;
+        String hammerheadImgPath = ResPath.PIECE_HAMMERHEAD;
+        String sawSharkImgPath = ResPath.PIECE_SAW_SHARK;
 
 
         for (Square square : topRow) {
             Piece piece = square.getPiece();
 
             if (piece instanceof BaldEagle) {
-                addPiece(square.getRow(), square.getCol(), baldEagle);
+                addPiece(square.getRow(), square.getCol(), baldEagleImgPath);
             } else if (piece instanceof HarpyEagle) {
-                addPiece(square.getRow(), square.getCol(), harpyEagle);
+                addPiece(square.getRow(), square.getCol(), harpyEagleImgPath);
             } else if (piece instanceof GoldenEagle) {
-                addPiece(square.getRow(), square.getCol(), goldenEagle);
+                addPiece(square.getRow(), square.getCol(), goldenEagleImgPath);
             }
         }
 
@@ -232,11 +235,11 @@ public class BoardView
             Piece piece = square.getPiece();
 
             if (piece instanceof Hammerhead) {
-                addPiece(square.getRow(), square.getCol(), hammerhead);
+                addPiece(square.getRow(), square.getCol(), hammerheadImgPath);
             } else if (piece instanceof GoblinShark) {
-                addPiece(square.getRow(), square.getCol(), goblinShark);
+                addPiece(square.getRow(), square.getCol(), goblinSharkImgPath);
             } else if (piece instanceof SawShark) {
-                addPiece(square.getRow(), square.getCol(), sawShark);
+                addPiece(square.getRow(), square.getCol(), sawSharkImgPath);
             }
         }
     }
