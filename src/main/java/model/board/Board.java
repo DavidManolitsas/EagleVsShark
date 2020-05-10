@@ -18,6 +18,8 @@ public interface Board {
 
     int getEagleSquareCount();
 
+    boolean retrieveSteps(int steps, Player player);
+
     Piece getPiece(int row, int col);
 
     void setChosenPiece(Piece chosenPiece);

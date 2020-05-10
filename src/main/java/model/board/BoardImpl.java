@@ -2,6 +2,7 @@ package main.java.model.board;
 
 import main.java.model.Square;
 import main.java.model.move.Move;
+import main.java.model.move.StoreMove;
 import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
@@ -26,6 +27,10 @@ public class BoardImpl
     private Square[][] squares;
     private Map<Piece, Square> pieceSquareMap;
     private Piece chosenPiece;
+
+    private boolean isEagleUndo;
+    private boolean isSharkUndo;
+    private LinkedList<StoreMove> moveHistory;
 
     /**
      * Requires:
@@ -71,6 +76,9 @@ public class BoardImpl
         totalRows = rows;
         totalCols = cols;
         chosenPiece = null;
+        isEagleUndo = false;
+        isSharkUndo = false;
+        moveHistory = new LinkedList<StoreMove>();
 
         initSquare();
         initPieces(sharks, eagles);
@@ -145,6 +153,60 @@ public class BoardImpl
         }
     }
 
+    /**
+     * Requires:
+     * 1. steps >= 1 && steps <= 3
+     *
+     * @param steps
+     * @param player
+     * @return if the undo is valid
+     */
+    @Override
+    public boolean retrieveSteps(int steps, Player player) {
+        // All conditions checking can be moved to somewhere else in the future
+        // like controllers
+        if (moveHistory.size() < 2 * steps) {
+            // The require steps is exceed the maximum history record
+            return false;
+        }
+
+        if (player instanceof EaglePlayer && !isEagleUndo) {
+            isEagleUndo = true;
+        } else if (player instanceof SharkPlayer && !isSharkUndo) {
+            isSharkUndo = true;
+        } else {
+            // Run out of chance, undo button cannot be clicked
+            return false;
+        }
+
+        StoreMove moveRecord;
+        // Undo both sides move
+        for (int i = 0; i < 2 * steps; ++i) {
+            moveRecord = moveHistory.pop();
+
+            //TODO: Handle pop element
+        }
+        return true;
+    }
+
+    /**
+     * Requires:
+     * 1. Call before the move actually happened, but after the user confirmed
+     * 2. Move should be valid
+     *
+     * @param move
+     * @param piece
+     */
+    public void recordMove(Move move, Piece piece) {
+        Map<int[], Player> paintBeforeChange = new HashMap<int[], Player>();
+        // Record the board info before the changes
+        for (int[] paint : move.getPaintShape().getPaintInfo()) {
+            paintBeforeChange.put(paint,
+                    getSquareAt(paint[0], paint[1]).getOccupiedPlayer());
+        }
+        moveHistory.push(new StoreMove(move, piece, paintBeforeChange));
+    }
+
     @Override
     public List<int[]> getSharksPositions() {
         List<int[]> list = new ArrayList<>();
@@ -214,6 +276,10 @@ public class BoardImpl
     }
 
     // region private methods
+    private void undoMove(StoreMove storeMove) {
+
+    }
+
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
         int[] newPos = new int[2];
         newPos[0] = attackedPiece.getStartPos()[0];
