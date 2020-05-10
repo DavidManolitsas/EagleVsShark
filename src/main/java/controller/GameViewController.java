@@ -67,6 +67,7 @@ public class GameViewController
                              int cols,
                              int sharks, int eagles) {
 
+
         board.initBoard(rows, cols, sharks, eagles);
         boardView.initBoardView(rows, cols, board.getTopRow(), board.getBottomRow());
         board = new RockDecorator(board);
