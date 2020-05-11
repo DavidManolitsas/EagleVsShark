@@ -80,13 +80,15 @@ public class SceneManager {
         }
     }
 
-    public void showCustomGameView(String sharkPlayerName, String eaglePlayerName, int timeLimit, int cols, int rows,
+    public void showCustomGameView(String sharkPlayerName, String eaglePlayerName, int timeLimit, int turnCount,
+                                   int cols, int rows,
                                    int sharks, int eagles) {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
         try {
             root.setCenter(gameLoader.load());
+
             GameViewController controller = gameLoader.getController();
-            controller.initGameData(sharkPlayerName, eaglePlayerName, timeLimit, cols, rows, sharks, eagles);
+            controller.initGameData(sharkPlayerName, eaglePlayerName, timeLimit, turnCount, cols, rows, sharks, eagles);
 
         } catch (IOException e) {
             e.printStackTrace();

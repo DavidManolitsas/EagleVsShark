@@ -1,8 +1,8 @@
 package main.java.model.piece;
 
-import main.java.model.move.Move;
-
 import java.util.List;
+
+import main.java.model.move.Move;
 
 
 public abstract class Piece {
@@ -29,5 +29,10 @@ public abstract class Piece {
      */
     public int[] getStartPos() {
         return startPos;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " " + getStartPos()[0] + " " + getStartPos()[1];
     }
 }

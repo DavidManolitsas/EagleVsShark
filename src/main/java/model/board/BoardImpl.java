@@ -20,6 +20,7 @@ import java.util.*;
 public class BoardImpl
         implements Board {
 
+
     private BoardModelEventListener eventListener;
     private int totalRows;
     private int totalCols;
@@ -250,19 +251,78 @@ public class BoardImpl
     private void initPieces(int sharks, int eagles) {
         pieceSquareMap = new HashMap<>();
 
+        int typesOfPieces = 3;
         int topRow = 0;
         int bottomRow = totalRows - 1;
-        int[] pieceCols = {4, 5, 6};
+        // Gaps between each piece
+        int sharkSplit = totalCols / sharks;
+        int sharkPosCount = sharkSplit;
+        int eagleSplit = totalCols / eagles;
+        int eaglePosCount = eagleSplit;
 
-        // Adding pieces by order
-        Piece[] pieces = {
-                new BaldEagle(topRow, pieceCols[0]),
-                new GoldenEagle(topRow, pieceCols[1]),
-                new HarpyEagle(topRow, pieceCols[2]),
-                new GoblinShark(bottomRow, pieceCols[0]),
-                new Hammerhead(bottomRow, pieceCols[1]),
-                new SawShark(bottomRow, pieceCols[2]),
-        };
+        // Get each number of sharks
+        int goblinSharks, sawSharks, hammerHeads, goldenEagles, baldEagles, harpyEagles;
+        if (sharks % typesOfPieces == 0) {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces;
+            hammerHeads = sharks / typesOfPieces;
+        } else if (sharks % typesOfPieces == 1) {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces;
+            hammerHeads = sharks / typesOfPieces + 1;
+        } else {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces + 1;
+            hammerHeads = sharks / typesOfPieces + 1;
+        }
+
+        //  Get each number of eagles
+        if (eagles % typesOfPieces == 0) {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces;
+            harpyEagles = eagles / typesOfPieces;
+        } else if (eagles % typesOfPieces == 1) {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces;
+            harpyEagles = eagles / typesOfPieces + 1;
+        } else {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces + 1;
+            harpyEagles = eagles / typesOfPieces + 1;
+        }
+
+        ArrayList<Piece> pieces = new ArrayList<Piece>();
+        // Initialise Sharks
+        for (int i = 0; i < goblinSharks; i++) {
+            pieces.add(new GoblinShark(bottomRow, sharkSplit - 1));
+            sharkSplit += sharkPosCount;
+        }
+
+        for (int i = 0; i < hammerHeads; i++) {
+            pieces.add(new Hammerhead(bottomRow, sharkSplit - 1));
+            sharkSplit += sharkPosCount;
+        }
+
+        for (int i = 0; i < sawSharks; i++) {
+            pieces.add(new SawShark(bottomRow, sharkSplit - 1));
+            sharkSplit += sharkPosCount;
+        }
+
+        // Initialise Eagles
+        for (int i = 0; i < baldEagles; i++) {
+            pieces.add(new BaldEagle(topRow, eagleSplit - 1));
+            eagleSplit += eaglePosCount;
+        }
+
+        for (int i = 0; i < goldenEagles; i++) {
+            pieces.add(new GoldenEagle(topRow, eagleSplit - 1));
+            eagleSplit += eaglePosCount;
+        }
+
+        for (int i = 0; i < harpyEagles; i++) {
+            pieces.add(new HarpyEagle(topRow, eagleSplit - 1));
+            eagleSplit += eaglePosCount;
+        }
 
         for (Piece piece : pieces) {
             int[] pos = piece.getStartPos();
@@ -271,6 +331,16 @@ public class BoardImpl
             pieceSquareMap.put(piece, square);
         }
     }
+
+    public Square[] getTopRow() {
+        return squares[0];
+
+    }
+
+    public Square[] getBottomRow() {
+        return squares[totalRows - 1];
+    }
+
 
     /**
      * Requires:

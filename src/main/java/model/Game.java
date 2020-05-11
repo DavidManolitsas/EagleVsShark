@@ -36,8 +36,9 @@ public class Game {
     //listener
     private GameModelEventListener listener;
 
-    private static final int TOTAL_TURNS = 40;
+
     private static final double WIN_PERCENTAGE = 0.6;
+    private int totalTurns;
     private double totalSquares;
     private int turnTime;
     private Player sharkPlayer;
@@ -67,15 +68,17 @@ public class Game {
      * @param timeLimit
      *         amount of time per turn
      */
-    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
+    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int timeLimit, int turnCount, int rows,
+                               int cols) {
         this.sharkPlayer = new SharkPlayer(sharkPlayerName);
         this.eaglePlayer = new EaglePlayer(eaglePlayerName);
         this.turnTime = timeLimit;
         this.totalSquares = rows * cols;
+        this.totalTurns = turnCount;
 
         listener.gameInitialised(sharkPlayerName,
                                  eaglePlayerName,
-                                 turnCount, TOTAL_TURNS, turnTime, getSharkScore(), getEagleScore());
+                                 turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore());
     }
 
     /**
@@ -85,7 +88,7 @@ public class Game {
      * 2. otherwise, the game is ended
      */
     public void nextTurn() {
-        if (turnCount >= TOTAL_TURNS || isWinner()) {
+        if (turnCount >= totalTurns || isWinner()) {
             stopTimer();
             endGame();
         } else {

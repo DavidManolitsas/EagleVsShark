@@ -60,21 +60,19 @@ public class GameViewController
 
 
     public void initGameData(String sharkPlayerName, String eaglePlayerName) {
-        initGameData(sharkPlayerName, eaglePlayerName, 60, 15, 10, 3, 3);
+        initGameData(sharkPlayerName, eaglePlayerName, 60, 40, 15, 10, 3, 3);
     }
 
-    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols,
+    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int turnCount, int rows,
+                             int cols,
                              int sharks, int eagles) {
-        //TODO: implement initialising each number of pieces
-        //does this happen in the board class?
-        System.out.println("No. of Piece, Sharks:" + sharks + " Eagles:" + eagles);
 
-        boardView.initBoardView(rows, cols);
 
-        board = new RockDecorator(board);
         board.initBoard(rows, cols, sharks, eagles);
+        boardView.initBoardView(rows, cols, board.getTopRow(), board.getBottomRow());
+        board = new RockDecorator(board);
 
-        game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols);
+        game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit, turnCount, rows, cols);
         game.nextTurn();
     }
 
