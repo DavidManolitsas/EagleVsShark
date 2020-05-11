@@ -163,11 +163,18 @@ public class BoardView
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
 
-        StackPane start = getSquareAt(startPos[0], startPos[1]);
+        updatePiecePosition(startPos[0], startPos[1], destinationPos[0],  destinationPos[1]);
+    }
+
+
+    @Override
+//    public void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol){
+    public void updatePiecePosition(int originalRow, int originalCol, int destinationRow, int destinationCol){
+        StackPane start = getSquareAt(originalRow, originalCol);
         Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);
         start.getChildren().remove(piece);
 
-        StackPane destination = getSquareAt(destinationPos[0], destinationPos[1]);
+        StackPane destination = getSquareAt(destinationRow, destinationCol);
         destination.getChildren().add(piece);
     }
 

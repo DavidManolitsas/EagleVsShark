@@ -1,24 +1,13 @@
 package main.java.model.board;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import main.java.model.Square;
 import main.java.model.move.Move;
-import main.java.model.piece.BaldEagle;
-import main.java.model.piece.GoblinShark;
-import main.java.model.piece.GoldenEagle;
-import main.java.model.piece.Hammerhead;
-import main.java.model.piece.HarpyEagle;
-import main.java.model.piece.Piece;
-import main.java.model.piece.SawShark;
-import main.java.model.piece.Shark;
+import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
+
+import java.util.*;
 
 /**
  * @author WeiYi Yu
@@ -31,23 +20,12 @@ import main.java.model.player.SharkPlayer;
 public class BoardImpl
         implements Board {
 
-    public interface BoardModelEventListener {
-
-        void onPiecePositionUpdated(Move move);
-
-        void onRocksAdded(Collection<int[]> rockPositionList);
-
-        void initBoardView(int rows, int cols, Square[] topRow, Square[] bottomRow);
-    }
 
     private BoardModelEventListener eventListener;
-
     private int totalRows;
     private int totalCols;
-
     private Square[][] squares;
     private Map<Piece, Square> pieceSquareMap;
-
     private Piece chosenPiece;
 
     /**
@@ -56,6 +34,36 @@ public class BoardImpl
      */
     public BoardImpl(BoardModelEventListener listener) {
         eventListener = listener;
+    }
+
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. piece != null
+     * <p>
+     * Ensures:
+     * 1. pieceSquareMap.get(piece) == destination
+     * 2. start.getPiece == null
+     */
+    @Override
+    public void updatePiecePosition(Move move, Piece piece) {
+        int[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
+
+        Square start = getSquareAt(startPos[0], startPos[1]);
+        start.setPiece(null);
+
+        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
+
+        if (destination.getPiece() != null) {
+            attackPiece(destination.getPiece(), destination);
+        }
+
+        destination.setPiece(piece);
+
+        pieceSquareMap.put(piece, destination);
+
+        eventListener.onPiecePositionUpdated(move);
     }
 
     // region public Board methods
@@ -106,37 +114,13 @@ public class BoardImpl
     }
 
     @Override
-    public void setChosenPiece(Piece chosenPiece) {
-        this.chosenPiece = chosenPiece;
-    }
-
-    @Override
     public Piece getChosenPiece() {
         return chosenPiece;
     }
 
-    /**
-     * Requires:
-     * 1. move != null
-     * 2. piece != null
-     * <p>
-     * Ensures:
-     * 1. pieceSquareMap.get(piece) == destination
-     * 2. start.getPiece == null
-     */
     @Override
-    public void updatePiecePosition(Move move, Piece piece) {
-        int[] startPos = move.getRoute().get(0);
-        int[] destinationPos = move.getFinalPosition();
-
-        Square start = getSquareAt(startPos[0], startPos[1]);
-        start.setPiece(null);
-
-        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
-        destination.setPiece(piece);
-        pieceSquareMap.put(piece, destination);
-
-        eventListener.onPiecePositionUpdated(move);
+    public void setChosenPiece(Piece chosenPiece) {
+        this.chosenPiece = chosenPiece;
     }
 
     /**
@@ -151,6 +135,13 @@ public class BoardImpl
     public void updateTerritory(Move move, Player player) {
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
+            if (square.getPiece() != null) {
+                if (player instanceof EaglePlayer && !(square.getPiece() instanceof Eagle)) {
+                    attackPiece(square.getPiece(), square);
+                } else if (player instanceof SharkPlayer && !(square.getPiece() instanceof Shark)) {
+                    attackPiece(square.getPiece(), square);
+                }
+            }
             square.setOccupiedPlayer(player);
         }
     }
@@ -164,7 +155,7 @@ public class BoardImpl
                 Square square = pieceSquareMap.get(piece);
                 int row = square.getRow();
                 int col = square.getCol();
-                list.add(new int[] {row, col});
+                list.add(new int[]{row, col});
             }
         }
         return list;
@@ -192,9 +183,7 @@ public class BoardImpl
      * Requires:
      * 1. position != null
      *
-     * @param position
-     *         Destination position
-     *
+     * @param position Destination position
      * @return true when:
      * 1. destination square is on the board
      * 2. destination square has no piece which belongs to the same player
@@ -224,9 +213,30 @@ public class BoardImpl
     public BoardModelEventListener getEventListener() {
         return eventListener;
     }
-    // endregion
 
     // region private methods
+    private void attackPiece(Piece attackedPiece, Square attackedSquare) {
+        int[] newPos = new int[2];
+        newPos[0] = attackedPiece.getStartPos()[0];
+
+        do {
+            newPos[1] = genRandomCol();
+        } while (!isSquareValid(newPos));
+
+        Square startSquare = getSquareAt(newPos[0], newPos[1]);
+        startSquare.setPiece(attackedPiece);
+
+        attackedSquare.setPiece(null);
+
+        pieceSquareMap.put(attackedPiece, startSquare);
+
+        eventListener.updatePiecePosition(attackedSquare.getRow(), attackedSquare.getCol(), newPos[0], newPos[1]);
+    }
+
+    private int genRandomCol() {
+        return new Random().nextInt(totalCols - 0) + 0;
+    }
+
     private void initSquare() {
         squares = new Square[totalRows][totalCols];
 
@@ -357,6 +367,17 @@ public class BoardImpl
     private void removeInvalidPaintSquare(Move move) {
         List<int[]> paintInfo = move.getPaintShape().getPaintInfo();
         paintInfo.removeIf(this::isPositionOutOfBound);
+    }
+    // endregion
+
+    // region Board Model Event Listener interface
+    public interface BoardModelEventListener {
+
+        void onPiecePositionUpdated(Move move);
+
+        void updatePiecePosition(int attackedRow, int attackedCol, int resetRow, int resetCol);
+
+        void onRocksAdded(Collection<int[]> rockPositionList);
     }
     // endregion
 
