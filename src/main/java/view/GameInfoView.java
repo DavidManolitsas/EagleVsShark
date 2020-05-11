@@ -1,11 +1,20 @@
 package main.java.view;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Objects;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,10 +24,6 @@ import javafx.scene.text.TextAlignment;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -68,7 +73,7 @@ public class GameInfoView
     }
 
 
-    //start region move list
+    //region move list
     private void initMovement() {
         movement = new VBox();
         moveList = new ListView<>();
@@ -134,10 +139,10 @@ public class GameInfoView
     private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
     }
-    //end region
+    //endregion
 
 
-    //start region title and player names
+    //region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo = new VBox();
         titleInfo.setSpacing(10);
@@ -162,10 +167,10 @@ public class GameInfoView
         eaglePlayer.setFont(BODY);
         titleInfo.getChildren().addAll(sharkPlayer, eaglePlayer);
     }
-    //end region
+    //endregion
 
 
-    //start region whose turn and timer
+    //region whose turn and timer
     public void initWhoseTurn(int turnCount) {
         whoseTurn = new VBox();
         whoseTurn.setSpacing(10);
@@ -197,10 +202,10 @@ public class GameInfoView
             return "It's the Shark's turn!";
         }
     }
-    //end region
+    //endregion
 
 
-    // start region score info
+    // region score info
     public void initScoreInfo(int turnCount, double sharkScore, double eagleScore) {
         scoreInfo = new VBox();
         scoreInfo.setSpacing(10);
@@ -224,9 +229,9 @@ public class GameInfoView
         eagleScoreText.setFont(BODY);
         scoreInfo.getChildren().addAll(sharkScoreText, eagleScoreText);
     }
-    //end region
+    //endregion
 
-    //start region chosen piece
+    //region chosen piece
     public void initChosenPiece() {
         chosenPiece = new VBox();
         chosenPiece.setSpacing(10);
@@ -256,7 +261,7 @@ public class GameInfoView
         String pieceName = name.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2");
         return pieceName;
     }
-    //end region
+    //endregion
 
 
     private void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
@@ -324,7 +329,7 @@ public class GameInfoView
     public void timeRanOut() {
         showTimeRanOutAlert();
     }
-    //end region
+    //endregion
 
 
     public GameInfoViewEventListener getGameInfoViewEventListener() {
