@@ -42,13 +42,11 @@ public class GameInfoView
     private static final Font BODY = Font.font("Helvetica", 14);
 
     //Game Information components
-    private VBox rootGameInfo;
+    private VBox root;
     private VBox titleInfo;
-
     private VBox whoseTurn;
     private Text timeRemainingText;
     private Text playersTurnText;
-
     private Scoreboard scoreboard;
     private SelectMoveView selectMove;
 
@@ -58,11 +56,11 @@ public class GameInfoView
     }
 
     private void initGameInfo() {
-        rootGameInfo = new VBox();
+        root = new VBox();
         this.setPrefWidth(WIDTH);
-        rootGameInfo.setSpacing(10);
-        rootGameInfo.setAlignment(Pos.CENTER);
-        this.setTop(rootGameInfo);
+        root.setSpacing(10);
+        root.setAlignment(Pos.CENTER);
+        this.setTop(root);
     }
 
 
@@ -72,19 +70,17 @@ public class GameInfoView
         titleInfo.setSpacing(10);
         titleInfo.setPadding(new Insets(15, 0, 0, 0));
         titleInfo.setAlignment(Pos.CENTER);
-        drawTitle();
-        drawPlayerNames(sharkPlayerName, eaglePlayerName);
-        rootGameInfo.getChildren().add(titleInfo);
+        drawTitleAndPlayerNames(sharkPlayerName, eaglePlayerName);
+        root.getChildren().add(titleInfo);
     }
 
-    public void drawTitle() {
+    public void drawTitleAndPlayerNames(String sharkPlayerName, String eaglePlayerName) {
+        // title
         Text title = new Text("Eagle vs. Shark");
         title.setFont(TITLE);
         title.setFill(Color.ORANGERED);
         titleInfo.getChildren().add(title);
-    }
-
-    public void drawPlayerNames(String sharkPlayerName, String eaglePlayerName) {
+        // player names
         Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
         sharkPlayer.setFont(BODY);
         Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
@@ -111,7 +107,7 @@ public class GameInfoView
         timeRemainingText.setFill(Color.ORANGERED);
         whoseTurn.getChildren().add(timeRemainingText);
 
-        rootGameInfo.getChildren().add(whoseTurn);
+        root.getChildren().add(whoseTurn);
     }
 
     private void drawPlayersTurn(int turnCount) {
@@ -130,12 +126,12 @@ public class GameInfoView
 
     public void initScoreboard(int turnCount, int totalTurns, double sharkScore, double eagleScore) {
         scoreboard = new Scoreboard(turnCount, totalTurns, sharkScore, eagleScore);
-        rootGameInfo.getChildren().add(scoreboard);
+        root.getChildren().add(scoreboard);
     }
 
     private void initSelectMoveView() {
         selectMove = new SelectMoveView(this);
-        rootGameInfo.getChildren().add(selectMove);
+        root.getChildren().add(selectMove);
     }
 
     public void showValidMoveList(List<Move> moves) {
