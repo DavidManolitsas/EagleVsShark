@@ -1,26 +1,19 @@
 package main.java.view;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
@@ -47,8 +40,7 @@ public class GameInfoView
     private static final Font TITLE = Font.font("Impact", 24);
     private static final Font HEADING = Font.font("Helvetica", 16);
     private static final Font BODY = Font.font("Helvetica", 14);
-    private ListView<Move> moveList;
-    private DecimalFormat decimalFormat = new DecimalFormat("#%");
+
     //Game Information components
     private VBox rootGameInfo;
     private VBox titleInfo;
@@ -58,9 +50,7 @@ public class GameInfoView
     private Text playersTurnText;
 
     private Scoreboard scoreboard;
-
-    private VBox chosenPiece;
-    private VBox movement;
+    private SelectMoveView selectMove;
 
 
     public GameInfoView() {
@@ -143,119 +133,30 @@ public class GameInfoView
         rootGameInfo.getChildren().add(scoreboard);
     }
 
-    //region chosen piece
-    public void initChosenPiece() {
-        chosenPiece = new VBox();
-        chosenPiece.setSpacing(10);
-        chosenPiece.setPadding(new Insets(0, 0, 15, 0));
-        chosenPiece.setAlignment(Pos.CENTER);
-        drawChoosePiece();
-        rootGameInfo.getChildren().add(chosenPiece);
-    }
-
-    public void drawChoosePiece() {
-        Text choosePieceText = new Text("\nChoose a piece to move");
-        choosePieceText.setFont(HEADING);
-        choosePieceText.setFill(Color.ORANGERED);
-        chosenPiece.getChildren().add(choosePieceText);
-    }
-
-    public void showChosenPiece(Piece piece) {
-        chosenPiece.getChildren().clear();
-        Text pieceName = new Text("\n" + getPieceName(piece) + " selected");
-        pieceName.setFont(HEADING);
-        pieceName.setFill(Color.ORANGERED);
-        chosenPiece.getChildren().add(pieceName);
-    }
-
-    public String getPieceName(Piece piece) {
-        String name = piece.getClass().getSimpleName();
-        String pieceName = name.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2");
-        return pieceName;
-    }
-    //endregion
-
-    //region move list
-    private void initMovement() {
-        movement = new VBox();
-        moveList = new ListView<>();
-        moveList.setFixedCellSize(50);
-        this.setCenter(movement);
-    }
-
-    private void drawMoveButton() {
-        if (moveList != null) {
-            Button moveBt = new Button("Move Piece");
-            moveBt.setWrapText(true);
-            moveBt.setFont(HEADING);
-            moveBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
-            moveBt.setPrefWidth(WIDTH);
-
-            moveBt.setOnAction(event -> {
-                gameInfoViewEventListener.onMoveButtonClicked(getSelectedMove());
-            });
-
-            movement.getChildren().add(moveBt);
-        }
-
+    private void initSelectMoveView() {
+        selectMove = new SelectMoveView(this);
+        rootGameInfo.getChildren().add(selectMove);
     }
 
     public void showValidMoveList(List<Move> moves) {
-        movement.getChildren().clear();
-        movement.getChildren().add(moveList);
-        // update the move list
-        ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
-        moveList.getItems().removeAll();
-        moveList.setItems(moveListObservable);
-        moveList.setStyle("-fx-selection-bar: rgba(255,69,0,0.33)");
-
-        // assign name to each Move object
-        moveList.setCellFactory(e -> new ListCell<Move>() {
-
-            protected void updateItem(Move item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.toString().replaceAll("(.)([A-Z])", "$1 $2"));
-                    setTextAlignment(TextAlignment.CENTER);
-                    setFont(BODY);
-
-                }
-            }
-
-        });
-
-        moveList.setOnMouseClicked(event -> {
-            Move move = getSelectedMove();
-            if (move != null) {
-                getGameInfoViewEventListener().onMoveListItemClicked(getSelectedMove());
-            }
-        });
-
-        drawMoveButton();
-
+        selectMove.showValidMoveList(moves);
     }
 
-    private Move getSelectedMove() throws NullPointerException {
-        return moveList.getSelectionModel().getSelectedItem();
+    public void showChosenPiece(Piece piece) {
+        selectMove.showChosenPiece(piece);
     }
-    //endregion
-
 
     private void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
         clearView();
         drawPlayersTurn(turnCount);
         scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
-        drawChoosePiece();
+        selectMove.promptChoosePiece();
     }
+
 
     private void clearView() {
         scoreboard.getChildren().clear();
-        chosenPiece.getChildren().clear();
-        movement.getChildren().clear();
-        moveList.getItems().clear();
+        selectMove.clearMoveList();
     }
 
     public void showError(String message) {
@@ -288,8 +189,7 @@ public class GameInfoView
         initTitleInfo(sharkPlayerName, eaglePlayerName);
         initWhoseTurn(turnCount);
         initScoreboard(turnCount, totalTurns, sharkScore, eagleScore);
-        initChosenPiece();
-        initMovement();
+        initSelectMoveView();
     }
 
     @Override
