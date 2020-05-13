@@ -49,16 +49,19 @@ public class GameInfoView
     private static final Font BODY = Font.font("Helvetica", 14);
     private ListView<Move> moveList;
     private DecimalFormat decimalFormat = new DecimalFormat("#%");
-    private int totalTurns;
     //Game Information components
     private VBox rootGameInfo;
     private VBox titleInfo;
+
     private VBox whoseTurn;
-    private VBox scoreInfo;
-    private VBox chosenPiece;
-    private VBox movement;
     private Text timeRemainingText;
     private Text playersTurnText;
+
+    private Scoreboard scoreboard;
+
+    private VBox chosenPiece;
+    private VBox movement;
+
 
     public GameInfoView() {
         initGameInfo();
@@ -72,6 +75,105 @@ public class GameInfoView
         this.setTop(rootGameInfo);
     }
 
+
+    //region title and player names
+    private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
+        titleInfo = new VBox();
+        titleInfo.setSpacing(10);
+        titleInfo.setPadding(new Insets(15, 0, 0, 0));
+        titleInfo.setAlignment(Pos.CENTER);
+        drawTitle();
+        drawPlayerNames(sharkPlayerName, eaglePlayerName);
+        rootGameInfo.getChildren().add(titleInfo);
+    }
+
+    public void drawTitle() {
+        Text title = new Text("Eagle vs. Shark");
+        title.setFont(TITLE);
+        title.setFill(Color.ORANGERED);
+        titleInfo.getChildren().add(title);
+    }
+
+    public void drawPlayerNames(String sharkPlayerName, String eaglePlayerName) {
+        Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
+        sharkPlayer.setFont(BODY);
+        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
+        eaglePlayer.setFont(BODY);
+        titleInfo.getChildren().addAll(sharkPlayer, eaglePlayer);
+    }
+    //endregion
+
+    //region whose turn and timer
+    public void initWhoseTurn(int turnCount) {
+        whoseTurn = new VBox();
+        whoseTurn.setSpacing(10);
+        whoseTurn.setAlignment(Pos.CENTER);
+
+        // Player turn text
+        playersTurnText = new Text(getPlayerTurnText(turnCount));
+        playersTurnText.setFont(HEADING);
+        playersTurnText.setFill(Color.ORANGERED);
+        whoseTurn.getChildren().add(playersTurnText);
+
+        // Timer text
+        timeRemainingText = new Text("Time remaining");
+        timeRemainingText.setFont(HEADING);
+        timeRemainingText.setFill(Color.ORANGERED);
+        whoseTurn.getChildren().add(timeRemainingText);
+
+        rootGameInfo.getChildren().add(whoseTurn);
+    }
+
+    private void drawPlayersTurn(int turnCount) {
+        playersTurnText.setText(getPlayerTurnText(turnCount));
+    }
+
+    private String getPlayerTurnText(int turnCount) {
+        if (turnCount % 2 == 0) {
+            return "It's the Eagle's turn!";
+        } else {
+            return "It's the Shark's turn!";
+        }
+    }
+    //endregion
+
+
+    public void initScoreboard(int turnCount, int totalTurns, double sharkScore, double eagleScore) {
+        scoreboard = new Scoreboard(turnCount, totalTurns, sharkScore, eagleScore);
+        rootGameInfo.getChildren().add(scoreboard);
+    }
+
+    //region chosen piece
+    public void initChosenPiece() {
+        chosenPiece = new VBox();
+        chosenPiece.setSpacing(10);
+        chosenPiece.setPadding(new Insets(0, 0, 15, 0));
+        chosenPiece.setAlignment(Pos.CENTER);
+        drawChoosePiece();
+        rootGameInfo.getChildren().add(chosenPiece);
+    }
+
+    public void drawChoosePiece() {
+        Text choosePieceText = new Text("\nChoose a piece to move");
+        choosePieceText.setFont(HEADING);
+        choosePieceText.setFill(Color.ORANGERED);
+        chosenPiece.getChildren().add(choosePieceText);
+    }
+
+    public void showChosenPiece(Piece piece) {
+        chosenPiece.getChildren().clear();
+        Text pieceName = new Text("\n" + getPieceName(piece) + " selected");
+        pieceName.setFont(HEADING);
+        pieceName.setFill(Color.ORANGERED);
+        chosenPiece.getChildren().add(pieceName);
+    }
+
+    public String getPieceName(Piece piece) {
+        String name = piece.getClass().getSimpleName();
+        String pieceName = name.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2");
+        return pieceName;
+    }
+    //endregion
 
     //region move list
     private void initMovement() {
@@ -142,138 +244,15 @@ public class GameInfoView
     //endregion
 
 
-    //region title and player names
-    private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
-        titleInfo = new VBox();
-        titleInfo.setSpacing(10);
-        titleInfo.setPadding(new Insets(15, 0, 0, 0));
-        titleInfo.setAlignment(Pos.CENTER);
-        drawTitle();
-        drawPlayerNames(sharkPlayerName, eaglePlayerName);
-        rootGameInfo.getChildren().add(titleInfo);
-    }
-
-    public void drawTitle() {
-        Text title = new Text("Eagle vs. Shark");
-        title.setFont(TITLE);
-        title.setFill(Color.ORANGERED);
-        titleInfo.getChildren().add(title);
-    }
-
-    public void drawPlayerNames(String sharkPlayerName, String eaglePlayerName) {
-        Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
-        sharkPlayer.setFont(BODY);
-        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
-        eaglePlayer.setFont(BODY);
-        titleInfo.getChildren().addAll(sharkPlayer, eaglePlayer);
-    }
-    //endregion
-
-
-    //region whose turn and timer
-    public void initWhoseTurn(int turnCount) {
-        whoseTurn = new VBox();
-        whoseTurn.setSpacing(10);
-        whoseTurn.setAlignment(Pos.CENTER);
-
-        // Player turn text
-        playersTurnText = new Text(getPlayerTurnText(turnCount));
-        playersTurnText.setFont(HEADING);
-        playersTurnText.setFill(Color.ORANGERED);
-        whoseTurn.getChildren().add(playersTurnText);
-
-        // Timer text
-        timeRemainingText = new Text("Time remaining");
-        timeRemainingText.setFont(HEADING);
-        timeRemainingText.setFill(Color.ORANGERED);
-        whoseTurn.getChildren().add(timeRemainingText);
-
-        rootGameInfo.getChildren().add(whoseTurn);
-    }
-
-    private void drawPlayersTurn(int turnCount) {
-        playersTurnText.setText(getPlayerTurnText(turnCount));
-    }
-
-    private String getPlayerTurnText(int turnCount) {
-        if (turnCount % 2 == 0) {
-            return "It's the Eagle's turn!";
-        } else {
-            return "It's the Shark's turn!";
-        }
-    }
-    //endregion
-
-
-    // region score info
-    public void initScoreInfo(int turnCount, double sharkScore, double eagleScore) {
-        scoreInfo = new VBox();
-        scoreInfo.setSpacing(10);
-        scoreInfo.setAlignment(Pos.CENTER);
-        drawTurnCount(turnCount);
-        drawScores(sharkScore, eagleScore);
-
-        rootGameInfo.getChildren().add(scoreInfo);
-    }
-
-    public void drawTurnCount(int turnCount) {
-        Text turnCountText = new Text("Turn No. " + turnCount + "/" + totalTurns);
-        turnCountText.setFont(BODY);
-        scoreInfo.getChildren().add(turnCountText);
-    }
-
-    private void drawScores(double sharkScore, double eagleScore) {
-        Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
-        sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
-        eagleScoreText.setFont(BODY);
-        scoreInfo.getChildren().addAll(sharkScoreText, eagleScoreText);
-    }
-    //endregion
-
-    //region chosen piece
-    public void initChosenPiece() {
-        chosenPiece = new VBox();
-        chosenPiece.setSpacing(10);
-        chosenPiece.setPadding(new Insets(0, 0, 15, 0));
-        chosenPiece.setAlignment(Pos.CENTER);
-        drawChoosePiece();
-        rootGameInfo.getChildren().add(chosenPiece);
-    }
-
-    public void drawChoosePiece() {
-        Text choosePieceText = new Text("\nChoose a piece to move");
-        choosePieceText.setFont(HEADING);
-        choosePieceText.setFill(Color.ORANGERED);
-        chosenPiece.getChildren().add(choosePieceText);
-    }
-
-    public void showChosenPiece(Piece piece) {
-        chosenPiece.getChildren().clear();
-        Text pieceName = new Text("\n" + getPieceName(piece) + " selected");
-        pieceName.setFont(HEADING);
-        pieceName.setFill(Color.ORANGERED);
-        chosenPiece.getChildren().add(pieceName);
-    }
-
-    public String getPieceName(Piece piece) {
-        String name = piece.getClass().getSimpleName();
-        String pieceName = name.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2");
-        return pieceName;
-    }
-    //endregion
-
-
     private void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
         clearView();
         drawPlayersTurn(turnCount);
-        drawTurnCount(turnCount);
-        drawScores(sharkScore, eagleScore);
+        scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
         drawChoosePiece();
     }
 
     private void clearView() {
-        scoreInfo.getChildren().clear();
+        scoreboard.getChildren().clear();
         chosenPiece.getChildren().clear();
         movement.getChildren().clear();
         moveList.getItems().clear();
@@ -305,12 +284,10 @@ public class GameInfoView
     public void gameInitialised(String sharkPlayerName, String eaglePlayerName,
                                 int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore) {
 
-        //initialise number of turns
-        this.totalTurns = totalTurns;
         //initialise game information
         initTitleInfo(sharkPlayerName, eaglePlayerName);
         initWhoseTurn(turnCount);
-        initScoreInfo(turnCount, sharkScore, eagleScore);
+        initScoreboard(turnCount, totalTurns, sharkScore, eagleScore);
         initChosenPiece();
         initMovement();
     }
