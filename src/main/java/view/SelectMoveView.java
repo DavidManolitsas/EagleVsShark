@@ -67,6 +67,7 @@ public class SelectMoveView
             } else {
                 moveList.setStyle("-fx-selection-bar: rgba(201,202,211,0.33)");
             }
+            gameInfo.getGameInfoViewEventListener().onPowerMoveToggled();
         });
         this.getChildren().add(powered);
     }
@@ -74,7 +75,7 @@ public class SelectMoveView
     public void promptChoosePiece() {
         choosePieceText.setText("Choose a piece to move");
         if (!this.getChildren().contains(choosePieceText)) {
-            this.getChildren().add(choosePieceText);
+            this.getChildren().addAll(choosePieceText, powered);
         }
     }
 
@@ -91,6 +92,7 @@ public class SelectMoveView
     public void showValidMoveList(List<Move> moves) {
         this.getChildren().clear();
         this.getChildren().addAll(choosePieceText, powered, moveList);
+
         // update the move list
         ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
         moveList.getItems().removeAll();
@@ -136,8 +138,10 @@ public class SelectMoveView
             moveBt.setPrefWidth(WIDTH);
 
             moveBt.setOnAction(event -> {
-                getSelectedMove().setPowered(powered.isSelected());
-                gameInfo.getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
+                Move currentMove = getSelectedMove();
+
+                currentMove.setPowered(powered.isSelected());
+                gameInfo.getGameInfoViewEventListener().onMoveButtonClicked(currentMove);
                 // reset the toggle
                 powered.setSelected(false);
             });
@@ -149,6 +153,10 @@ public class SelectMoveView
 
     private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
+    }
+
+    public boolean isPowered() {
+        return powered.isSelected();
     }
 
     public void clearMoveList() {

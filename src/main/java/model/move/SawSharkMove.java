@@ -1,10 +1,10 @@
 package main.java.model.move;
 
+import java.util.ArrayList;
+
 import main.java.model.move.movements.MoveDiagonalLeft;
 import main.java.model.move.movements.MoveDiagonalRight;
 import main.java.model.move.shape.TriangleShape;
-
-import java.util.ArrayList;
 
 /*
  * Precondition: none
@@ -13,13 +13,13 @@ import java.util.ArrayList;
  */
 public class SawSharkMove extends PieceMove {
 
-    private static final int SQUARE_MOVED = 2;
 
-    public SawSharkMove(int startRow, int startCol) {
+    public SawSharkMove(int startRow, int startCol, int width, int squaresMoved) {
+        super(squaresMoved);
         moveList = new ArrayList<>();
-        moveList.add(new Move(new MoveDiagonalLeft(startRow, startCol, SQUARE_MOVED),
-                new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_LEFT)));
-        moveList.add(new Move(new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED),
-                new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_RIGHT)));
+        moveList.add(new Move(new MoveDiagonalLeft(startRow, startCol, squaresMoved),
+                              new TriangleShape(startRow, startCol, width, TriangleShape.DIRECTION_LEFT)));
+        moveList.add(new Move(new MoveDiagonalRight(startRow, startCol, squaresMoved),
+                              new TriangleShape(startRow, startCol, width, TriangleShape.DIRECTION_RIGHT)));
     }
 }

@@ -32,6 +32,10 @@ public class Move {
         return movements.getRoute();
     }
 
+    public Movements getMovements() {
+        return movements;
+    }
+
     public boolean isPowered() {
         return isPowered;
     }

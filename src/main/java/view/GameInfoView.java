@@ -32,6 +32,8 @@ public class GameInfoView
 
         void onMoveButtonClicked(Move move);
 
+        void onPowerMoveToggled();
+
         void nextPlayerTurn();
     }
 
@@ -151,6 +153,10 @@ public class GameInfoView
 
     public void showValidMoveList(List<Move> moves) {
         selectMove.showValidMoveList(moves);
+    }
+
+    public boolean isPowered() {
+        return selectMove.isPowered();
     }
 
     public void showChosenPiece(Piece piece) {

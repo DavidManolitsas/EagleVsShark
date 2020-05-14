@@ -1,9 +1,9 @@
 package main.java.model.piece;
 
+import java.util.List;
+
 import main.java.model.move.Move;
 import main.java.model.move.SawSharkMove;
-
-import java.util.List;
 
 public class SawShark
         extends Shark {
@@ -12,13 +12,22 @@ public class SawShark
         super(startRow, startCol);
     }
 
+
     /**
      * Ensures:
      * moveList of SawSharkMove objects
      */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new SawSharkMove(startRow, startCol).getMoveList();
+        setPieceMove(new SawSharkMove(startRow, startCol, 3, 2));
+        return getPieceMove().getMoveList();
+    }
+
+
+    @Override
+    public List<Move> getAllPowerMoves(int startRow, int startCol) {
+        setPieceMove(new SawSharkMove(startRow, startCol, 5, 4));
+        return getPieceMove().getMoveList();
     }
 
 }

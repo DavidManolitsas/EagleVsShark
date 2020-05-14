@@ -44,4 +44,11 @@ public interface Board {
     Square[] getTopRow();
 
     Square[] getBottomRow();
+
+    Square getSquareAt(int row, int col);
+
+    Square getSelectedSquare();
+
+    void setSelectedSquare(Square selectedSquare);
+
 }

@@ -1,5 +1,9 @@
 package main.java.model.piece;
 
+import java.util.List;
+
+import main.java.model.move.Move;
+
 /**
  * @author David Manolitsas
  * @project OOSD-A1
@@ -10,4 +14,6 @@ public abstract class Shark
     public Shark(int startRow, int startCol) {
         super(startRow, startCol);
     }
+
+    public abstract List<Move> getAllPowerMoves(int startRow, int startCol);
 }

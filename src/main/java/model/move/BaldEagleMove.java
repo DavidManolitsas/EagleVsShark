@@ -8,31 +8,28 @@ import main.java.model.move.shape.SquareShape;
 
 public class BaldEagleMove extends PieceMove {
 
-    private static final int SQUARE_MOVED_ONE = 1;
-    private static final int SQUARE_MOVED_TWO = 2;
-    private static final int SQUARE_MOVED_THREE = 3;
-
     /*
      * Precondition: none
      *              Starting point of the piece
      * Postcondition: a list of move
      */
-    public BaldEagleMove(int startRow, int startCol) {
+    public BaldEagleMove(int startRow, int startCol, int squaresMoved) {
+        super(squaresMoved);
 
         Movements[] movements = {
-                new MoveLeft(startRow, startCol, SQUARE_MOVED_ONE),
-                new MoveLeft(startRow, startCol, SQUARE_MOVED_TWO),
-                new MoveLeft(startRow, startCol, SQUARE_MOVED_THREE),
-                new MoveRight(startRow, startCol, SQUARE_MOVED_ONE),
-                new MoveRight(startRow, startCol, SQUARE_MOVED_TWO),
-                new MoveRight(startRow, startCol, SQUARE_MOVED_THREE),
-                new MoveDown(startRow, startCol, SQUARE_MOVED_ONE),
-                new MoveDown(startRow, startCol, SQUARE_MOVED_TWO),
-                new MoveDown(startRow, startCol, SQUARE_MOVED_THREE)
+                new MoveLeft(startRow, startCol, squaresMoved),
+                new MoveLeft(startRow, startCol, squaresMoved + 1),
+                new MoveLeft(startRow, startCol, squaresMoved + 2),
+                new MoveRight(startRow, startCol, squaresMoved),
+                new MoveRight(startRow, startCol, squaresMoved + 1),
+                new MoveRight(startRow, startCol, squaresMoved + 2),
+                new MoveDown(startRow, startCol, squaresMoved),
+                new MoveDown(startRow, startCol, squaresMoved + 1),
+                new MoveDown(startRow, startCol, squaresMoved + 2)
         };
 
         for (Movements movement : movements) {
-            moveList.add(new Move(movement, new SquareShape(movement.getDestination())));
+            moveList.add(new Move(movement, new SquareShape(movement.getDestination(), false)));
         }
     }
 }

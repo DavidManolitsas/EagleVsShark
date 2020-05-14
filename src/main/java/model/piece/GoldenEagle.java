@@ -1,9 +1,9 @@
 package main.java.model.piece;
 
+import java.util.List;
+
 import main.java.model.move.GoldenEagleMove;
 import main.java.model.move.Move;
-
-import java.util.List;
 
 public class GoldenEagle
         extends Eagle {
@@ -23,10 +23,19 @@ public class GoldenEagle
      */
     @Override
     public List<Move> getAllMoves(int startRow, int startCol) {
-        return new GoldenEagleMove(startRow, startCol, sharkPosList).getMoveList();
+        setPieceMove(new GoldenEagleMove(startRow, startCol, 0, sharkPosList, false));
+        return getPieceMove().getMoveList();
+    }
+
+    @Override
+    public List<Move> getAllPowerMoves(int startRow, int startCol) {
+        setPieceMove(new GoldenEagleMove(startRow, startCol, 0, sharkPosList, true));
+        return getPieceMove().getMoveList();
     }
 
     public void setSharkList(List<int[]> sharksPos) {
         this.sharkPosList = sharksPos;
     }
+
+
 }

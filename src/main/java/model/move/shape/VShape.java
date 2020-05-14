@@ -1,8 +1,7 @@
 package main.java.model.move.shape;
 
-import java.util.List;
-
-public class VShape extends PaintShape{
+public class VShape
+        extends PaintShape {
 
     // all direction is in the board's perspective
 
@@ -13,7 +12,7 @@ public class VShape extends PaintShape{
 
     private static final int STAIRS = 3;
 
-    public VShape(int[] destination, int[] direction) {
+    public VShape(int[] destination, int[] direction, boolean isPowered) {
         int col = 0;
         for (int paintPart : direction){
             switch(paintPart) {
@@ -49,5 +48,31 @@ public class VShape extends PaintShape{
         }
 
         paintInfo.add(new int[] {destination[0], destination[1]});
+
+        if (isPowered) {
+            powerShape(destination, direction);
+        }
     }
+
+    void powerShape(int[] destination, int[] direction) {
+
+        if (direction == DIRECTION_UP) {
+            paintInfo.add(new int[] {destination[0] - 1, destination[1]});
+            paintInfo.add(new int[] {destination[0] - 2, destination[1]});
+            paintInfo.add(new int[] {destination[0] - 3, destination[1]});
+        } else if (direction == DIRECTION_DOWN) {
+            paintInfo.add(new int[] {destination[0] + 1, destination[1]});
+            paintInfo.add(new int[] {destination[0] + 2, destination[1]});
+            paintInfo.add(new int[] {destination[0] + 3, destination[1]});
+        } else if (direction == DIRECTION_LEFT) {
+            paintInfo.add(new int[] {destination[0], destination[1] - 1});
+            paintInfo.add(new int[] {destination[0], destination[1] - 2});
+            paintInfo.add(new int[] {destination[0], destination[1] - 3});
+        } else if (direction == DIRECTION_RIGHT) {
+            paintInfo.add(new int[] {destination[0], destination[1] + 1});
+            paintInfo.add(new int[] {destination[0], destination[1] + 2});
+            paintInfo.add(new int[] {destination[0], destination[1] + 3});
+        }
+    }
+
 }

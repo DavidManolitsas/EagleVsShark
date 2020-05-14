@@ -103,4 +103,19 @@ public abstract class AbstractBoardDecorator
     public Square[] getBottomRow() {
         return board.getBottomRow();
     }
+
+    @Override
+    public Square getSquareAt(int row, int col) {
+        return board.getSquareAt(row, col);
+    }
+
+    @Override
+    public Square getSelectedSquare() {
+        return board.getSelectedSquare();
+    }
+
+    @Override
+    public void setSelectedSquare(Square selectedSquare) {
+        board.setSelectedSquare(selectedSquare);
+    }
 }

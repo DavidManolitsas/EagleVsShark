@@ -204,7 +204,6 @@ public class Game {
 
     public void updateRemainingPowerMoves() {
         Player currentPlayer = getCurrentPlayer();
-        System.out.println(currentPlayer.getPlayerName());
         currentPlayer.setRemainingPowerMoves(currentPlayer.getRemainingPowerMoves() - 1);
     }
 
