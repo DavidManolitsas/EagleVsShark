@@ -159,6 +159,10 @@ public class GameInfoView
         return selectMove.isPowered();
     }
 
+    public void setIsPowered(boolean isPowered) {
+        selectMove.setIsPowered(isPowered);
+    }
+
     public void showChosenPiece(Piece piece) {
         selectMove.showChosenPiece(piece);
     }

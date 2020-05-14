@@ -139,13 +139,6 @@ public class GameViewController
             return;
         }
 
-        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && move.isPowered()) {
-            boardView.removeMovePreview();
-            boardView.removeHighlight();
-            gameInfoView.showError("Invalid move, you have no more power moves remaining");
-            return;
-        }
-
         // update power move count
         if (move.isPowered()) {
             game.updateRemainingPowerMoves();
@@ -172,6 +165,15 @@ public class GameViewController
     @Override
     public void onPowerMoveToggled() {
         if (board.getSelectedSquare() == null) {
+            return;
+        }
+
+        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && gameInfoView.isPowered()) {
+            boardView.removeMovePreview();
+            boardView.removeHighlight();
+            board.setSelectedSquare(null);
+            gameInfoView.setIsPowered(false);
+            gameInfoView.showError("You have no more power moves available");
             return;
         }
 

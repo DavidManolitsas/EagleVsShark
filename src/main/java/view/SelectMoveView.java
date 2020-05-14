@@ -159,6 +159,10 @@ public class SelectMoveView
         return powered.isSelected();
     }
 
+    public void setIsPowered(Boolean isPowered) {
+        powered.setSelected(isPowered);
+    }
+
     public void clearMoveList() {
         moveList.getItems().clear();
         this.getChildren().clear();
