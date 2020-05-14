@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -31,19 +32,20 @@ public class SelectMoveView
     private static final double WIDTH = 250;
     private static final Font HEADING = Font.font("Helvetica", 16);
     private static final Font BODY = Font.font("Helvetica", 14);
+    private RadioButton powered;
 
     public SelectMoveView(GameInfoView gameInfo) {
-//        this.setSpacing(10);
         this.setPadding(new Insets(10, 0, 0, 0));
         this.setAlignment(Pos.CENTER);
         this.gameInfo = gameInfo;
         initChoosePiece();
+        initPoweredUp();
         initMoveList();
     }
 
     private void initMoveList() {
         moveList = new ListView<>();
-        moveList.setPrefHeight(270);
+        moveList.setPrefHeight(260);
         moveList.setFixedCellSize(35);
     }
 
@@ -56,6 +58,13 @@ public class SelectMoveView
         this.getChildren().add(choosePieceText);
     }
 
+    private void initPoweredUp() {
+        powered = new RadioButton("Power Move");
+        powered.setFont(BODY);
+        powered.setPadding(new Insets(5, 0, 5, 0));
+        this.getChildren().add(powered);
+    }
+
     public void promptChoosePiece() {
         choosePieceText.setText("Choose a piece to move");
         if (!this.getChildren().contains(choosePieceText)) {
@@ -64,7 +73,7 @@ public class SelectMoveView
     }
 
     public void showChosenPiece(Piece piece) {
-        choosePieceText.setText(getPieceName(piece) + " selected\n");
+        choosePieceText.setText(getPieceName(piece) + " selected");
     }
 
     public String getPieceName(Piece piece) {
@@ -75,7 +84,7 @@ public class SelectMoveView
 
     public void showValidMoveList(List<Move> moves) {
         this.getChildren().clear();
-        this.getChildren().addAll(choosePieceText, moveList);
+        this.getChildren().addAll(choosePieceText, powered, moveList);
         // update the move list
         ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
         moveList.getItems().removeAll();
@@ -108,6 +117,7 @@ public class SelectMoveView
 
     }
 
+
     private void drawMoveButton() {
         if (moveList != null) {
             Button moveBt = new Button("Move Piece");
@@ -116,8 +126,9 @@ public class SelectMoveView
             moveBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
             moveBt.setPrefWidth(WIDTH);
 
-
             moveBt.setOnAction(event -> {
+                //TODO: implement me
+//                getSelectedMove().setPowered(true);
                 gameInfo.getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
             });
 
