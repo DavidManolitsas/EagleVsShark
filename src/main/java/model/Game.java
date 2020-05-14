@@ -23,9 +23,11 @@ public class Game {
 
     public interface GameModelEventListener {
         void gameInitialised(String eaglePlayerName, String sharkPlayerName,
-                             int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore);
+                             int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore,
+                             int sharkPowerMoves, int eaglePowerMoves);
 
-        void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore);
+        void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
+                             int eaglePowerMoves);
 
         //timer functions
         void timeRemainingChanged(int timeRemaining);
@@ -70,15 +72,19 @@ public class Game {
      */
     public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int timeLimit, int turnCount, int rows,
                                int cols) {
-        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
-        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
+
+        int numOfPowerMoves = (turnCount / 2) / 4;
+
+        this.sharkPlayer = new SharkPlayer(sharkPlayerName, numOfPowerMoves);
+        this.eaglePlayer = new EaglePlayer(eaglePlayerName, numOfPowerMoves);
         this.turnTime = timeLimit;
         this.totalSquares = rows * cols;
         this.totalTurns = turnCount;
 
         listener.gameInitialised(sharkPlayerName,
                                  eaglePlayerName,
-                                 turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore());
+                                 turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore(),
+                                 sharkPlayer.getRemainingPowerMoves(), eaglePlayer.getRemainingPowerMoves());
     }
 
     /**
@@ -94,7 +100,8 @@ public class Game {
         } else {
             incrementTurnCount();
             startTimer();
-            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore());
+            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore(), sharkPlayer.getRemainingPowerMoves(),
+                                     eaglePlayer.getRemainingPowerMoves());
         }
     }
 
@@ -193,6 +200,12 @@ public class Game {
         } else {
             return sharkPlayer;
         }
+    }
+
+    public void updateRemainingPowerMoves() {
+        Player currentPlayer = getCurrentPlayer();
+        System.out.println(currentPlayer.getPlayerName());
+        currentPlayer.setRemainingPowerMoves(currentPlayer.getRemainingPowerMoves() - 1);
     }
 
     public void startTimer() {

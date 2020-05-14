@@ -133,6 +133,18 @@ public class GameViewController
             return;
         }
 
+        if (game.getCurrentPlayer().getRemainingPowerMoves() < 0) {
+            gameInfoView.showError("Invalid move, you have no more power moves remaining");
+            return;
+        }
+
+        //TODO: testing
+        System.out.println(move.isPowered());
+        // update power move count
+        if (move.isPowered()) {
+            game.updateRemainingPowerMoves();
+        }
+
         // Remove preview
         boardView.removeMovePreview();
         boardView.removeHighlight();
@@ -147,6 +159,7 @@ public class GameViewController
         //the player moved their piece, change to next players turn
         game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
         game.nextTurn();
+
     }
 
     @Override
