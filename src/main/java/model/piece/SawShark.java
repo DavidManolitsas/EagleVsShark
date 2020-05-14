@@ -26,7 +26,7 @@ public class SawShark
 
     @Override
     public List<Move> getAllPowerMoves(int startRow, int startCol) {
-        setPieceMove(new SawSharkMove(startRow, startCol, 5, 4));
+        setPieceMove(new SawSharkMove(startRow, startCol, 4, 3));
         return getPieceMove().getMoveList();
     }
 
