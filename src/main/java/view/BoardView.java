@@ -145,15 +145,6 @@ public class BoardView
     }
 
     @Override
-    public void onPiecePositionUpdated(Move move) {
-        int[] startPos = move.getRoute().get(0);
-        int[] destinationPos = move.getFinalPosition();
-
-        updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
-    }
-
-
-    @Override
 //    public void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol){
     public void updatePiecePosition(int originalRow, int originalCol, int destinationRow, int destinationCol) {
         StackPane start = getSquareAt(originalRow, originalCol);
@@ -162,6 +153,23 @@ public class BoardView
 
         StackPane destination = getSquareAt(destinationRow, destinationCol);
         destination.getChildren().add(piece);
+    }
+
+    @Override
+    public void onPieceSelected(int row, int col) {
+        removeMovePreview();
+        highlightSquare(row, col);
+    }
+
+    @Override
+    public void onPieceMoved(Move move, int turnCount) {
+        removeMovePreview();
+        removeHighlight();
+
+        int[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
+        updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
+        updateTerritory(move, turnCount);
     }
     //endregion
 

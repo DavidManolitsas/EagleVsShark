@@ -1,7 +1,5 @@
 package main.java.view;
 
-import java.util.List;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -17,6 +15,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
+
+import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -67,7 +67,7 @@ public class SelectMoveView
             } else {
                 moveList.setStyle("-fx-selection-bar: rgba(201,202,211,0.33)");
             }
-            gameInfo.getGameInfoViewEventListener().onPowerMoveToggled();
+            gameInfo.getGameInfoViewEventListener().onPowerMoveToggled(isPowered());
         });
         this.getChildren().add(powered);
     }

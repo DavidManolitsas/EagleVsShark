@@ -19,9 +19,9 @@ public interface Board {
 
     Piece getPiece(int row, int col);
 
-    void setChosenPiece(Piece chosenPiece);
-
     Piece getChosenPiece();
+
+    void initBoard();
 
     void updatePiecePosition(Move move, Piece piece);
 
@@ -33,16 +33,13 @@ public interface Board {
 
     boolean isSquareValid(int[] position);
 
-    int getTotalRows();
-
-    int getTotalCols();
-
-    void setEventListener(BoardModelEventListener eventListener);
+    void setListener(BoardModelEventListener eventListener);
 
     Square getSquareAt(int row, int col);
 
-    Square getSelectedSquare();
+    void onPieceSelected(Piece piece, int row, int col);
 
-    void setSelectedSquare(Square selectedSquare);
+    void onMoveButtonClicked(Move move, Player currentPlayer, int turnCount);
 
+    int[] getPiecePosition(Piece chosenPiece);
 }

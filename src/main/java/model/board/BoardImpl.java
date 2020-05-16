@@ -23,10 +23,11 @@ public class BoardImpl
     private BoardModelEventListener eventListener;
     private int totalRows;
     private int totalCols;
+    private int sharkNums;
+    private int eagleNums;
     private Square[][] squares;
     private Map<Piece, Square> pieceSquareMap;
     private Piece chosenPiece;
-    private Square selectedSquare;
 
     /**
      * Requires:
@@ -35,12 +36,17 @@ public class BoardImpl
     public BoardImpl(int rows, int cols, int sharks, int eagles) {
         totalRows = rows;
         totalCols = cols;
+        sharkNums = sharks;
+        eagleNums = eagles;
         chosenPiece = null;
+    }
 
+    @Override
+    public void initBoard() {
         initSquare();
-        initPieces(sharks, eagles);
+        initPieces(sharkNums, eagleNums);
 
-        eventListener.onBoardInitialised(rows, cols, squares[0], squares[totalRows - 1]);
+        eventListener.onBoardInitialised(totalRows, totalCols, squares[0], squares[totalRows - 1]);
     }
 
     /**
@@ -69,8 +75,6 @@ public class BoardImpl
         destination.setPiece(piece);
 
         pieceSquareMap.put(piece, destination);
-
-        eventListener.onPiecePositionUpdated(move);
     }
 
     // region public Board methods
@@ -113,11 +117,6 @@ public class BoardImpl
     @Override
     public Piece getChosenPiece() {
         return chosenPiece;
-    }
-
-    @Override
-    public void setChosenPiece(Piece chosenPiece) {
-        this.chosenPiece = chosenPiece;
     }
 
     /**
@@ -200,22 +199,8 @@ public class BoardImpl
     }
 
     @Override
-    public int getTotalRows() {
-        return totalRows;
-    }
-
-    @Override
-    public int getTotalCols() {
-        return totalCols;
-    }
-
-    @Override
-    public void setEventListener(BoardModelEventListener eventListener) {
+    public void setListener(BoardModelEventListener eventListener) {
         this.eventListener = eventListener;
-    }
-
-    public BoardModelEventListener getEventListener() {
-        return eventListener;
     }
 
     // region private methods
@@ -345,12 +330,31 @@ public class BoardImpl
         return squares[row][col];
     }
 
-    public Square getSelectedSquare() {
-        return selectedSquare;
+    @Override
+    public void onPieceSelected(Piece piece, int row, int col) {
+        chosenPiece = piece;
+
+        if (piece instanceof GoldenEagle) {
+            List<int[]> sharksPositions = getSharksPositions();
+            ((GoldenEagle) piece).setSharkList(sharksPositions);
+        }
+
+        eventListener.onPieceSelected(row, col);
     }
 
-    public void setSelectedSquare(Square selectedSquare) {
-        this.selectedSquare = selectedSquare;
+    @Override
+    public void onMoveButtonClicked(Move move, Player currentPlayer, int turnCount) {
+        updatePiecePosition(move, chosenPiece);
+        updateTerritory(move, currentPlayer);
+        chosenPiece = null;
+
+        eventListener.onPieceMoved(move, turnCount);
+    }
+
+    @Override
+    public int[] getPiecePosition(Piece chosenPiece) {
+        Square square = pieceSquareMap.get(chosenPiece);
+        return new int[] {square.getRow(), square.getCol()};
     }
 
     /**
@@ -376,9 +380,11 @@ public class BoardImpl
     public interface BoardModelEventListener {
         void onBoardInitialised(int rows, int cols, Square[] topRow, Square[] bottomRow);
 
-        void onPiecePositionUpdated(Move move);
-
         void updatePiecePosition(int attackedRow, int attackedCol, int resetRow, int resetCol);
+
+        void onPieceSelected(int row, int col);
+
+        void onPieceMoved(Move move, int turnCount);
     }
     // endregion
 

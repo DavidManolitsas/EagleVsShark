@@ -1,8 +1,5 @@
 package main.java.view;
 
-import java.util.List;
-import java.util.Objects;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -18,6 +15,9 @@ import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
  * @author David Manolitsas
  * @project OOSD-A1
@@ -32,7 +32,7 @@ public class GameInfoView
 
         void onMoveButtonClicked(Move move);
 
-        void onPowerMoveToggled();
+        void onPowerMoveToggled(boolean isPowered);
 
         void nextPlayerTurn();
     }
@@ -231,6 +231,12 @@ public class GameInfoView
     @Override
     public void timeRanOut() {
         showTimeRanOutAlert();
+    }
+
+    @Override
+    public void onPieceSelected(Piece piece, List<Move> allPossibleMoves) {
+        showValidMoveList(allPossibleMoves);
+        showChosenPiece(piece);
     }
     //endregion
 

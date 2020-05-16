@@ -7,6 +7,7 @@ import javafx.util.Duration;
 import main.java.model.board.Board;
 import main.java.model.board.BoardImpl;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
+import main.java.model.move.Move;
 import main.java.model.piece.Eagle;
 import main.java.model.piece.Piece;
 import main.java.model.piece.Shark;
@@ -14,6 +15,8 @@ import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
 import main.java.util.SceneManager;
+
+import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -36,6 +39,8 @@ public class Game {
         void timeRemainingChanged(int timeRemaining);
 
         void timeRanOut();
+
+        void onPieceSelected(Piece piece, List<Move> allPossibleMoves);
     }
 
     //listener
@@ -69,6 +74,72 @@ public class Game {
         this.turnCount = 0;
 
         board = new BoardImpl(gameBuilder.rows, gameBuilder.cols, gameBuilder.sharkNums, gameBuilder.eagleNums);
+    }
+
+    public void start() {
+        board.initBoard();
+        listener.gameInitialised(sharkPlayer.getPlayerName(), eaglePlayer.getPlayerName(),
+                                 turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore(),
+                                 sharkPlayer.getRemainingPowerMoves(), eaglePlayer.getRemainingPowerMoves());
+
+        nextTurn();
+    }
+
+    public void onSquareClicked(int row, int col, boolean isPowered) {
+        Piece piece = board.getPiece(row, col);
+        Piece prevChosenPiece = board.getChosenPiece();
+        if (piece == null || piece == prevChosenPiece) {
+            return;
+        }
+
+        if (!pieceBelongsToPlayer(piece)) {
+            return;
+        }
+
+        board.onPieceSelected(piece, row, col);
+
+        List<Move> allPossibleMoves;
+        if (isPowered) {
+            allPossibleMoves = piece.getAllPowerMoves(row, col);
+        } else {
+            allPossibleMoves = piece.getAllMoves(row, col);
+        }
+        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+
+        listener.onPieceSelected(piece, allPossibleMoves);
+    }
+
+    public void onMoveButtonClicked(Move move) {
+        // update power move count
+        if (move.isPowered()) {
+            updateRemainingPowerMoves();
+        }
+
+        board.onMoveButtonClicked(move, getCurrentPlayer(), turnCount);
+
+        //the player moved their piece, change to next players turn
+        updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
+        nextTurn();
+    }
+
+    public void onPowerMoveToggled(boolean isPowered) {
+        Piece chosenPiece = board.getChosenPiece();
+
+        if (chosenPiece == null) {
+            return;
+        }
+
+        int[] position = board.getPiecePosition(chosenPiece);
+
+        List<Move> allPossibleMoves;
+        if (isPowered) {
+            allPossibleMoves = chosenPiece.getAllPowerMoves(position[0], position[1]);
+        } else {
+            allPossibleMoves = chosenPiece.getAllMoves(position[0], position[1]);
+        }
+        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+
+        listener.onPieceSelected(chosenPiece, allPossibleMoves);
     }
 
     /**
@@ -244,6 +315,7 @@ public class Game {
 
     public void setListener(GameModelEventListener gameListener, BoardModelEventListener boardListener) {
         this.listener = gameListener;
+        board.setListener(boardListener);
     }
 
     public static class GameBuilder {
