@@ -1,6 +1,9 @@
 package main.java.model.move;
 
-import main.java.model.move.movements.*;
+import main.java.model.move.movements.MoveDown;
+import main.java.model.move.movements.MoveLeft;
+import main.java.model.move.movements.MoveRight;
+import main.java.model.move.movements.MoveUp;
 import main.java.model.move.shape.VShape;
 
 /*
@@ -10,22 +13,23 @@ import main.java.model.move.shape.VShape;
  */
 public class HarpyEagleMove extends PieceMove {
 
-    private static final int SQUARE_MOVED = 3;
 
-    public HarpyEagleMove(int startRow, int startCol) {
-        MoveLeft left = new MoveLeft(startRow, startCol, SQUARE_MOVED);
-        MoveRight right = new MoveRight(startRow, startCol, SQUARE_MOVED);
-        MoveDown down = new MoveDown(startRow, startCol, SQUARE_MOVED);
-        MoveUp up = new MoveUp(startRow, startCol, SQUARE_MOVED);
+    public HarpyEagleMove(int startRow, int startCol, int squaresMoved, boolean isPowered) {
+        super(squaresMoved);
+
+        MoveLeft left = new MoveLeft(startRow, startCol, squaresMoved);
+        MoveRight right = new MoveRight(startRow, startCol, squaresMoved);
+        MoveDown down = new MoveDown(startRow, startCol, squaresMoved);
+        MoveUp up = new MoveUp(startRow, startCol, squaresMoved);
 
         moveList.add(new Move(left,
-                new VShape(left.getDestination(), VShape.DIRECTION_LEFT)));
+                              new VShape(left.getDestination(), VShape.DIRECTION_LEFT, isPowered)));
         moveList.add(new Move(right,
-                new VShape(right.getDestination(), VShape.DIRECTION_RIGHT)));
+                              new VShape(right.getDestination(), VShape.DIRECTION_RIGHT, isPowered)));
         moveList.add(new Move(up,
-                new VShape(up.getDestination(), VShape.DIRECTION_UP)));
+                              new VShape(up.getDestination(), VShape.DIRECTION_UP, isPowered)));
         moveList.add(new Move(down,
-                new VShape(down.getDestination(), VShape.DIRECTION_DOWN)));
+                              new VShape(down.getDestination(), VShape.DIRECTION_DOWN, isPowered)));
     }
 
 }

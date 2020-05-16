@@ -44,6 +44,7 @@ public class RockDecorator
         return super.isSquareValid(position) && !rockSquareMap.containsKey(Arrays.toString(position));
     }
 
+
     private void generateObstacles() {
         Random random = new Random();
         while (rockSquareMap.size() < ROCKS_NUM) {

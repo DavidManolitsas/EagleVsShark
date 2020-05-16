@@ -1,9 +1,9 @@
 package main.java.model.move;
 
+import java.util.List;
+
 import main.java.model.move.movements.Movements;
 import main.java.model.move.shape.PaintShape;
-
-import java.util.List;
 
 /*
  * Precondition: valid movement and paintShape
@@ -12,10 +12,12 @@ import java.util.List;
 public class Move {
     private Movements movements;
     private PaintShape paintShape;
+    private boolean isPowered;
 
     public Move(Movements movements, PaintShape paintShape) {
         this.movements = movements;
         this.paintShape = paintShape;
+        this.isPowered = false;
     }
 
     public PaintShape getPaintShape() {
@@ -28,6 +30,18 @@ public class Move {
 
     public List<int[]> getRoute() {
         return movements.getRoute();
+    }
+
+    public Movements getMovements() {
+        return movements;
+    }
+
+    public boolean isPowered() {
+        return isPowered;
+    }
+
+    public void setPowered(boolean powered) {
+        isPowered = powered;
     }
 
     @Override

@@ -13,18 +13,18 @@ import main.java.model.move.shape.TShape;
  */
 public class HammerheadMove extends PieceMove {
 
-    private static final int SQUARE_MOVED = 1;
 
-    public HammerheadMove(int startRow, int startCol) {
+    public HammerheadMove(int startRow, int startCol, int length, int width, int squaresMoved) {
+        super(squaresMoved);
 
         Movements[] movements = {
-                new MoveUp(startRow, startCol, SQUARE_MOVED),
-                new MoveDiagonalLeft(startRow, startCol, SQUARE_MOVED),
-                new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED)
+                new MoveUp(startRow, startCol, squaresMoved),
+                new MoveDiagonalLeft(startRow, startCol, squaresMoved),
+                new MoveDiagonalRight(startRow, startCol, squaresMoved)
         };
 
         for (Movements movement : movements) {
-            moveList.add(new Move(movement, new TShape(movement.getDestination())));
+            moveList.add(new Move(movement, new TShape(movement.getDestination(), length, width)));
         }
     }
 

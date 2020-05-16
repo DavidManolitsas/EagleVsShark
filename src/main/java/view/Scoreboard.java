@@ -2,6 +2,7 @@ package main.java.view;
 
 import java.text.DecimalFormat;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -31,7 +32,8 @@ public class Scoreboard
     }
 
     private void initScoreboard() {
-        this.setSpacing(10);
+        this.setPadding(new Insets(12, 0, 15, 0));
+        this.setSpacing(8);
         this.setAlignment(Pos.CENTER);
         drawTurnCount();
         drawScores();

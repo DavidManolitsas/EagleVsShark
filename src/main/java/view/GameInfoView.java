@@ -32,6 +32,8 @@ public class GameInfoView
 
         void onMoveButtonClicked(Move move);
 
+        void onPowerMoveToggled();
+
         void nextPlayerTurn();
     }
 
@@ -47,6 +49,8 @@ public class GameInfoView
     private VBox whoseTurn;
     private Text timeRemainingText;
     private Text playersTurnText;
+    private Text sharkPowerMoveText;
+    private Text eaglePowerMoveText;
     private Scoreboard scoreboard;
     private SelectMoveView selectMove;
 
@@ -58,7 +62,7 @@ public class GameInfoView
     private void initGameInfo() {
         root = new VBox();
         this.setPrefWidth(WIDTH);
-        root.setSpacing(10);
+        root.setSpacing(5);
         root.setAlignment(Pos.CENTER);
         this.setTop(root);
     }
@@ -68,9 +72,13 @@ public class GameInfoView
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo = new VBox();
         titleInfo.setSpacing(10);
-        titleInfo.setPadding(new Insets(15, 0, 0, 0));
+        titleInfo.setPadding(new Insets(10, 0, 15, 0));
         titleInfo.setAlignment(Pos.CENTER);
         drawTitleAndPlayerNames(sharkPlayerName, eaglePlayerName);
+        sharkPowerMoveText = new Text();
+        sharkPowerMoveText.setFont(BODY);
+        eaglePowerMoveText = new Text();
+        eaglePowerMoveText.setFont(BODY);
         root.getChildren().add(titleInfo);
     }
 
@@ -83,10 +91,19 @@ public class GameInfoView
         // player names
         Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
         sharkPlayer.setFont(BODY);
-        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
+        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player");
         eaglePlayer.setFont(BODY);
         titleInfo.getChildren().addAll(sharkPlayer, eaglePlayer);
     }
+
+    public void drawPowerMoves(int sharkPowerMoves, int eaglePowerMoves) {
+        sharkPowerMoveText.setText("Shark power moves: " + sharkPowerMoves);
+        eaglePowerMoveText.setText("Eagle power moves: " + eaglePowerMoves);
+        if (!titleInfo.getChildren().contains(sharkPowerMoveText)) {
+            titleInfo.getChildren().addAll(sharkPowerMoveText, eaglePowerMoveText);
+        }
+    }
+
     //endregion
 
     //region whose turn and timer
@@ -138,12 +155,22 @@ public class GameInfoView
         selectMove.showValidMoveList(moves);
     }
 
+    public boolean isPowered() {
+        return selectMove.isPowered();
+    }
+
+    public void setIsPowered(boolean isPowered) {
+        selectMove.setIsPowered(isPowered);
+    }
+
     public void showChosenPiece(Piece piece) {
         selectMove.showChosenPiece(piece);
     }
 
-    private void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
+    private void updateGameInfo(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
+                                int eaglePowerMoves) {
         clearView();
+        drawPowerMoves(sharkPowerMoves, eaglePowerMoves);
         drawPlayersTurn(turnCount);
         scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
         selectMove.promptChoosePiece();
@@ -179,23 +206,26 @@ public class GameInfoView
     //region Game Event
     @Override
     public void gameInitialised(String sharkPlayerName, String eaglePlayerName,
-                                int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore) {
+                                int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore,
+                                int sharkPowerMoves, int eaglePowerMoves) {
 
         //initialise game information
         initTitleInfo(sharkPlayerName, eaglePlayerName);
+        drawPowerMoves(sharkPowerMoves, eaglePowerMoves);
         initWhoseTurn(turnCount);
         initScoreboard(turnCount, totalTurns, sharkScore, eagleScore);
         initSelectMoveView();
     }
 
     @Override
-    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
-        updateGameInfo(turnCount, sharkScore, eagleScore);
+    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
+                                int eaglePowerMoves) {
+        updateGameInfo(turnCount, sharkScore, eagleScore, sharkPowerMoves, eaglePowerMoves);
     }
 
     @Override
     public void timeRemainingChanged(int timeRemaining) {
-        timeRemainingText.setText(timeRemaining + " seconds\n");
+        timeRemainingText.setText(timeRemaining + " seconds");
     }
 
     @Override

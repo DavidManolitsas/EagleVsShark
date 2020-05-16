@@ -45,7 +45,7 @@ public class SelectMoveView
 
     private void initMoveList() {
         moveList = new ListView<>();
-        moveList.setPrefHeight(260);
+        moveList.setPrefHeight(220);
         moveList.setFixedCellSize(35);
     }
 
@@ -54,7 +54,6 @@ public class SelectMoveView
         choosePieceText = new Text("Choose a piece to move");
         choosePieceText.setFont(HEADING);
         choosePieceText.setFill(Color.ORANGERED);
-
         this.getChildren().add(choosePieceText);
     }
 
@@ -62,13 +61,21 @@ public class SelectMoveView
         powered = new RadioButton("Power Move");
         powered.setFont(BODY);
         powered.setPadding(new Insets(5, 0, 5, 0));
+        powered.setOnAction(event -> {
+            if (powered.isSelected()) {
+                moveList.setStyle("-fx-selection-bar: rgba(255,69,0,0.33)");
+            } else {
+                moveList.setStyle("-fx-selection-bar: rgba(201,202,211,0.33)");
+            }
+            gameInfo.getGameInfoViewEventListener().onPowerMoveToggled();
+        });
         this.getChildren().add(powered);
     }
 
     public void promptChoosePiece() {
         choosePieceText.setText("Choose a piece to move");
         if (!this.getChildren().contains(choosePieceText)) {
-            this.getChildren().add(choosePieceText);
+            this.getChildren().addAll(choosePieceText, powered);
         }
     }
 
@@ -85,11 +92,12 @@ public class SelectMoveView
     public void showValidMoveList(List<Move> moves) {
         this.getChildren().clear();
         this.getChildren().addAll(choosePieceText, powered, moveList);
+
         // update the move list
         ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
         moveList.getItems().removeAll();
         moveList.setItems(moveListObservable);
-        moveList.setStyle("-fx-selection-bar: rgba(255,69,0,0.33)");
+        moveList.setStyle("-fx-selection-bar: rgba(201,202,211,0.33)");
 
         // assign name to each Move object
         moveList.setCellFactory(e -> new ListCell<Move>() {
@@ -103,6 +111,9 @@ public class SelectMoveView
                     setText(item.toString().replaceAll("(.)([A-Z])", "$1 $2"));
                     setTextAlignment(TextAlignment.CENTER);
                     setFont(BODY);
+                    if (powered.isSelected()) {
+                        moveList.setStyle("-fx-selection-bar: rgba(255,69,0,0.33)");
+                    }
 
                 }
             }
@@ -127,9 +138,12 @@ public class SelectMoveView
             moveBt.setPrefWidth(WIDTH);
 
             moveBt.setOnAction(event -> {
-                //TODO: implement me
-//                getSelectedMove().setPowered(true);
-                gameInfo.getGameInfoViewEventListener().onMoveButtonClicked(getSelectedMove());
+                Move currentMove = getSelectedMove();
+
+                currentMove.setPowered(powered.isSelected());
+                gameInfo.getGameInfoViewEventListener().onMoveButtonClicked(currentMove);
+                // reset the toggle
+                powered.setSelected(false);
             });
 
             this.getChildren().add(moveBt);
@@ -139,6 +153,14 @@ public class SelectMoveView
 
     private Move getSelectedMove() throws NullPointerException {
         return moveList.getSelectionModel().getSelectedItem();
+    }
+
+    public boolean isPowered() {
+        return powered.isSelected();
+    }
+
+    public void setIsPowered(Boolean isPowered) {
+        powered.setSelected(isPowered);
     }
 
     public void clearMoveList() {

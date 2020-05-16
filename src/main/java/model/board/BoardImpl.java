@@ -1,13 +1,26 @@
 package main.java.model.board;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import main.java.model.Square;
 import main.java.model.move.Move;
-import main.java.model.piece.*;
+import main.java.model.piece.BaldEagle;
+import main.java.model.piece.Eagle;
+import main.java.model.piece.GoblinShark;
+import main.java.model.piece.GoldenEagle;
+import main.java.model.piece.Hammerhead;
+import main.java.model.piece.HarpyEagle;
+import main.java.model.piece.Piece;
+import main.java.model.piece.SawShark;
+import main.java.model.piece.Shark;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
-
-import java.util.*;
 
 /**
  * @author WeiYi Yu
@@ -27,6 +40,7 @@ public class BoardImpl
     private Square[][] squares;
     private Map<Piece, Square> pieceSquareMap;
     private Piece chosenPiece;
+    private Square selectedSquare;
 
     /**
      * Requires:
@@ -347,8 +361,16 @@ public class BoardImpl
      * 1. row >= 0 && col >= 0
      * 2. row < ROW && col < COL
      */
-    private Square getSquareAt(int row, int col) {
+    public Square getSquareAt(int row, int col) {
         return squares[row][col];
+    }
+
+    public Square getSelectedSquare() {
+        return selectedSquare;
+    }
+
+    public void setSelectedSquare(Square selectedSquare) {
+        this.selectedSquare = selectedSquare;
     }
 
     /**
