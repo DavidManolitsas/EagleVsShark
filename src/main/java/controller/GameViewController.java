@@ -21,7 +21,6 @@ import main.java.view.MenuView.MenuBarEventListener;
  * 1. boardView !=null
  * 1. gameInfoView !=null
  * 1. game !=null
- * 1. board !=null
  */
 public class GameViewController
         implements BoardViewEventListener,
@@ -83,7 +82,6 @@ public class GameViewController
     @Override
     public void onMoveButtonClicked(Move move) {
         if (move == null) {
-//            board.setChosenPiece(null);
             gameInfoView.showError("No move was selected");
             return;
         }
