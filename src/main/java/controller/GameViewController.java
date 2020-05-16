@@ -179,23 +179,25 @@ public class GameViewController
         }
 
         Piece piece = board.getChosenPiece();
-        int row = board.getSelectedSquare().getRow();
-        int col = board.getSelectedSquare().getCol();
+        if (piece != null) {
+            int row = board.getSelectedSquare().getRow();
+            int col = board.getSelectedSquare().getCol();
 
-        boardView.removeMovePreview();
-        boardView.highlightSquare(row, col);
+            boardView.removeMovePreview();
+            boardView.highlightSquare(row, col);
 
-        board.setSelectedSquare(board.getSquareAt(row, col));
-        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
-        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-
-        if (gameInfoView.isPowered()) {
-            allPossibleMoves = piece.getAllPowerMoves(row, col);
+            board.setSelectedSquare(board.getSquareAt(row, col));
+            List<Move> allPossibleMoves = piece.getAllMoves(row, col);
             allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-        }
 
-        gameInfoView.showValidMoveList(allPossibleMoves);
-        gameInfoView.showChosenPiece(piece);
+            if (gameInfoView.isPowered()) {
+                allPossibleMoves = piece.getAllPowerMoves(row, col);
+                allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+            }
+
+            gameInfoView.showValidMoveList(allPossibleMoves);
+            gameInfoView.showChosenPiece(piece);
+        }
     }
 
     @Override
