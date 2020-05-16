@@ -41,6 +41,7 @@ public class BoardImpl
         chosenPiece = null;
     }
 
+    // region public Board methods
     @Override
     public void initBoard() {
         initSquare();
@@ -49,35 +50,6 @@ public class BoardImpl
         eventListener.onBoardInitialised(totalRows, totalCols, squares[0], squares[totalRows - 1]);
     }
 
-    /**
-     * Requires:
-     * 1. move != null
-     * 2. piece != null
-     * <p>
-     * Ensures:
-     * 1. pieceSquareMap.get(piece) == destination
-     * 2. start.getPiece == null
-     */
-    @Override
-    public void updatePiecePosition(Move move, Piece piece) {
-        int[] startPos = move.getRoute().get(0);
-        int[] destinationPos = move.getFinalPosition();
-
-        Square start = getSquareAt(startPos[0], startPos[1]);
-        start.setPiece(null);
-
-        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
-
-        if (destination.getPiece() != null) {
-            attackPiece(destination.getPiece(), destination);
-        }
-
-        destination.setPiece(piece);
-
-        pieceSquareMap.put(piece, destination);
-    }
-
-    // region public Board methods
     @Override
     public int getSharkSquareCount() {
         int count = 0;
@@ -121,44 +93,6 @@ public class BoardImpl
 
     /**
      * Requires:
-     * 1. move != null
-     * 2. player != null
-     * <p>
-     * Ensures:
-     * 1. squares of PaintInfo are occupied by the player
-     */
-    @Override
-    public void updateTerritory(Move move, Player player) {
-        for (int[] position : move.getPaintShape().getPaintInfo()) {
-            Square square = getSquareAt(position[0], position[1]);
-            if (square.getPiece() != null) {
-                if (player instanceof EaglePlayer && !(square.getPiece() instanceof Eagle)) {
-                    attackPiece(square.getPiece(), square);
-                } else if (player instanceof SharkPlayer && !(square.getPiece() instanceof Shark)) {
-                    attackPiece(square.getPiece(), square);
-                }
-            }
-            square.setOccupiedPlayer(player);
-        }
-    }
-
-    @Override
-    public List<int[]> getSharksPositions() {
-        List<int[]> list = new ArrayList<>();
-
-        for (Piece piece : pieceSquareMap.keySet()) {
-            if (piece instanceof Shark) {
-                Square square = pieceSquareMap.get(piece);
-                int row = square.getRow();
-                int col = square.getCol();
-                list.add(new int[] {row, col});
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Requires:
      * 1. moves != null
      */
     @Override
@@ -175,6 +109,14 @@ public class BoardImpl
         return validatedMoves;
     }
 
+    @Override
+    public void setListener(BoardModelEventListener eventListener) {
+        this.eventListener = eventListener;
+    }
+    // endregion
+
+    // region private methods
+
     /**
      * Requires:
      * 1. position != null
@@ -186,7 +128,7 @@ public class BoardImpl
      * 1. destination square is on the board
      * 2. destination square has no piece which belongs to the same player
      */
-    public boolean isSquareValid(int[] position) {
+    private boolean isSquareValid(int[] position) {
         if (isPositionOutOfBound(position)) {
             return false;
         }
@@ -198,12 +140,70 @@ public class BoardImpl
                         !piece.getClass().getSuperclass().equals(chosenPiece.getClass().getSuperclass()));
     }
 
-    @Override
-    public void setListener(BoardModelEventListener eventListener) {
-        this.eventListener = eventListener;
+
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. piece != null
+     * <p>
+     * Ensures:
+     * 1. pieceSquareMap.get(piece) == destination
+     * 2. start.getPiece == null
+     */
+    private void updatePiecePosition(Move move, Piece piece) {
+        int[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
+
+        Square start = getSquareAt(startPos[0], startPos[1]);
+        start.setPiece(null);
+
+        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
+
+        if (destination.getPiece() != null) {
+            attackPiece(destination.getPiece(), destination);
+        }
+
+        destination.setPiece(piece);
+
+        pieceSquareMap.put(piece, destination);
     }
 
-    // region private methods
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. player != null
+     * <p>
+     * Ensures:
+     * 1. squares of PaintInfo are occupied by the player
+     */
+    private void updateTerritory(Move move, Player player) {
+        for (int[] position : move.getPaintShape().getPaintInfo()) {
+            Square square = getSquareAt(position[0], position[1]);
+            if (square.getPiece() != null) {
+                if (player instanceof EaglePlayer && !(square.getPiece() instanceof Eagle)) {
+                    attackPiece(square.getPiece(), square);
+                } else if (player instanceof SharkPlayer && !(square.getPiece() instanceof Shark)) {
+                    attackPiece(square.getPiece(), square);
+                }
+            }
+            square.setOccupiedPlayer(player);
+        }
+    }
+
+    private List<int[]> getSharksPositions() {
+        List<int[]> list = new ArrayList<>();
+
+        for (Piece piece : pieceSquareMap.keySet()) {
+            if (piece instanceof Shark) {
+                Square square = pieceSquareMap.get(piece);
+                int row = square.getRow();
+                int col = square.getCol();
+                list.add(new int[] {row, col});
+            }
+        }
+        return list;
+    }
+
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
         int[] newPos = new int[2];
         newPos[0] = attackedPiece.getStartPos()[0];

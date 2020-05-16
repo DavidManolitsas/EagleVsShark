@@ -23,15 +23,7 @@ public interface Board {
 
     void initBoard();
 
-    void updatePiecePosition(Move move, Piece piece);
-
-    void updateTerritory(Move move, Player player);
-
-    List<int[]> getSharksPositions();
-
     List<Move> validatePossibleMoves(List<Move> moves);
-
-    boolean isSquareValid(int[] position);
 
     void setListener(BoardModelEventListener eventListener);
 
