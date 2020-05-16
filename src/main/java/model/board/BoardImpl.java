@@ -1,8 +1,11 @@
 package main.java.model.board;
 
 import main.java.model.Square;
+import main.java.model.move.CustomPieceMove;
 import main.java.model.move.Move;
-import main.java.model.move.StoreMove;
+import main.java.model.momento.CareTaker;
+import main.java.model.momento.Momento;
+import main.java.model.momento.Originator;
 import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
@@ -30,7 +33,8 @@ public class BoardImpl
 
     private boolean isEagleUndo;
     private boolean isSharkUndo;
-    private LinkedList<StoreMove> moveHistory;
+    private Originator originator;
+    private CareTaker careTaker;
 
     /**
      * Requires:
@@ -78,7 +82,9 @@ public class BoardImpl
         chosenPiece = null;
         isEagleUndo = false;
         isSharkUndo = false;
-        moveHistory = new LinkedList<StoreMove>();
+        originator = new Originator();
+        careTaker = new CareTaker();
+
 
         initSquare();
         initPieces(sharks, eagles);
@@ -165,7 +171,7 @@ public class BoardImpl
     public boolean retrieveSteps(int steps, Player player) {
         // All conditions checking can be moved to somewhere else in the future
         // like controllers
-        if (moveHistory.size() < 2 * steps) {
+        if (careTaker.getMomentoNumbers() < 2 * steps) {
             // The require steps is exceed the maximum history record
             return false;
         }
@@ -179,12 +185,12 @@ public class BoardImpl
             return false;
         }
 
-        StoreMove moveRecord;
+        Momento moveRecord;
         // Undo both sides move
         for (int i = 0; i < 2 * steps; ++i) {
-            moveRecord = moveHistory.pop();
+            moveRecord = careTaker.getMomento();
+            restoreFromMomento(moveRecord);
 
-            //TODO: Handle pop element
         }
         return true;
     }
@@ -197,14 +203,15 @@ public class BoardImpl
      * @param move
      * @param piece
      */
-    public void recordMove(Move move, Piece piece) {
-        Map<int[], Player> paintBeforeChange = new HashMap<int[], Player>();
+    public void recordMoveBeforeAction(Move move, Piece piece) {
+        HashMap<int[], Player> paintBeforeChange = new HashMap<int[], Player>();
         // Record the board info before the changes
         for (int[] paint : move.getPaintShape().getPaintInfo()) {
             paintBeforeChange.put(paint,
                     getSquareAt(paint[0], paint[1]).getOccupiedPlayer());
         }
-        moveHistory.push(new StoreMove(move, piece, paintBeforeChange));
+        originator.setMoveAndPiece(move, piece);
+        originator.setPaintBeforeMove(paintBeforeChange);
     }
 
     @Override
@@ -276,8 +283,20 @@ public class BoardImpl
     }
 
     // region private methods
-    private void undoMove(StoreMove storeMove) {
+    private void restoreFromMomento(Momento momento) {
+        LinkedList<CustomPieceMove> reversePieceMove;
+        // shark paint
+        momento.getReversePaint().pop();
+        // TODO: a better way to restore colour
 
+        CustomPieceMove reversePiece;
+
+        if (!momento.getPieceReverseInfo().isEmpty()) {
+            reversePieceMove = momento.getPieceReverseInfo();
+            while (reversePieceMove.size() != 0) {
+                reversePiece = reversePieceMove.pop();
+            }
+        }
     }
 
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
@@ -286,6 +305,7 @@ public class BoardImpl
 
         do {
             newPos[1] = genRandomCol();
+            // TODO: record the startPosition
         } while (!isSquareValid(newPos));
 
         Square startSquare = getSquareAt(newPos[0], newPos[1]);
