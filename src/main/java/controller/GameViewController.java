@@ -94,6 +94,7 @@ public class GameViewController
         game.onPowerMoveToggled(isPowered);
         boardView.removeMovePreview();
 
+        // TODO: Hide the powered button when remainingPowerMoves is 0 so we don't need to check
 //        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && gameInfoView.isPowered()) {
 //            boardView.removeMovePreview();
 //            boardView.removeHighlight();
