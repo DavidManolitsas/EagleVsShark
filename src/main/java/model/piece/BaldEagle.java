@@ -1,10 +1,10 @@
 package main.java.model.piece;
 
 
-import java.util.List;
-
 import main.java.model.move.BaldEagleMove;
 import main.java.model.move.Move;
+
+import java.util.List;
 
 public class BaldEagle
         extends Eagle {
@@ -18,13 +18,7 @@ public class BaldEagle
      * moveList of BaldEagleMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        return new BaldEagleMove(startRow, startCol, 1).getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new BaldEagleMove(startRow, startCol, isPowered).getMoveList();
     }
-
-    @Override
-    public List<Move> getAllPowerMoves(int startRow, int startCol) {
-        return new BaldEagleMove(startRow, startCol, 3).getMoveList();
-    }
-
 }

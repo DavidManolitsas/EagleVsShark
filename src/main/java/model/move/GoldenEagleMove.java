@@ -1,20 +1,19 @@
 package main.java.model.move;
 
-import java.util.List;
-
 import main.java.model.move.movements.MoveBehindPiece;
 import main.java.model.move.shape.CrossShape;
+
+import java.util.List;
 
 /*
  * Precondition: none
  *              Starting point of the piece
  * Postcondition: a list of move
  */
-public class GoldenEagleMove extends PieceMove {
+public class GoldenEagleMove
+        extends PieceMove {
 
-    public GoldenEagleMove(int startRow, int startCol, int squaresMoved, List<int[]> piecePositionList,
-                           boolean isPowered) {
-        super(squaresMoved);
+    public GoldenEagleMove(int startRow, int startCol, List<int[]> piecePositionList, boolean isPowered) {
         MoveBehindPiece move;
 
         for (int[] positions : piecePositionList) {

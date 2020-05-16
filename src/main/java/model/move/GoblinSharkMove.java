@@ -1,10 +1,6 @@
 package main.java.model.move;
 
-import main.java.model.move.movements.MoveDiagonalLeft;
-import main.java.model.move.movements.MoveDiagonalRight;
-import main.java.model.move.movements.MoveLeft;
-import main.java.model.move.movements.MoveRight;
-import main.java.model.move.movements.Movements;
+import main.java.model.move.movements.*;
 import main.java.model.move.shape.SquareShape;
 
 /*
@@ -12,10 +8,15 @@ import main.java.model.move.shape.SquareShape;
  *              Starting point of the piece
  * Postcondition: a list of move
  */
-public class GoblinSharkMove extends PieceMove {
+public class GoblinSharkMove
+        extends PieceMove {
 
-    public GoblinSharkMove(int startRow, int startCol, int squaresMoved, boolean isPowered) {
-        super(squaresMoved);
+    private int squaresMoved = 1;
+
+    public GoblinSharkMove(int startRow, int startCol, boolean isPowered) {
+        if (isPowered) {
+            squaresMoved = squaresMoved * 2;
+        }
 
         Movements[] movements = {
                 new MoveLeft(startRow, startCol, squaresMoved),

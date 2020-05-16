@@ -98,12 +98,7 @@ public class Game {
 
         board.onPieceSelected(piece, row, col);
 
-        List<Move> allPossibleMoves;
-        if (isPowered) {
-            allPossibleMoves = piece.getAllPowerMoves(row, col);
-        } else {
-            allPossibleMoves = piece.getAllMoves(row, col);
-        }
+        List<Move> allPossibleMoves = piece.getAllMoves(row, col, isPowered);
         allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
 
         listener.onPieceSelected(piece, allPossibleMoves);
@@ -131,12 +126,7 @@ public class Game {
 
         int[] position = board.getPiecePosition(chosenPiece);
 
-        List<Move> allPossibleMoves;
-        if (isPowered) {
-            allPossibleMoves = chosenPiece.getAllPowerMoves(position[0], position[1]);
-        } else {
-            allPossibleMoves = chosenPiece.getAllMoves(position[0], position[1]);
-        }
+        List<Move> allPossibleMoves = chosenPiece.getAllMoves(position[0], position[1], isPowered);
         allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
 
         listener.onPieceSelected(chosenPiece, allPossibleMoves);

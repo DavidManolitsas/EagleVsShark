@@ -11,11 +11,15 @@ import main.java.model.move.shape.VShape;
  *              Starting point of the piece
  * Postcondition: a list of move
  */
-public class HarpyEagleMove extends PieceMove {
+public class HarpyEagleMove
+        extends PieceMove {
 
+    private int squaresMoved = 3;
 
-    public HarpyEagleMove(int startRow, int startCol, int squaresMoved, boolean isPowered) {
-        super(squaresMoved);
+    public HarpyEagleMove(int startRow, int startCol, boolean isPowered) {
+        if (isPowered) {
+            squaresMoved = 1;
+        }
 
         MoveLeft left = new MoveLeft(startRow, startCol, squaresMoved);
         MoveRight right = new MoveRight(startRow, startCol, squaresMoved);

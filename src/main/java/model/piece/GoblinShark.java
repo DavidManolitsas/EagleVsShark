@@ -1,9 +1,9 @@
 package main.java.model.piece;
 
-import java.util.List;
-
 import main.java.model.move.GoblinSharkMove;
 import main.java.model.move.Move;
+
+import java.util.List;
 
 
 public class GoblinShark
@@ -19,15 +19,8 @@ public class GoblinShark
      * moveList of GoblinSharkMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        setPieceMove(new GoblinSharkMove(startRow, startCol, 1, false));
-        return getPieceMove().getMoveList();
-    }
-
-    @Override
-    public List<Move> getAllPowerMoves(int startRow, int startCol) {
-        setPieceMove(new GoblinSharkMove(startRow, startCol, 2, true));
-        return getPieceMove().getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new GoblinSharkMove(startRow, startCol, isPowered).getMoveList();
     }
 }
 

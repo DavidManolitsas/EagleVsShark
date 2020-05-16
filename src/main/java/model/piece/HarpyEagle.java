@@ -1,9 +1,9 @@
 package main.java.model.piece;
 
-import java.util.List;
-
 import main.java.model.move.HarpyEagleMove;
 import main.java.model.move.Move;
+
+import java.util.List;
 
 public class HarpyEagle
         extends Eagle {
@@ -17,15 +17,7 @@ public class HarpyEagle
      * moveList of HarpyEagleMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        setPieceMove(new HarpyEagleMove(startRow, startCol, 3, false));
-        return getPieceMove().getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new HarpyEagleMove(startRow, startCol, isPowered).getMoveList();
     }
-
-    @Override
-    public List<Move> getAllPowerMoves(int startRow, int startCol) {
-        setPieceMove(new HarpyEagleMove(startRow, startCol, 1, true));
-        return getPieceMove().getMoveList();
-    }
-
 }

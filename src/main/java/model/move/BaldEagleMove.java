@@ -6,15 +6,20 @@ import main.java.model.move.movements.MoveRight;
 import main.java.model.move.movements.Movements;
 import main.java.model.move.shape.SquareShape;
 
-public class BaldEagleMove extends PieceMove {
+public class BaldEagleMove
+        extends PieceMove {
+
+    private int squaresMoved = 1;
 
     /*
      * Precondition: none
      *              Starting point of the piece
      * Postcondition: a list of move
      */
-    public BaldEagleMove(int startRow, int startCol, int squaresMoved) {
-        super(squaresMoved);
+    public BaldEagleMove(int startRow, int startCol, boolean isPowered) {
+        if (isPowered) {
+            squaresMoved = squaresMoved * 3;
+        }
 
         Movements[] movements = {
                 new MoveLeft(startRow, startCol, squaresMoved),
