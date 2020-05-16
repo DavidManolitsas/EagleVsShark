@@ -61,36 +61,36 @@ public class GameViewController
      */
     @Override
     public void onSquareClicked(int row, int col) {
-//        Piece piece = board.getPiece(row, col);
-//        Piece prevChosenPiece = board.getChosenPiece();
-//        if (piece == null || piece == prevChosenPiece) {
-//            return;
-//        }
-//
-//        if (!game.pieceBelongsToPlayer(piece)) {
-//            return;
-//        }
-//
-//        if (piece instanceof GoldenEagle) {
-//            List<int[]> sharksPositions = board.getSharksPositions();
-//            ((GoldenEagle) piece).setSharkList(sharksPositions);
-//        }
-//
-//        boardView.removeMovePreview();
-//        boardView.highlightSquare(row, col);
-//
-//        board.setChosenPiece(piece);
-//        board.setSelectedSquare(board.getSquareAt(row, col));
-//        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
-//        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-//
-//        if (gameInfoView.isPowered()) {
-//            allPossibleMoves = piece.getAllPowerMoves(row, col);
-//            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-//        }
-//
-//        gameInfoView.showValidMoveList(allPossibleMoves);
-//        gameInfoView.showChosenPiece(piece);
+        Piece piece = board.getPiece(row, col);
+        Piece prevChosenPiece = board.getChosenPiece();
+        if (piece == null || piece == prevChosenPiece) {
+            return;
+        }
+
+        if (!game.pieceBelongsToPlayer(piece)) {
+            return;
+        }
+
+        if (piece instanceof GoldenEagle) {
+            List<int[]> sharksPositions = board.getSharksPositions();
+            ((GoldenEagle) piece).setSharkList(sharksPositions);
+        }
+
+        boardView.removeMovePreview();
+        boardView.highlightSquare(row, col);
+
+        board.setChosenPiece(piece);
+        board.setSelectedSquare(board.getSquareAt(row, col));
+        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
+        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+
+        if (gameInfoView.isPowered()) {
+            allPossibleMoves = piece.getAllPowerMoves(row, col);
+            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+        }
+
+        gameInfoView.showValidMoveList(allPossibleMoves);
+        gameInfoView.showChosenPiece(piece);
     }
     //endregion
 
@@ -110,67 +110,70 @@ public class GameViewController
      */
     @Override
     public void onMoveButtonClicked(Move move) {
-//        if (move == null) {
-//            gameInfoView.showError("No move was selected");
-//            return;
-//        }
-//
-//        // update power move count
-//        if (move.isPowered()) {
-//            game.updateRemainingPowerMoves();
-//        }
-//
-//        // Remove preview
-//        boardView.removeMovePreview();
-//        boardView.removeHighlight();
-//
-//        // Update board
-//        Piece piece = board.getChosenPiece();
-//        Player currentPlayer = game.getCurrentPlayer();
-//        board.updatePiecePosition(move, piece);
-//        board.updateTerritory(move, currentPlayer);
-//        boardView.updateTerritory(move, game.getTurnCount());
-//        board.setSelectedSquare(null);
-//
-//        //the player moved their piece, change to next players turn
-//        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
-//        game.nextTurn();
+        if (move == null) {
+            board.setChosenPiece(null);
+            gameInfoView.showError("No move was selected");
+            return;
+        }
+
+        // Remove preview
+        boardView.removeMovePreview();
+        boardView.removeHighlight();
+
+        // update power move count
+        if (move.isPowered()) {
+            game.updateRemainingPowerMoves();
+        }
+
+        // Update board
+        Piece piece = board.getChosenPiece();
+        Player currentPlayer = game.getCurrentPlayer();
+        board.updatePiecePosition(move, piece);
+        board.updateTerritory(move, currentPlayer);
+        boardView.updateTerritory(move, game.getTurnCount());
+        board.setSelectedSquare(null);
+
+        //the player moved their piece, change to next players turn
+        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
+        game.nextTurn();
 
     }
 
     @Override
     public void onPowerMoveToggled() {
-//        if (board.getSelectedSquare() == null) {
-//            return;
-//        }
-//
-//        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && gameInfoView.isPowered()) {
-//            boardView.removeMovePreview();
-//            boardView.removeHighlight();
-//            board.setSelectedSquare(null);
-//            gameInfoView.setIsPowered(false);
-//            gameInfoView.showError("You have no more power moves available");
-//            return;
-//        }
-//
-//        Piece piece = board.getChosenPiece();
-//        int row = board.getSelectedSquare().getRow();
-//        int col = board.getSelectedSquare().getCol();
-//
-//        boardView.removeMovePreview();
-//        boardView.highlightSquare(row, col);
-//
-//        board.setSelectedSquare(board.getSquareAt(row, col));
-//        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
-//        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-//
-//        if (gameInfoView.isPowered()) {
-//            allPossibleMoves = piece.getAllPowerMoves(row, col);
-//            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-//        }
-//
-//        gameInfoView.showValidMoveList(allPossibleMoves);
-//        gameInfoView.showChosenPiece(piece);
+        if (board.getSelectedSquare() == null) {
+            return;
+        }
+
+        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && gameInfoView.isPowered()) {
+            boardView.removeMovePreview();
+            boardView.removeHighlight();
+            board.setSelectedSquare(null);
+            gameInfoView.setIsPowered(false);
+            gameInfoView.showError("You have no more power moves available");
+            return;
+        }
+
+        Piece piece = board.getChosenPiece();
+        if (piece != null) {
+            int row = board.getSelectedSquare().getRow();
+            int col = board.getSelectedSquare().getCol();
+
+            boardView.removeMovePreview();
+            boardView.highlightSquare(row, col);
+
+            board.setSelectedSquare(board.getSquareAt(row, col));
+            List<Move> allPossibleMoves = piece.getAllMoves(row, col);
+            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+
+            if (gameInfoView.isPowered()) {
+                allPossibleMoves = piece.getAllPowerMoves(row, col);
+                allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+            }
+
+            gameInfoView.showValidMoveList(allPossibleMoves);
+            gameInfoView.showChosenPiece(piece);
+        }
     }
 
     @Override
