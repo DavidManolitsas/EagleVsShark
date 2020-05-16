@@ -139,8 +139,10 @@ public class SelectMoveView
 
             moveBt.setOnAction(event -> {
                 Move currentMove = getSelectedMove();
-
-                currentMove.setPowered(powered.isSelected());
+                if (currentMove != null) {
+                    currentMove.setPowered(powered.isSelected());
+                }
+                clearMoveList();
                 gameInfo.getGameInfoViewEventListener().onMoveButtonClicked(currentMove);
                 // reset the toggle
                 powered.setSelected(false);

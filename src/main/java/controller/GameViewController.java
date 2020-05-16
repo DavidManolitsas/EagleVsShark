@@ -135,18 +135,19 @@ public class GameViewController
     @Override
     public void onMoveButtonClicked(Move move) {
         if (move == null) {
+            board.setChosenPiece(null);
             gameInfoView.showError("No move was selected");
             return;
-        }
-
-        // update power move count
-        if (move.isPowered()) {
-            game.updateRemainingPowerMoves();
         }
 
         // Remove preview
         boardView.removeMovePreview();
         boardView.removeHighlight();
+
+        // update power move count
+        if (move.isPowered()) {
+            game.updateRemainingPowerMoves();
+        }
 
         // Update board
         Piece piece = board.getChosenPiece();
