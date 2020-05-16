@@ -1,17 +1,10 @@
 package main.java.controller;
 
-import java.util.List;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import main.java.model.Game;
-import main.java.model.board.Board;
-import main.java.model.board.BoardImpl;
-import main.java.model.board.RockDecorator;
+import main.java.model.Game.GameBuilder;
 import main.java.model.move.Move;
-import main.java.model.piece.GoldenEagle;
-import main.java.model.piece.Piece;
-import main.java.model.player.Player;
 import main.java.util.SceneManager;
 import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
@@ -46,33 +39,16 @@ public class GameViewController
 
     private Game game;
 
-    private Board board;
-
     @FXML
     public void initialize() {
-        board = new BoardImpl(boardView);
-        game = new Game(gameInfoView);
-
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
         menuView.setListener(this);
     }
 
-
-    public void initGameData(String sharkPlayerName, String eaglePlayerName) {
-        initGameData(sharkPlayerName, eaglePlayerName, 60, 40, 15, 10, 3, 3);
-    }
-
-    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int turnCount, int rows,
-                             int cols,
-                             int sharks, int eagles) {
-
-
-        board.initBoard(rows, cols, sharks, eagles);
-        boardView.initBoardView(rows, cols, board.getTopRow(), board.getBottomRow());
-        board = new RockDecorator(board);
-
-        game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit, turnCount, rows, cols);
+    public void initGameData(GameBuilder gameBuilder) {
+        game = gameBuilder.build();
+        game.setListener(gameInfoView, boardView);
         game.nextTurn();
     }
 
@@ -85,36 +61,36 @@ public class GameViewController
      */
     @Override
     public void onSquareClicked(int row, int col) {
-        Piece piece = board.getPiece(row, col);
-        Piece prevChosenPiece = board.getChosenPiece();
-        if (piece == null || piece == prevChosenPiece) {
-            return;
-        }
-
-        if (!game.pieceBelongsToPlayer(piece)) {
-            return;
-        }
-
-        if (piece instanceof GoldenEagle) {
-            List<int[]> sharksPositions = board.getSharksPositions();
-            ((GoldenEagle) piece).setSharkList(sharksPositions);
-        }
-
-        boardView.removeMovePreview();
-        boardView.highlightSquare(row, col);
-
-        board.setChosenPiece(piece);
-        board.setSelectedSquare(board.getSquareAt(row, col));
-        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
-        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-
-        if (gameInfoView.isPowered()) {
-            allPossibleMoves = piece.getAllPowerMoves(row, col);
-            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-        }
-
-        gameInfoView.showValidMoveList(allPossibleMoves);
-        gameInfoView.showChosenPiece(piece);
+//        Piece piece = board.getPiece(row, col);
+//        Piece prevChosenPiece = board.getChosenPiece();
+//        if (piece == null || piece == prevChosenPiece) {
+//            return;
+//        }
+//
+//        if (!game.pieceBelongsToPlayer(piece)) {
+//            return;
+//        }
+//
+//        if (piece instanceof GoldenEagle) {
+//            List<int[]> sharksPositions = board.getSharksPositions();
+//            ((GoldenEagle) piece).setSharkList(sharksPositions);
+//        }
+//
+//        boardView.removeMovePreview();
+//        boardView.highlightSquare(row, col);
+//
+//        board.setChosenPiece(piece);
+//        board.setSelectedSquare(board.getSquareAt(row, col));
+//        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
+//        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+//
+//        if (gameInfoView.isPowered()) {
+//            allPossibleMoves = piece.getAllPowerMoves(row, col);
+//            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+//        }
+//
+//        gameInfoView.showValidMoveList(allPossibleMoves);
+//        gameInfoView.showChosenPiece(piece);
     }
     //endregion
 
@@ -134,67 +110,67 @@ public class GameViewController
      */
     @Override
     public void onMoveButtonClicked(Move move) {
-        if (move == null) {
-            gameInfoView.showError("No move was selected");
-            return;
-        }
-
-        // update power move count
-        if (move.isPowered()) {
-            game.updateRemainingPowerMoves();
-        }
-
-        // Remove preview
-        boardView.removeMovePreview();
-        boardView.removeHighlight();
-
-        // Update board
-        Piece piece = board.getChosenPiece();
-        Player currentPlayer = game.getCurrentPlayer();
-        board.updatePiecePosition(move, piece);
-        board.updateTerritory(move, currentPlayer);
-        boardView.updateTerritory(move, game.getTurnCount());
-        board.setSelectedSquare(null);
-
-        //the player moved their piece, change to next players turn
-        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
-        game.nextTurn();
+//        if (move == null) {
+//            gameInfoView.showError("No move was selected");
+//            return;
+//        }
+//
+//        // update power move count
+//        if (move.isPowered()) {
+//            game.updateRemainingPowerMoves();
+//        }
+//
+//        // Remove preview
+//        boardView.removeMovePreview();
+//        boardView.removeHighlight();
+//
+//        // Update board
+//        Piece piece = board.getChosenPiece();
+//        Player currentPlayer = game.getCurrentPlayer();
+//        board.updatePiecePosition(move, piece);
+//        board.updateTerritory(move, currentPlayer);
+//        boardView.updateTerritory(move, game.getTurnCount());
+//        board.setSelectedSquare(null);
+//
+//        //the player moved their piece, change to next players turn
+//        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
+//        game.nextTurn();
 
     }
 
     @Override
     public void onPowerMoveToggled() {
-        if (board.getSelectedSquare() == null) {
-            return;
-        }
-
-        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && gameInfoView.isPowered()) {
-            boardView.removeMovePreview();
-            boardView.removeHighlight();
-            board.setSelectedSquare(null);
-            gameInfoView.setIsPowered(false);
-            gameInfoView.showError("You have no more power moves available");
-            return;
-        }
-
-        Piece piece = board.getChosenPiece();
-        int row = board.getSelectedSquare().getRow();
-        int col = board.getSelectedSquare().getCol();
-
-        boardView.removeMovePreview();
-        boardView.highlightSquare(row, col);
-
-        board.setSelectedSquare(board.getSquareAt(row, col));
-        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
-        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-
-        if (gameInfoView.isPowered()) {
-            allPossibleMoves = piece.getAllPowerMoves(row, col);
-            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-        }
-
-        gameInfoView.showValidMoveList(allPossibleMoves);
-        gameInfoView.showChosenPiece(piece);
+//        if (board.getSelectedSquare() == null) {
+//            return;
+//        }
+//
+//        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && gameInfoView.isPowered()) {
+//            boardView.removeMovePreview();
+//            boardView.removeHighlight();
+//            board.setSelectedSquare(null);
+//            gameInfoView.setIsPowered(false);
+//            gameInfoView.showError("You have no more power moves available");
+//            return;
+//        }
+//
+//        Piece piece = board.getChosenPiece();
+//        int row = board.getSelectedSquare().getRow();
+//        int col = board.getSelectedSquare().getCol();
+//
+//        boardView.removeMovePreview();
+//        boardView.highlightSquare(row, col);
+//
+//        board.setSelectedSquare(board.getSquareAt(row, col));
+//        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
+//        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+//
+//        if (gameInfoView.isPowered()) {
+//            allPossibleMoves = piece.getAllPowerMoves(row, col);
+//            allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+//        }
+//
+//        gameInfoView.showValidMoveList(allPossibleMoves);
+//        gameInfoView.showChosenPiece(piece);
     }
 
     @Override
@@ -204,7 +180,7 @@ public class GameViewController
     }
     //endregion
 
-    // region BoardView Event
+    // region MenuView Event
     @Override
     public void onNewGameClicked() {
         game.stopTimer();
