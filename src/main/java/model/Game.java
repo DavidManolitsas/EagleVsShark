@@ -62,7 +62,7 @@ public class Game {
     private int timeRemaining;
 
     public Game(GameBuilder gameBuilder) {
-        int numOfPowerMoves = (turnCount / 2) / 4;
+        int numOfPowerMoves = (gameBuilder.turnCount / 2) / 4;
 
         this.sharkPlayer = new SharkPlayer(gameBuilder.sharkPlayerName, numOfPowerMoves);
         this.eaglePlayer = new EaglePlayer(gameBuilder.eaglePlayerName, numOfPowerMoves);
