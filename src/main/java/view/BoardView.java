@@ -1,34 +1,19 @@
 package main.java.view;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import main.java.ResPath;
 import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
-import main.java.model.piece.BaldEagle;
-import main.java.model.piece.GoblinShark;
-import main.java.model.piece.GoldenEagle;
-import main.java.model.piece.Hammerhead;
-import main.java.model.piece.HarpyEagle;
-import main.java.model.piece.Piece;
-import main.java.model.piece.SawShark;
+import main.java.model.piece.*;
+
+import java.util.*;
 
 public class BoardView
         extends GridPane
@@ -66,17 +51,6 @@ public class BoardView
     }
 
     //region public BoardView methods
-    public void initBoardView(int rows, int cols, Square[] topRow, Square[] bottomRow) {
-        totalRows = rows;
-        totalCols = cols;
-
-        lastHighlightPos = null;
-        lastPreviewMove = null;
-
-        drawBoard();
-        drawPieces(topRow, bottomRow);
-    }
-
     public void highlightSquare(int row, int col) {
         if (lastHighlightPos != null) {
             removeHighlight();
@@ -159,17 +133,29 @@ public class BoardView
 
     //region BoardModelEvent methods
     @Override
+    public void onBoardInitialised(int rows, int cols, Square[] topRow, Square[] bottomRow) {
+        totalRows = rows;
+        totalCols = cols;
+
+        lastHighlightPos = null;
+        lastPreviewMove = null;
+
+        drawBoard();
+        drawPieces(topRow, bottomRow);
+    }
+
+    @Override
     public void onPiecePositionUpdated(Move move) {
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
 
-        updatePiecePosition(startPos[0], startPos[1], destinationPos[0],  destinationPos[1]);
+        updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
     }
 
 
     @Override
 //    public void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol){
-    public void updatePiecePosition(int originalRow, int originalCol, int destinationRow, int destinationCol){
+    public void updatePiecePosition(int originalRow, int originalCol, int destinationRow, int destinationCol) {
         StackPane start = getSquareAt(originalRow, originalCol);
         Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);
         start.getChildren().remove(piece);
@@ -177,15 +163,6 @@ public class BoardView
         StackPane destination = getSquareAt(destinationRow, destinationCol);
         destination.getChildren().add(piece);
     }
-
-    @Override
-    public void onRocksAdded(Collection<int[]> rockPositionList) {
-        for (int[] position : rockPositionList) {
-            addRocks(position[0], position[1], ResPath.ROCKS);
-        }
-    }
-
-
     //endregion
 
     //region private methods

@@ -1,20 +1,18 @@
 package main.java.model.board;
 
-import java.util.List;
-
 import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.model.player.Player;
 
+import java.util.List;
+
 /**
  * @author WeiYi Yu
  * @date 2020-05-06
  */
 public interface Board {
-    void initBoard(int rows, int cols, int sharks, int eagles);
-
     int getSharkSquareCount();
 
     int getEagleSquareCount();
@@ -39,11 +37,7 @@ public interface Board {
 
     int getTotalCols();
 
-    BoardModelEventListener getEventListener();
-
-    Square[] getTopRow();
-
-    Square[] getBottomRow();
+    void setEventListener(BoardModelEventListener eventListener);
 
     Square getSquareAt(int row, int col);
 

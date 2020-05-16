@@ -1,26 +1,13 @@
 package main.java.model.board;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import main.java.model.Square;
 import main.java.model.move.Move;
-import main.java.model.piece.BaldEagle;
-import main.java.model.piece.Eagle;
-import main.java.model.piece.GoblinShark;
-import main.java.model.piece.GoldenEagle;
-import main.java.model.piece.Hammerhead;
-import main.java.model.piece.HarpyEagle;
-import main.java.model.piece.Piece;
-import main.java.model.piece.SawShark;
-import main.java.model.piece.Shark;
+import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
+
+import java.util.*;
 
 /**
  * @author WeiYi Yu
@@ -32,7 +19,6 @@ import main.java.model.player.SharkPlayer;
  */
 public class BoardImpl
         implements Board {
-
 
     private BoardModelEventListener eventListener;
     private int totalRows;
@@ -46,8 +32,15 @@ public class BoardImpl
      * Requires:
      * listener != null
      */
-    public BoardImpl(BoardModelEventListener listener) {
-        eventListener = listener;
+    public BoardImpl(int rows, int cols, int sharks, int eagles) {
+        totalRows = rows;
+        totalCols = cols;
+        chosenPiece = null;
+
+        initSquare();
+        initPieces(sharks, eagles);
+
+        eventListener.onBoardInitialised(rows, cols, squares[0], squares[totalRows - 1]);
     }
 
     /**
@@ -81,16 +74,6 @@ public class BoardImpl
     }
 
     // region public Board methods
-    @Override
-    public void initBoard(int rows, int cols, int sharks, int eagles) {
-        totalRows = rows;
-        totalCols = cols;
-        chosenPiece = null;
-
-        initSquare();
-        initPieces(sharks, eagles);
-    }
-
     @Override
     public int getSharkSquareCount() {
         int count = 0;
@@ -169,7 +152,7 @@ public class BoardImpl
                 Square square = pieceSquareMap.get(piece);
                 int row = square.getRow();
                 int col = square.getCol();
-                list.add(new int[]{row, col});
+                list.add(new int[] {row, col});
             }
         }
         return list;
@@ -197,7 +180,9 @@ public class BoardImpl
      * Requires:
      * 1. position != null
      *
-     * @param position Destination position
+     * @param position
+     *         Destination position
+     *
      * @return true when:
      * 1. destination square is on the board
      * 2. destination square has no piece which belongs to the same player
@@ -222,6 +207,11 @@ public class BoardImpl
     @Override
     public int getTotalCols() {
         return totalCols;
+    }
+
+    @Override
+    public void setEventListener(BoardModelEventListener eventListener) {
+        this.eventListener = eventListener;
     }
 
     public BoardModelEventListener getEventListener() {
@@ -346,16 +336,6 @@ public class BoardImpl
         }
     }
 
-    public Square[] getTopRow() {
-        return squares[0];
-
-    }
-
-    public Square[] getBottomRow() {
-        return squares[totalRows - 1];
-    }
-
-
     /**
      * Requires:
      * 1. row >= 0 && col >= 0
@@ -394,12 +374,11 @@ public class BoardImpl
 
     // region Board Model Event Listener interface
     public interface BoardModelEventListener {
+        void onBoardInitialised(int rows, int cols, Square[] topRow, Square[] bottomRow);
 
         void onPiecePositionUpdated(Move move);
 
         void updatePiecePosition(int attackedRow, int attackedCol, int resetRow, int resetCol);
-
-        void onRocksAdded(Collection<int[]> rockPositionList);
     }
     // endregion
 
