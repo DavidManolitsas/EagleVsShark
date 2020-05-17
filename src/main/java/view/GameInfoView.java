@@ -34,7 +34,7 @@ public class GameInfoView
 
         void onPowerMoveToggled(boolean isPowered);
 
-        void nextPlayerTurn();
+        void onTimeRanOutAlertClosed();
     }
 
     private GameInfoViewEventListener gameInfoViewEventListener;
@@ -196,7 +196,7 @@ public class GameInfoView
         a.getButtonTypes().setAll(nextTurn);
 
         a.setOnHidden(event -> {
-            gameInfoViewEventListener.nextPlayerTurn();
+            gameInfoViewEventListener.onTimeRanOutAlertClosed();
         });
 
         a.show();

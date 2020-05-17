@@ -106,7 +106,7 @@ public class GameViewController
     }
 
     @Override
-    public void nextPlayerTurn() {
+    public void onTimeRanOutAlertClosed() {
         //the player ran out of time, change to next players turn
         game.nextTurn();
     }

@@ -171,6 +171,12 @@ public class BoardView
         updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
         updateTerritory(move, turnCount);
     }
+
+    @Override
+    public void onTimeRanOut() {
+        removeMovePreview();
+        removeHighlight();
+    }
     //endregion
 
     //region private methods

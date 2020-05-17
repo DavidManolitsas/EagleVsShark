@@ -357,6 +357,12 @@ public class BoardImpl
         return new int[] {square.getRow(), square.getCol()};
     }
 
+    @Override
+    public void timeRantOut() {
+        chosenPiece = null;
+        eventListener.onTimeRanOut();
+    }
+
     /**
      * Requires:
      * 1. position != null
@@ -385,6 +391,8 @@ public class BoardImpl
         void onPieceSelected(int row, int col);
 
         void onPieceMoved(Move move, int turnCount);
+
+        void onTimeRanOut();
     }
     // endregion
 

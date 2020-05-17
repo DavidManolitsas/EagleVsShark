@@ -34,4 +34,6 @@ public interface Board {
     void onMoveButtonClicked(Move move, Player currentPlayer, int turnCount);
 
     int[] getPiecePosition(Piece chosenPiece);
+
+    void timeRantOut();
 }

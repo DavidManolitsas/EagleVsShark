@@ -88,7 +88,7 @@ public class Game {
     public void onSquareClicked(int row, int col, boolean isPowered) {
         Piece piece = board.getPiece(row, col);
         Piece prevChosenPiece = board.getChosenPiece();
-        if (piece == null || piece == prevChosenPiece) {
+        if (piece == null) {
             return;
         }
 
@@ -262,6 +262,7 @@ public class Game {
 
                 if (timeRemaining <= 0) {
                     timer.stop();
+                    board.timeRantOut();
                     listener.timeRanOut();
                 }
             }));
