@@ -1,7 +1,11 @@
 package main.java.model.board;
 
 import main.java.model.Square;
+import main.java.model.move.CustomPieceMove;
 import main.java.model.move.Move;
+import main.java.model.momento.CareTaker;
+import main.java.model.momento.Memento;
+import main.java.model.momento.Originator;
 import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
@@ -29,6 +33,11 @@ public class BoardImpl
     private Map<Piece, Square> pieceSquareMap;
     private Piece chosenPiece;
 
+    private boolean isEagleUndo;
+    private boolean isSharkUndo;
+    private Originator originator;
+    private CareTaker careTaker;
+
     /**
      * Requires:
      * listener != null
@@ -39,6 +48,10 @@ public class BoardImpl
         sharkNums = sharks;
         eagleNums = eagles;
         chosenPiece = null;
+        isEagleUndo = false;
+        isSharkUndo = false;
+        originator = new Originator();
+        careTaker = new CareTaker();
     }
 
     // region public Board methods
@@ -89,6 +102,61 @@ public class BoardImpl
     @Override
     public Piece getChosenPiece() {
         return chosenPiece;
+    }
+
+    /**
+     * Requires:
+     * 1. steps >= 1 && steps <= 3
+     *
+     * @param steps
+     * @param player
+     * @return if the undo is valid
+     */
+    @Override
+    public boolean retrieveSteps(int steps, Player player) {
+        // All conditions checking can be moved to somewhere else in the future
+        // like controllers
+        if (careTaker.getMomentoNumbers() < 2 * steps) {
+            // The require steps is exceed the maximum history record
+            return false;
+        }
+
+        if (player instanceof EaglePlayer && !isEagleUndo) {
+            isEagleUndo = true;
+        } else if (player instanceof SharkPlayer && !isSharkUndo) {
+            isSharkUndo = true;
+        } else {
+            // Run out of chance, undo button cannot be clicked
+            return false;
+        }
+
+        Memento moveRecord;
+        // Undo both sides move
+        for (int i = 0; i < 2 * steps; ++i) {
+            moveRecord = careTaker.getMomento();
+            restoreFromMomento(moveRecord);
+
+        }
+        return true;
+    }
+
+    /**
+     * Requires:
+     * 1. Call before the move actually happened, but after the user confirmed
+     * 2. Move should be valid
+     *
+     * @param move
+     * @param piece
+     */
+    public void recordMoveBeforeAction(Move move, Piece piece) {
+        HashMap<int[], Player> paintBeforeChange = new HashMap<int[], Player>();
+        // Record the board info before the changes
+        for (int[] paint : move.getPaintShape().getPaintInfo()) {
+            paintBeforeChange.put(paint,
+                    getSquareAt(paint[0], paint[1]).getOccupiedPlayer());
+        }
+        originator.setMoveAndPiece(move, piece);
+        originator.setPaintBeforeMove(paintBeforeChange);
     }
 
     /**
@@ -204,12 +272,29 @@ public class BoardImpl
         return list;
     }
 
+    private void restoreFromMomento(Memento memento) {
+        LinkedList<CustomPieceMove> reversePieceMove;
+        // shark paint
+        memento.getReversePaint().pop();
+        // TODO: a better way to restore colour
+
+        CustomPieceMove reversePiece;
+
+        if (!memento.getPieceReverseInfo().isEmpty()) {
+            reversePieceMove = memento.getPieceReverseInfo();
+            while (reversePieceMove.size() != 0) {
+                reversePiece = reversePieceMove.pop();
+            }
+        }
+    }
+
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
         int[] newPos = new int[2];
         newPos[0] = attackedPiece.getStartPos()[0];
 
         do {
             newPos[1] = genRandomCol();
+            // TODO: record the startPosition
         } while (!isSquareValid(newPos));
 
         Square startSquare = getSquareAt(newPos[0], newPos[1]);
