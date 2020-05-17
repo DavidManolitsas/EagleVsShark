@@ -1,8 +1,5 @@
 package main.java.view;
 
-import java.util.List;
-import java.util.Objects;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -17,6 +14,9 @@ import javafx.scene.text.Text;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -204,6 +204,7 @@ public class GameInfoView
         a.getButtonTypes().setAll(nextTurn);
 
         a.setOnHidden(event -> {
+            setIsPowered(false);
             gameInfoViewEventListener.onTimeRanOutAlertClosed();
         });
 

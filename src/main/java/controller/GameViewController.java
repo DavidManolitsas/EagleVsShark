@@ -103,7 +103,6 @@ public class GameViewController
     @Override
     public void onTimeRanOutAlertClosed() {
         //the player ran out of time, change to next players turn
-        gameInfoView.setIsPowered(false);
         game.nextTurn();
     }
     //endregion
