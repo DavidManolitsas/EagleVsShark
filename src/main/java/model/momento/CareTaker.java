@@ -3,25 +3,25 @@ package main.java.model.momento;
 import java.util.LinkedList;
 
 public class CareTaker {
-    private LinkedList<Momento> momentos;
+    private LinkedList<Memento> mementos;
 
     public CareTaker() {
-        momentos = new LinkedList<Momento>();
+        mementos = new LinkedList<Memento>();
     }
 
     public void addMomento(Originator originator) {
-        momentos.push(originator.create());
+        mementos.push(originator.create());
     }
 
-    public Momento getMomento() {
-        return momentos.pop();
+    public Memento getMomento() {
+        return mementos.pop();
     }
 
-    public LinkedList<Momento> getMomentos() {
-        return momentos;
+    public LinkedList<Memento> getMementos() {
+        return mementos;
     }
 
     public int getMomentoNumbers() {
-        return momentos.size();
+        return mementos.size();
     }
 }

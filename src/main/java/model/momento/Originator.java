@@ -43,8 +43,8 @@ public class Originator {
 
     }
 
-    public Momento create() {
-        Momento momento = new Momento(currentMove, actionPiece, paintBeforeChange, movedPieces, previousLocations, newLocations);
+    public Memento create() {
+        Memento memento = new Memento(currentMove, actionPiece, paintBeforeChange, movedPieces, previousLocations, newLocations);
         // reset state
         currentMove = null;
         actionPiece = null;
@@ -52,6 +52,6 @@ public class Originator {
         previousLocations = new LinkedList<int[]>();
         newLocations = new LinkedList<int[]>();
         paintBeforeChange = new HashMap<int[], Player>();
-        return momento;
+        return memento;
     }
 }

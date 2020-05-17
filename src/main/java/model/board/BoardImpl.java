@@ -4,7 +4,7 @@ import main.java.model.Square;
 import main.java.model.move.CustomPieceMove;
 import main.java.model.move.Move;
 import main.java.model.momento.CareTaker;
-import main.java.model.momento.Momento;
+import main.java.model.momento.Memento;
 import main.java.model.momento.Originator;
 import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
@@ -130,7 +130,7 @@ public class BoardImpl
             return false;
         }
 
-        Momento moveRecord;
+        Memento moveRecord;
         // Undo both sides move
         for (int i = 0; i < 2 * steps; ++i) {
             moveRecord = careTaker.getMomento();
@@ -272,16 +272,16 @@ public class BoardImpl
         return list;
     }
 
-    private void restoreFromMomento(Momento momento) {
+    private void restoreFromMomento(Memento memento) {
         LinkedList<CustomPieceMove> reversePieceMove;
         // shark paint
-        momento.getReversePaint().pop();
+        memento.getReversePaint().pop();
         // TODO: a better way to restore colour
 
         CustomPieceMove reversePiece;
 
-        if (!momento.getPieceReverseInfo().isEmpty()) {
-            reversePieceMove = momento.getPieceReverseInfo();
+        if (!memento.getPieceReverseInfo().isEmpty()) {
+            reversePieceMove = memento.getPieceReverseInfo();
             while (reversePieceMove.size() != 0) {
                 reversePiece = reversePieceMove.pop();
             }

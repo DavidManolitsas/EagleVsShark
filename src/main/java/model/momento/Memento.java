@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class Momento {
+public class Memento {
     private Move currentMove;
     private Piece actionPiece;
     private LinkedList<Piece> movedPieces;
@@ -20,7 +20,7 @@ public class Momento {
     private LinkedList<int[]> newLocations;
     private HashMap<int[], Player> paintBeforeChange;
 
-    public Momento(Move currentMove, Piece actionPiece, HashMap<int[], Player> paintBeforeChange,
+    public Memento(Move currentMove, Piece actionPiece, HashMap<int[], Player> paintBeforeChange,
                    LinkedList<Piece> movedPieces, LinkedList<int[]> previousLocations, LinkedList<int[]> newLocations) {
         this.currentMove = currentMove;
         this.actionPiece = actionPiece;
