@@ -116,7 +116,7 @@ public class BoardImpl
     public boolean retrieveSteps(int steps, Player player) {
         // All conditions checking can be moved to somewhere else in the future
         // like controllers
-        if (careTaker.getMomentoNumbers() < 2 * steps) {
+        if (careTaker.getMementoNumbers() < 2 * steps) {
             // The require steps is exceed the maximum history record
             return false;
         }
@@ -133,7 +133,7 @@ public class BoardImpl
         Memento moveRecord;
         // Undo both sides move
         for (int i = 0; i < 2 * steps; ++i) {
-            moveRecord = careTaker.getMomento();
+            moveRecord = careTaker.getMemento();
             restoreFromMomento(moveRecord);
 
         }
