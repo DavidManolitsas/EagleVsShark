@@ -10,14 +10,15 @@ import java.util.List;
  *              Starting point of the piece
  * Postcondition: a list of move
  */
-public class GoldenEagleMove extends PieceMove {
+public class GoldenEagleMove
+        extends PieceMove {
 
-    public GoldenEagleMove(int startRow, int startCol, List<int[]> piecePositionList) {
+    public GoldenEagleMove(int startRow, int startCol, List<int[]> piecePositionList, boolean isPowered) {
         MoveBehindPiece move;
 
         for (int[] positions : piecePositionList) {
             move = new MoveBehindPiece(startRow, startCol, positions[0], positions[1]);
-            moveList.add(new Move(move, new CrossShape(move.getDestination())));
+            moveList.add(new Move(move, new CrossShape(move.getDestination(), isPowered)));
         }
 
     }

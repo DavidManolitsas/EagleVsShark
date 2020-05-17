@@ -18,8 +18,7 @@ public class BaldEagle
      * moveList of BaldEagleMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        return new BaldEagleMove(startRow, startCol).getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new BaldEagleMove(startRow, startCol, isPowered).getMoveList();
     }
-
 }

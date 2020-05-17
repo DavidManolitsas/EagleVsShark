@@ -1,9 +1,15 @@
 package main.java.model;
 
 
+import java.util.List;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import main.java.model.board.Board;
+import main.java.model.board.BoardImpl;
+import main.java.model.board.BoardImpl.BoardModelEventListener;
+import main.java.model.move.Move;
 import main.java.model.piece.Eagle;
 import main.java.model.piece.Piece;
 import main.java.model.piece.Shark;
@@ -23,21 +29,27 @@ public class Game {
 
     public interface GameModelEventListener {
         void gameInitialised(String eaglePlayerName, String sharkPlayerName,
-                             int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore);
+                             int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore,
+                             int sharkPowerMoves, int eaglePowerMoves);
 
-        void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore);
+        void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
+                             int eaglePowerMoves);
 
         //timer functions
         void timeRemainingChanged(int timeRemaining);
 
         void timeRanOut();
+
+        void onPieceSelected(Piece piece, List<Move> allPossibleMoves);
     }
 
     //listener
     private GameModelEventListener listener;
 
-    private static final int TOTAL_TURNS = 40;
+    private Board board;
+
     private static final double WIN_PERCENTAGE = 0.6;
+    private int totalTurns;
     private double totalSquares;
     private int turnTime;
     private Player sharkPlayer;
@@ -49,33 +61,75 @@ public class Game {
     private Timeline timer;
     private int timeRemaining;
 
-    public Game(GameModelEventListener listener) {
-        this.listener = listener;
-        this.sharkSquareCount = 0;
-        this.eagleSquareCount = 0;
+    public Game(GameBuilder gameBuilder) {
+        int numOfPowerMoves = (gameBuilder.turnCount / 2) / 4;
+
+        this.sharkPlayer = new SharkPlayer(gameBuilder.sharkPlayerName, numOfPowerMoves);
+        this.eaglePlayer = new EaglePlayer(gameBuilder.eaglePlayerName, numOfPowerMoves);
+        this.turnTime = gameBuilder.timeLimit;
+        this.totalSquares = gameBuilder.rows * gameBuilder.cols;
+        this.totalTurns = gameBuilder.turnCount;
+        this.sharkSquareCount = gameBuilder.sharkNums;
+        this.eagleSquareCount = gameBuilder.eagleNums;
         this.turnCount = 0;
+
+        board = new BoardImpl(gameBuilder.rows, gameBuilder.cols, gameBuilder.sharkNums, gameBuilder.eagleNums);
     }
 
-    /**
-     * This overloaded method initialises a custom game where the player can set the time limit
-     * for each turn as
-     *
-     * @param sharkPlayerName
-     *         name of the shark player
-     * @param eaglePlayerName
-     *         name of the eagle player
-     * @param timeLimit
-     *         amount of time per turn
-     */
-    public void initialiseGame(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols) {
-        this.sharkPlayer = new SharkPlayer(sharkPlayerName);
-        this.eaglePlayer = new EaglePlayer(eaglePlayerName);
-        this.turnTime = timeLimit;
-        this.totalSquares = rows * cols;
+    public void start() {
+        board.initBoard();
+        listener.gameInitialised(sharkPlayer.getPlayerName(), eaglePlayer.getPlayerName(),
+                                 turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore(),
+                                 sharkPlayer.getRemainingPowerMoves(), eaglePlayer.getRemainingPowerMoves());
 
-        listener.gameInitialised(sharkPlayerName,
-                                 eaglePlayerName,
-                                 turnCount, TOTAL_TURNS, turnTime, getSharkScore(), getEagleScore());
+        nextTurn();
+    }
+
+    public void onSquareClicked(int row, int col, boolean isPowered) {
+        Piece piece = board.getPiece(row, col);
+        Piece prevChosenPiece = board.getChosenPiece();
+        if (piece == null) {
+            return;
+        }
+
+        if (!pieceBelongsToPlayer(piece)) {
+            return;
+        }
+
+        board.onPieceSelected(piece, row, col);
+
+        List<Move> allPossibleMoves = piece.getAllMoves(row, col, isPowered);
+        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+
+        listener.onPieceSelected(piece, allPossibleMoves);
+    }
+
+    public void onMoveButtonClicked(Move move) {
+        // update power move count
+        if (move.isPowered()) {
+            updateRemainingPowerMoves();
+        }
+
+        board.onMoveButtonClicked(move, getCurrentPlayer(), turnCount);
+
+        //the player moved their piece, change to next players turn
+        updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
+        nextTurn();
+    }
+
+    public void onPowerMoveToggled(boolean isPowered) {
+        Piece chosenPiece = board.getChosenPiece();
+
+        if (chosenPiece == null) {
+            return;
+        }
+
+        int[] position = board.getPiecePosition(chosenPiece);
+
+        List<Move> allPossibleMoves = chosenPiece.getAllMoves(position[0], position[1], isPowered);
+        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
+
+        listener.onPieceSelected(chosenPiece, allPossibleMoves);
     }
 
     /**
@@ -85,13 +139,14 @@ public class Game {
      * 2. otherwise, the game is ended
      */
     public void nextTurn() {
-        if (turnCount >= TOTAL_TURNS || isWinner()) {
+        if (turnCount >= totalTurns || isWinner()) {
             stopTimer();
             endGame();
         } else {
             incrementTurnCount();
             startTimer();
-            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore());
+            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore(), sharkPlayer.getRemainingPowerMoves(),
+                                     eaglePlayer.getRemainingPowerMoves());
         }
     }
 
@@ -192,6 +247,19 @@ public class Game {
         }
     }
 
+    public Player getNextPlayer() {
+        if (turnCount % 2 == 0) {
+            return sharkPlayer;
+        } else {
+            return eaglePlayer;
+        }
+    }
+
+    public void updateRemainingPowerMoves() {
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.setRemainingPowerMoves(currentPlayer.getRemainingPowerMoves() - 1);
+    }
+
     public void startTimer() {
         if (timer == null) {
             timer = new Timeline(new KeyFrame(Duration.seconds(1), actionEvent -> {
@@ -202,6 +270,7 @@ public class Game {
 
                 if (timeRemaining <= 0) {
                     timer.stop();
+                    board.timeRantOut();
                     listener.timeRanOut();
                 }
             }));
@@ -241,5 +310,71 @@ public class Game {
 
     public int getTurnCount() {
         return turnCount;
+    }
+
+    public void setListener(GameModelEventListener gameListener, BoardModelEventListener boardListener) {
+        this.listener = gameListener;
+        board.setListener(boardListener);
+    }
+
+    public static class GameBuilder {
+
+        private String sharkPlayerName;
+        private String eaglePlayerName;
+        private int timeLimit = 60;
+        private int turnCount = 40;
+        private int rows = 15;
+        private int cols = 10;
+        private int sharkNums = 3;
+        private int eagleNums = 3;
+
+        public GameBuilder(String sharkPlayerName, String eaglePlayerName) {
+            this.sharkPlayerName = sharkPlayerName;
+            this.eaglePlayerName = eaglePlayerName;
+        }
+
+        public GameBuilder setSharkPlayerName(String sharkPlayerName) {
+            this.sharkPlayerName = sharkPlayerName;
+            return this;
+        }
+
+        public GameBuilder setEaglePlayerName(String eaglePlayerName) {
+            this.eaglePlayerName = eaglePlayerName;
+            return this;
+        }
+
+        public GameBuilder setTimeLimit(int timeLimit) {
+            this.timeLimit = timeLimit;
+            return this;
+        }
+
+        public GameBuilder setTurnCount(int turnCount) {
+            this.turnCount = turnCount;
+            return this;
+        }
+
+        public GameBuilder setRows(int rows) {
+            this.rows = rows;
+            return this;
+        }
+
+        public GameBuilder setCols(int cols) {
+            this.cols = cols;
+            return this;
+        }
+
+        public GameBuilder setSharkNums(int sharkNums) {
+            this.sharkNums = sharkNums;
+            return this;
+        }
+
+        public GameBuilder setEagleNums(int eagleNums) {
+            this.eagleNums = eagleNums;
+            return this;
+        }
+
+        public Game build() {
+            return new Game(this);
+        }
     }
 }

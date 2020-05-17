@@ -1,22 +1,20 @@
 package main.java.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +32,9 @@ public class GameInfoView
 
         void onMoveButtonClicked(Move move);
 
-        void nextPlayerTurn();
+        void onPowerMoveToggled(boolean isPowered);
+
+        void onTimeRanOutAlertClosed();
     }
 
     private GameInfoViewEventListener gameInfoViewEventListener;
@@ -42,130 +42,71 @@ public class GameInfoView
     private static final Font TITLE = Font.font("Impact", 24);
     private static final Font HEADING = Font.font("Helvetica", 16);
     private static final Font BODY = Font.font("Helvetica", 14);
-    private ListView<Move> moveList;
-    private DecimalFormat decimalFormat = new DecimalFormat("#%");
-    private int totalTurns;
+
     //Game Information components
-    private VBox rootGameInfo;
+    private VBox root;
     private VBox titleInfo;
     private VBox whoseTurn;
-    private VBox scoreInfo;
-    private VBox chosenPiece;
-    private VBox movement;
     private Text timeRemainingText;
     private Text playersTurnText;
+    private Text sharkPowerMoveText;
+    private Text eaglePowerMoveText;
+    private Scoreboard scoreboard;
+    private SelectMoveView selectMove;
+
 
     public GameInfoView() {
         initGameInfo();
     }
 
     private void initGameInfo() {
-        rootGameInfo = new VBox();
+        root = new VBox();
         this.setPrefWidth(WIDTH);
-        rootGameInfo.setSpacing(10);
-        rootGameInfo.setAlignment(Pos.CENTER);
-        this.setTop(rootGameInfo);
+        root.setSpacing(5);
+        root.setAlignment(Pos.CENTER);
+        this.setTop(root);
     }
 
 
-    //start region move list
-    private void initMovement() {
-        movement = new VBox();
-        moveList = new ListView<>();
-        moveList.setFixedCellSize(50);
-        this.setCenter(movement);
-    }
-
-    private void drawMoveButton() {
-        if (moveList != null) {
-            Button moveBt = new Button("Move Piece");
-            moveBt.setWrapText(true);
-            moveBt.setFont(HEADING);
-            moveBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
-            moveBt.setPrefWidth(WIDTH);
-
-            moveBt.setOnAction(event -> {
-                gameInfoViewEventListener.onMoveButtonClicked(getSelectedMove());
-            });
-
-            movement.getChildren().add(moveBt);
-        }
-
-    }
-
-    public void showValidMoveList(List<Move> moves) {
-        movement.getChildren().clear();
-        movement.getChildren().add(moveList);
-        // update the move list
-        ObservableList<Move> moveListObservable = FXCollections.observableArrayList(moves);
-        moveList.getItems().removeAll();
-        moveList.setItems(moveListObservable);
-        moveList.setStyle("-fx-selection-bar: rgba(255,69,0,0.33)");
-
-        // assign name to each Move object
-        moveList.setCellFactory(e -> new ListCell<Move>() {
-
-            protected void updateItem(Move item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.toString().replaceAll("(.)([A-Z])", "$1 $2"));
-                    setTextAlignment(TextAlignment.CENTER);
-                    setFont(BODY);
-
-                }
-            }
-
-        });
-
-        moveList.setOnMouseClicked(event -> {
-            Move move = getSelectedMove();
-            if (move != null) {
-                getGameInfoViewEventListener().onMoveListItemClicked(getSelectedMove());
-            }
-        });
-
-        drawMoveButton();
-
-    }
-
-    private Move getSelectedMove() throws NullPointerException {
-        return moveList.getSelectionModel().getSelectedItem();
-    }
-    //end region
-
-
-    //start region title and player names
+    //region title and player names
     private void initTitleInfo(String sharkPlayerName, String eaglePlayerName) {
         titleInfo = new VBox();
         titleInfo.setSpacing(10);
-        titleInfo.setPadding(new Insets(15, 0, 0, 0));
+        titleInfo.setPadding(new Insets(10, 0, 15, 0));
         titleInfo.setAlignment(Pos.CENTER);
-        drawTitle();
-        drawPlayerNames(sharkPlayerName, eaglePlayerName);
-        rootGameInfo.getChildren().add(titleInfo);
+        drawTitleAndPlayerNames(sharkPlayerName, eaglePlayerName);
+        sharkPowerMoveText = new Text();
+        sharkPowerMoveText.setFont(BODY);
+        eaglePowerMoveText = new Text();
+        eaglePowerMoveText.setFont(BODY);
+        root.getChildren().add(titleInfo);
     }
 
-    public void drawTitle() {
+    public void drawTitleAndPlayerNames(String sharkPlayerName, String eaglePlayerName) {
+        // title
         Text title = new Text("Eagle vs. Shark");
         title.setFont(TITLE);
         title.setFill(Color.ORANGERED);
         titleInfo.getChildren().add(title);
-    }
-
-    public void drawPlayerNames(String sharkPlayerName, String eaglePlayerName) {
+        // player names
         Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
         sharkPlayer.setFont(BODY);
-        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player\n");
+        Text eaglePlayer = new Text(eaglePlayerName + " is the Eagle Player");
         eaglePlayer.setFont(BODY);
         titleInfo.getChildren().addAll(sharkPlayer, eaglePlayer);
     }
-    //end region
 
+    public void drawPowerMoves(int sharkPowerMoves, int eaglePowerMoves) {
+        sharkPowerMoveText.setText("Shark power moves: " + sharkPowerMoves);
+        eaglePowerMoveText.setText("Eagle power moves: " + eaglePowerMoves);
+        if (!titleInfo.getChildren().contains(sharkPowerMoveText)) {
+            titleInfo.getChildren().addAll(sharkPowerMoveText, eaglePowerMoveText);
+        }
+    }
 
-    //start region whose turn and timer
+    //endregion
+
+    //region whose turn and timer
     public void initWhoseTurn(int turnCount) {
         whoseTurn = new VBox();
         whoseTurn.setSpacing(10);
@@ -183,7 +124,7 @@ public class GameInfoView
         timeRemainingText.setFill(Color.ORANGERED);
         whoseTurn.getChildren().add(timeRemainingText);
 
-        rootGameInfo.getChildren().add(whoseTurn);
+        root.getChildren().add(whoseTurn);
     }
 
     private void drawPlayersTurn(int turnCount) {
@@ -197,81 +138,56 @@ public class GameInfoView
             return "It's the Shark's turn!";
         }
     }
-    //end region
+    //endregion
 
 
-    // start region score info
-    public void initScoreInfo(int turnCount, double sharkScore, double eagleScore) {
-        scoreInfo = new VBox();
-        scoreInfo.setSpacing(10);
-        scoreInfo.setAlignment(Pos.CENTER);
-        drawTurnCount(turnCount);
-        drawScores(sharkScore, eagleScore);
-
-        rootGameInfo.getChildren().add(scoreInfo);
+    public void initScoreboard(int turnCount, int totalTurns, double sharkScore, double eagleScore) {
+        scoreboard = new Scoreboard(turnCount, totalTurns, sharkScore, eagleScore);
+        root.getChildren().add(scoreboard);
     }
 
-    public void drawTurnCount(int turnCount) {
-        Text turnCountText = new Text("Turn No. " + turnCount + "/" + totalTurns);
-        turnCountText.setFont(BODY);
-        scoreInfo.getChildren().add(turnCountText);
+    private void initSelectMoveView() {
+        selectMove = new SelectMoveView(this);
+        root.getChildren().add(selectMove);
     }
 
-    private void drawScores(double sharkScore, double eagleScore) {
-        Text sharkScoreText = new Text("Shark Score: " + decimalFormat.format(sharkScore));
-        sharkScoreText.setFont(BODY);
-        Text eagleScoreText = new Text("Eagle Score: " + decimalFormat.format(eagleScore));
-        eagleScoreText.setFont(BODY);
-        scoreInfo.getChildren().addAll(sharkScoreText, eagleScoreText);
-    }
-    //end region
-
-    //start region chosen piece
-    public void initChosenPiece() {
-        chosenPiece = new VBox();
-        chosenPiece.setSpacing(10);
-        chosenPiece.setPadding(new Insets(0, 0, 15, 0));
-        chosenPiece.setAlignment(Pos.CENTER);
-        drawChoosePiece();
-        rootGameInfo.getChildren().add(chosenPiece);
+    public void showValidMoveList(List<Move> moves) {
+        selectMove.showValidMoveList(moves);
     }
 
-    public void drawChoosePiece() {
-        Text choosePieceText = new Text("\nChoose a piece to move");
-        choosePieceText.setFont(HEADING);
-        choosePieceText.setFill(Color.ORANGERED);
-        chosenPiece.getChildren().add(choosePieceText);
+    public boolean isPowered() {
+        return selectMove.isPowered();
+    }
+
+    public void setIsPowered(boolean isPowered) {
+        selectMove.setIsPowered(isPowered);
+    }
+
+    public void turnOffPowered() {
+        selectMove.turnOffPowered();
+    }
+
+    public void turnOnPowered() {
+        selectMove.turnOnPowered();
     }
 
     public void showChosenPiece(Piece piece) {
-        chosenPiece.getChildren().clear();
-        Text pieceName = new Text("\n" + getPieceName(piece) + " selected");
-        pieceName.setFont(HEADING);
-        pieceName.setFill(Color.ORANGERED);
-        chosenPiece.getChildren().add(pieceName);
+        selectMove.showChosenPiece(piece);
     }
 
-    public String getPieceName(Piece piece) {
-        String name = piece.getClass().getSimpleName();
-        String pieceName = name.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2");
-        return pieceName;
-    }
-    //end region
-
-
-    private void updateGameInfo(int turnCount, double sharkScore, double eagleScore) {
+    private void updateGameInfo(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
+                                int eaglePowerMoves) {
         clearView();
+        drawPowerMoves(sharkPowerMoves, eaglePowerMoves);
         drawPlayersTurn(turnCount);
-        drawTurnCount(turnCount);
-        drawScores(sharkScore, eagleScore);
-        drawChoosePiece();
+        scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
+        selectMove.promptChoosePiece();
     }
+
 
     private void clearView() {
-        scoreInfo.getChildren().clear();
-        chosenPiece.getChildren().clear();
-        movement.getChildren().clear();
-        moveList.getItems().clear();
+        scoreboard.getChildren().clear();
+        selectMove.clearMoveList();
     }
 
     public void showError(String message) {
@@ -288,7 +204,8 @@ public class GameInfoView
         a.getButtonTypes().setAll(nextTurn);
 
         a.setOnHidden(event -> {
-            gameInfoViewEventListener.nextPlayerTurn();
+            setIsPowered(false);
+            gameInfoViewEventListener.onTimeRanOutAlertClosed();
         });
 
         a.show();
@@ -298,33 +215,39 @@ public class GameInfoView
     //region Game Event
     @Override
     public void gameInitialised(String sharkPlayerName, String eaglePlayerName,
-                                int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore) {
+                                int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore,
+                                int sharkPowerMoves, int eaglePowerMoves) {
 
-        //initialise number of turns
-        this.totalTurns = totalTurns;
         //initialise game information
         initTitleInfo(sharkPlayerName, eaglePlayerName);
+        drawPowerMoves(sharkPowerMoves, eaglePowerMoves);
         initWhoseTurn(turnCount);
-        initScoreInfo(turnCount, sharkScore, eagleScore);
-        initChosenPiece();
-        initMovement();
+        initScoreboard(turnCount, totalTurns, sharkScore, eagleScore);
+        initSelectMoveView();
     }
 
     @Override
-    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
-        updateGameInfo(turnCount, sharkScore, eagleScore);
+    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
+                                int eaglePowerMoves) {
+        updateGameInfo(turnCount, sharkScore, eagleScore, sharkPowerMoves, eaglePowerMoves);
     }
 
     @Override
     public void timeRemainingChanged(int timeRemaining) {
-        timeRemainingText.setText(timeRemaining + " seconds\n");
+        timeRemainingText.setText(timeRemaining + " seconds");
     }
 
     @Override
     public void timeRanOut() {
         showTimeRanOutAlert();
     }
-    //end region
+
+    @Override
+    public void onPieceSelected(Piece piece, List<Move> allPossibleMoves) {
+        showValidMoveList(allPossibleMoves);
+        showChosenPiece(piece);
+    }
+    //endregion
 
 
     public GameInfoViewEventListener getGameInfoViewEventListener() {

@@ -8,21 +8,25 @@ import main.java.model.move.shape.SquareShape;
  *              Starting point of the piece
  * Postcondition: a list of move
  */
-public class GoblinSharkMove extends PieceMove {
+public class GoblinSharkMove
+        extends PieceMove {
 
-    private static final int SQUARE_MOVED = 1;
+    private int squaresMoved = 1;
 
-    public GoblinSharkMove(int startRow, int startCol) {
+    public GoblinSharkMove(int startRow, int startCol, boolean isPowered) {
+        if (isPowered) {
+            squaresMoved = squaresMoved * 2;
+        }
 
         Movements[] movements = {
-                new MoveLeft(startRow, startCol, SQUARE_MOVED),
-                new MoveRight(startRow, startCol, SQUARE_MOVED),
-                new MoveDiagonalLeft(startRow, startCol, SQUARE_MOVED),
-                new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED)
+                new MoveLeft(startRow, startCol, squaresMoved),
+                new MoveRight(startRow, startCol, squaresMoved),
+                new MoveDiagonalLeft(startRow, startCol, squaresMoved),
+                new MoveDiagonalRight(startRow, startCol, squaresMoved)
         };
 
         for (Movements movement : movements) {
-            moveList.add(new Move(movement, new SquareShape(movement.getDestination())));
+            moveList.add(new Move(movement, new SquareShape(movement.getDestination(), isPowered)));
         }
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 public class Hammerhead
         extends Shark {
 
+
     public Hammerhead(int startRow, int startCol) {
         super(startRow, startCol);
     }
@@ -18,9 +19,7 @@ public class Hammerhead
      * moveList of HammerheadMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        return new HammerheadMove(startRow, startCol).getMoveList();
-
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new HammerheadMove(startRow, startCol, isPowered).getMoveList();
     }
-
 }

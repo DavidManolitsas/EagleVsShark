@@ -1,7 +1,5 @@
 package main.java.model.move.shape;
 
-import java.util.List;
-
 /**
  * @author WeiYi Yu
  * @date 2020-04-16
@@ -19,10 +17,9 @@ public class TriangleShape
     public static final int DIRECTION_RIGHT = 1;
     public static final int DIRECTION_LEFT = -1;
 
-    private static final int WIDTH = 3;
 
-    public TriangleShape(int startRow, int startCol, int direction) {
-        for (int i = 0; i < WIDTH; i++) {
+    public TriangleShape(int startRow, int startCol, int width, int direction) {
+        for (int i = 0; i < width; i++) {
             for (int m = i; m > -1; m--) {
                 paintInfo.add(new int[] {startRow - i, startCol + m * direction});
             }

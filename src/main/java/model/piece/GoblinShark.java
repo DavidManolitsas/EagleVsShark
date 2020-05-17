@@ -13,14 +13,14 @@ public class GoblinShark
         super(startRow, startCol);
     }
 
+
     /**
      * Ensures:
      * moveList of GoblinSharkMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        return new GoblinSharkMove(startRow, startCol).getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new GoblinSharkMove(startRow, startCol, isPowered).getMoveList();
     }
-
 }
 

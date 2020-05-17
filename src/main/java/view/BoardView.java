@@ -8,8 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.ResPath;
+import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
+import main.java.model.piece.*;
 
 import java.util.*;
 
@@ -49,17 +51,6 @@ public class BoardView
     }
 
     //region public BoardView methods
-    public void initBoardView(int rows, int cols) {
-        totalRows = rows;
-        totalCols = cols;
-
-        lastHighlightPos = null;
-        lastPreviewMove = null;
-
-        drawBoard();
-        drawPieces();
-    }
-
     public void highlightSquare(int row, int col) {
         if (lastHighlightPos != null) {
             removeHighlight();
@@ -142,17 +133,20 @@ public class BoardView
 
     //region BoardModelEvent methods
     @Override
-    public void onPiecePositionUpdated(Move move) {
-        int[] startPos = move.getRoute().get(0);
-        int[] destinationPos = move.getFinalPosition();
+    public void onBoardInitialised(int rows, int cols, Square[] topRow, Square[] bottomRow) {
+        totalRows = rows;
+        totalCols = cols;
 
-        updatePiecePosition(startPos[0], startPos[1], destinationPos[0],  destinationPos[1]);
+        lastHighlightPos = null;
+        lastPreviewMove = null;
+
+        drawBoard();
+        drawPieces(topRow, bottomRow);
     }
-
 
     @Override
 //    public void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol){
-    public void updatePiecePosition(int originalRow, int originalCol, int destinationRow, int destinationCol){
+    public void updatePiecePosition(int originalRow, int originalCol, int destinationRow, int destinationCol) {
         StackPane start = getSquareAt(originalRow, originalCol);
         Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);
         start.getChildren().remove(piece);
@@ -162,10 +156,26 @@ public class BoardView
     }
 
     @Override
-    public void onRocksAdded(Collection<int[]> rockPositionList) {
-        for (int[] position : rockPositionList) {
-            addRocks(position[0], position[1], ResPath.ROCKS);
-        }
+    public void onPieceSelected(int row, int col) {
+        removeMovePreview();
+        highlightSquare(row, col);
+    }
+
+    @Override
+    public void onPieceMoved(Move move, int turnCount) {
+        removeMovePreview();
+        removeHighlight();
+
+        int[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
+        updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
+        updateTerritory(move, turnCount);
+    }
+
+    @Override
+    public void onTimeRanOut() {
+        removeMovePreview();
+        removeHighlight();
     }
     //endregion
 
@@ -198,21 +208,36 @@ public class BoardView
         }
     }
 
-    private void drawPieces() {
-        int topRow = 0;
-        int bottomRow = totalRows - 1;
-        int[] pieceRows = {topRow, bottomRow};
-        int[] pieceCols = {4, 5, 6};
+    private void drawPieces(Square[] topRow, Square[] bottomRow) {
+        String baldEagleImgPath = ResPath.PIECE_BALD_EAGLE;
+        String goldenEagleImgPath = ResPath.PIECE_GOLDEN_EAGLE;
+        String harpyEagleImgPath = ResPath.PIECE_HARPY_EAGLE;
+        String goblinSharkImgPath = ResPath.PIECE_GOBLIN_SHARK;
+        String hammerheadImgPath = ResPath.PIECE_HAMMERHEAD;
+        String sawSharkImgPath = ResPath.PIECE_SAW_SHARK;
 
-        String[] images = {
-                ResPath.PIECE_BALD_EAGLE, ResPath.PIECE_GOLDEN_EAGLE, ResPath.PIECE_HARPY_EAGLE,
-                ResPath.PIECE_GOBLIN_SHARK, ResPath.PIECE_HAMMERHEAD, ResPath.PIECE_SAW_SHARK
-        };
 
-        int index = 0;
-        for (int row : pieceRows) {
-            for (int col : pieceCols) {
-                addPiece(row, col, images[index++]);
+        for (Square square : topRow) {
+            Piece piece = square.getPiece();
+
+            if (piece instanceof BaldEagle) {
+                addPiece(square.getRow(), square.getCol(), baldEagleImgPath);
+            } else if (piece instanceof HarpyEagle) {
+                addPiece(square.getRow(), square.getCol(), harpyEagleImgPath);
+            } else if (piece instanceof GoldenEagle) {
+                addPiece(square.getRow(), square.getCol(), goldenEagleImgPath);
+            }
+        }
+
+        for (Square square : bottomRow) {
+            Piece piece = square.getPiece();
+
+            if (piece instanceof Hammerhead) {
+                addPiece(square.getRow(), square.getCol(), hammerheadImgPath);
+            } else if (piece instanceof GoblinShark) {
+                addPiece(square.getRow(), square.getCol(), goblinSharkImgPath);
+            } else if (piece instanceof SawShark) {
+                addPiece(square.getRow(), square.getCol(), sawSharkImgPath);
             }
         }
     }

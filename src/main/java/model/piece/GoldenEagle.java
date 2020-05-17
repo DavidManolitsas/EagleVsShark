@@ -22,8 +22,8 @@ public class GoldenEagle
      * moveList of GoldenkMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        return new GoldenEagleMove(startRow, startCol, sharkPosList).getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new GoldenEagleMove(startRow, startCol, sharkPosList, isPowered).getMoveList();
     }
 
     public void setSharkList(List<int[]> sharksPos) {

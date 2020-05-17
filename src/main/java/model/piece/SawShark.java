@@ -17,8 +17,8 @@ public class SawShark
      * moveList of SawSharkMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        return new SawSharkMove(startRow, startCol).getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new SawSharkMove(startRow, startCol, isPowered).getMoveList();
     }
 
 }

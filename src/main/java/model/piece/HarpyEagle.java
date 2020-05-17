@@ -17,8 +17,7 @@ public class HarpyEagle
      * moveList of HarpyEagleMove objects
      */
     @Override
-    public List<Move> getAllMoves(int startRow, int startCol) {
-        return new HarpyEagleMove(startRow, startCol).getMoveList();
+    public List<Move> getAllMoves(int startRow, int startCol, boolean isPowered) {
+        return new HarpyEagleMove(startRow, startCol, isPowered).getMoveList();
     }
-
 }

@@ -27,6 +27,8 @@ public class BoardImpl
     private BoardModelEventListener eventListener;
     private int totalRows;
     private int totalCols;
+    private int sharkNums;
+    private int eagleNums;
     private Square[][] squares;
     private Map<Piece, Square> pieceSquareMap;
     private Piece chosenPiece;
@@ -40,54 +42,25 @@ public class BoardImpl
      * Requires:
      * listener != null
      */
-    public BoardImpl(BoardModelEventListener listener) {
-        eventListener = listener;
-    }
-
-    /**
-     * Requires:
-     * 1. move != null
-     * 2. piece != null
-     * <p>
-     * Ensures:
-     * 1. pieceSquareMap.get(piece) == destination
-     * 2. start.getPiece == null
-     */
-    @Override
-    public void updatePiecePosition(Move move, Piece piece) {
-        int[] startPos = move.getRoute().get(0);
-        int[] destinationPos = move.getFinalPosition();
-
-        Square start = getSquareAt(startPos[0], startPos[1]);
-        start.setPiece(null);
-
-        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
-
-        if (destination.getPiece() != null) {
-            attackPiece(destination.getPiece(), destination);
-        }
-
-        destination.setPiece(piece);
-
-        pieceSquareMap.put(piece, destination);
-
-        eventListener.onPiecePositionUpdated(move);
-    }
-
-    // region public Board methods
-    @Override
-    public void initBoard(int rows, int cols, int sharks, int eagles) {
+    public BoardImpl(int rows, int cols, int sharks, int eagles) {
         totalRows = rows;
         totalCols = cols;
+        sharkNums = sharks;
+        eagleNums = eagles;
         chosenPiece = null;
         isEagleUndo = false;
         isSharkUndo = false;
         originator = new Originator();
         careTaker = new CareTaker();
+    }
 
-
+    // region public Board methods
+    @Override
+    public void initBoard() {
         initSquare();
-        initPieces(sharks, eagles);
+        initPieces(sharkNums, eagleNums);
+
+        eventListener.onBoardInitialised(totalRows, totalCols, squares[0], squares[totalRows - 1]);
     }
 
     @Override
@@ -129,34 +102,6 @@ public class BoardImpl
     @Override
     public Piece getChosenPiece() {
         return chosenPiece;
-    }
-
-    @Override
-    public void setChosenPiece(Piece chosenPiece) {
-        this.chosenPiece = chosenPiece;
-    }
-
-    /**
-     * Requires:
-     * 1. move != null
-     * 2. player != null
-     * <p>
-     * Ensures:
-     * 1. squares of PaintInfo are occupied by the player
-     */
-    @Override
-    public void updateTerritory(Move move, Player player) {
-        for (int[] position : move.getPaintShape().getPaintInfo()) {
-            Square square = getSquareAt(position[0], position[1]);
-            if (square.getPiece() != null) {
-                if (player instanceof EaglePlayer && !(square.getPiece() instanceof Eagle)) {
-                    attackPiece(square.getPiece(), square);
-                } else if (player instanceof SharkPlayer && !(square.getPiece() instanceof Shark)) {
-                    attackPiece(square.getPiece(), square);
-                }
-            }
-            square.setOccupiedPlayer(player);
-        }
     }
 
     /**
@@ -214,21 +159,6 @@ public class BoardImpl
         originator.setPaintBeforeMove(paintBeforeChange);
     }
 
-    @Override
-    public List<int[]> getSharksPositions() {
-        List<int[]> list = new ArrayList<>();
-
-        for (Piece piece : pieceSquareMap.keySet()) {
-            if (piece instanceof Shark) {
-                Square square = pieceSquareMap.get(piece);
-                int row = square.getRow();
-                int col = square.getCol();
-                list.add(new int[]{row, col});
-            }
-        }
-        return list;
-    }
-
     /**
      * Requires:
      * 1. moves != null
@@ -247,16 +177,26 @@ public class BoardImpl
         return validatedMoves;
     }
 
+    @Override
+    public void setListener(BoardModelEventListener eventListener) {
+        this.eventListener = eventListener;
+    }
+    // endregion
+
+    // region private methods
+
     /**
      * Requires:
      * 1. position != null
      *
-     * @param position Destination position
+     * @param position
+     *         Destination position
+     *
      * @return true when:
      * 1. destination square is on the board
      * 2. destination square has no piece which belongs to the same player
      */
-    public boolean isSquareValid(int[] position) {
+    private boolean isSquareValid(int[] position) {
         if (isPositionOutOfBound(position)) {
             return false;
         }
@@ -268,21 +208,70 @@ public class BoardImpl
                         !piece.getClass().getSuperclass().equals(chosenPiece.getClass().getSuperclass()));
     }
 
-    @Override
-    public int getTotalRows() {
-        return totalRows;
+
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. piece != null
+     * <p>
+     * Ensures:
+     * 1. pieceSquareMap.get(piece) == destination
+     * 2. start.getPiece == null
+     */
+    private void updatePiecePosition(Move move, Piece piece) {
+        int[] startPos = move.getRoute().get(0);
+        int[] destinationPos = move.getFinalPosition();
+
+        Square start = getSquareAt(startPos[0], startPos[1]);
+        start.setPiece(null);
+
+        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
+
+        if (destination.getPiece() != null) {
+            attackPiece(destination.getPiece(), destination);
+        }
+
+        destination.setPiece(piece);
+
+        pieceSquareMap.put(piece, destination);
     }
 
-    @Override
-    public int getTotalCols() {
-        return totalCols;
+    /**
+     * Requires:
+     * 1. move != null
+     * 2. player != null
+     * <p>
+     * Ensures:
+     * 1. squares of PaintInfo are occupied by the player
+     */
+    private void updateTerritory(Move move, Player player) {
+        for (int[] position : move.getPaintShape().getPaintInfo()) {
+            Square square = getSquareAt(position[0], position[1]);
+            if (square.getPiece() != null) {
+                if (player instanceof EaglePlayer && !(square.getPiece() instanceof Eagle)) {
+                    attackPiece(square.getPiece(), square);
+                } else if (player instanceof SharkPlayer && !(square.getPiece() instanceof Shark)) {
+                    attackPiece(square.getPiece(), square);
+                }
+            }
+            square.setOccupiedPlayer(player);
+        }
     }
 
-    public BoardModelEventListener getEventListener() {
-        return eventListener;
+    private List<int[]> getSharksPositions() {
+        List<int[]> list = new ArrayList<>();
+
+        for (Piece piece : pieceSquareMap.keySet()) {
+            if (piece instanceof Shark) {
+                Square square = pieceSquareMap.get(piece);
+                int row = square.getRow();
+                int col = square.getCol();
+                list.add(new int[] {row, col});
+            }
+        }
+        return list;
     }
 
-    // region private methods
     private void restoreFromMomento(Momento momento) {
         LinkedList<CustomPieceMove> reversePieceMove;
         // shark paint
@@ -336,19 +325,78 @@ public class BoardImpl
     private void initPieces(int sharks, int eagles) {
         pieceSquareMap = new HashMap<>();
 
+        int typesOfPieces = 3;
         int topRow = 0;
         int bottomRow = totalRows - 1;
-        int[] pieceCols = {4, 5, 6};
+        // Gaps between each piece
+        int sharkSplit = totalCols / sharks;
+        int sharkPosCount = sharkSplit;
+        int eagleSplit = totalCols / eagles;
+        int eaglePosCount = eagleSplit;
 
-        // Adding pieces by order
-        Piece[] pieces = {
-                new BaldEagle(topRow, pieceCols[0]),
-                new GoldenEagle(topRow, pieceCols[1]),
-                new HarpyEagle(topRow, pieceCols[2]),
-                new GoblinShark(bottomRow, pieceCols[0]),
-                new Hammerhead(bottomRow, pieceCols[1]),
-                new SawShark(bottomRow, pieceCols[2]),
-        };
+        // Get each number of sharks
+        int goblinSharks, sawSharks, hammerHeads, goldenEagles, baldEagles, harpyEagles;
+        if (sharks % typesOfPieces == 0) {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces;
+            hammerHeads = sharks / typesOfPieces;
+        } else if (sharks % typesOfPieces == 1) {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces;
+            hammerHeads = sharks / typesOfPieces + 1;
+        } else {
+            goblinSharks = sharks / typesOfPieces;
+            sawSharks = sharks / typesOfPieces + 1;
+            hammerHeads = sharks / typesOfPieces + 1;
+        }
+
+        //  Get each number of eagles
+        if (eagles % typesOfPieces == 0) {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces;
+            harpyEagles = eagles / typesOfPieces;
+        } else if (eagles % typesOfPieces == 1) {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces;
+            harpyEagles = eagles / typesOfPieces + 1;
+        } else {
+            goldenEagles = eagles / typesOfPieces;
+            baldEagles = eagles / typesOfPieces + 1;
+            harpyEagles = eagles / typesOfPieces + 1;
+        }
+
+        ArrayList<Piece> pieces = new ArrayList<Piece>();
+        // Initialise Sharks
+        for (int i = 0; i < goblinSharks; i++) {
+            pieces.add(new GoblinShark(bottomRow, sharkSplit - 1));
+            sharkSplit += sharkPosCount;
+        }
+
+        for (int i = 0; i < hammerHeads; i++) {
+            pieces.add(new Hammerhead(bottomRow, sharkSplit - 1));
+            sharkSplit += sharkPosCount;
+        }
+
+        for (int i = 0; i < sawSharks; i++) {
+            pieces.add(new SawShark(bottomRow, sharkSplit - 1));
+            sharkSplit += sharkPosCount;
+        }
+
+        // Initialise Eagles
+        for (int i = 0; i < baldEagles; i++) {
+            pieces.add(new BaldEagle(topRow, eagleSplit - 1));
+            eagleSplit += eaglePosCount;
+        }
+
+        for (int i = 0; i < goldenEagles; i++) {
+            pieces.add(new GoldenEagle(topRow, eagleSplit - 1));
+            eagleSplit += eaglePosCount;
+        }
+
+        for (int i = 0; i < harpyEagles; i++) {
+            pieces.add(new HarpyEagle(topRow, eagleSplit - 1));
+            eagleSplit += eaglePosCount;
+        }
 
         for (Piece piece : pieces) {
             int[] pos = piece.getStartPos();
@@ -363,8 +411,41 @@ public class BoardImpl
      * 1. row >= 0 && col >= 0
      * 2. row < ROW && col < COL
      */
-    private Square getSquareAt(int row, int col) {
+    public Square getSquareAt(int row, int col) {
         return squares[row][col];
+    }
+
+    @Override
+    public void onPieceSelected(Piece piece, int row, int col) {
+        chosenPiece = piece;
+
+        if (piece instanceof GoldenEagle) {
+            List<int[]> sharksPositions = getSharksPositions();
+            ((GoldenEagle) piece).setSharkList(sharksPositions);
+        }
+
+        eventListener.onPieceSelected(row, col);
+    }
+
+    @Override
+    public void onMoveButtonClicked(Move move, Player currentPlayer, int turnCount) {
+        updatePiecePosition(move, chosenPiece);
+        updateTerritory(move, currentPlayer);
+        chosenPiece = null;
+
+        eventListener.onPieceMoved(move, turnCount);
+    }
+
+    @Override
+    public int[] getPiecePosition(Piece chosenPiece) {
+        Square square = pieceSquareMap.get(chosenPiece);
+        return new int[] {square.getRow(), square.getCol()};
+    }
+
+    @Override
+    public void timeRantOut() {
+        chosenPiece = null;
+        eventListener.onTimeRanOut();
     }
 
     /**
@@ -388,12 +469,15 @@ public class BoardImpl
 
     // region Board Model Event Listener interface
     public interface BoardModelEventListener {
-
-        void onPiecePositionUpdated(Move move);
+        void onBoardInitialised(int rows, int cols, Square[] topRow, Square[] bottomRow);
 
         void updatePiecePosition(int attackedRow, int attackedCol, int resetRow, int resetCol);
 
-        void onRocksAdded(Collection<int[]> rockPositionList);
+        void onPieceSelected(int row, int col);
+
+        void onPieceMoved(Move move, int turnCount);
+
+        void onTimeRanOut();
     }
     // endregion
 

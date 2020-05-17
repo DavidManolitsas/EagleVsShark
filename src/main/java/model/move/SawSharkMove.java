@@ -11,15 +11,21 @@ import java.util.ArrayList;
  *              Starting point of the piece
  * Postcondition: a list of move
  */
-public class SawSharkMove extends PieceMove {
+public class SawSharkMove
+        extends PieceMove {
 
-    private static final int SQUARE_MOVED = 2;
+    private int squaresMoved = 2;
+    private int width = 3;
 
-    public SawSharkMove(int startRow, int startCol) {
+    public SawSharkMove(int startRow, int startCol, boolean isPowered) {
+        if (isPowered) {
+            squaresMoved += 1;
+            width += 1;
+        }
         moveList = new ArrayList<>();
-        moveList.add(new Move(new MoveDiagonalLeft(startRow, startCol, SQUARE_MOVED),
-                new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_LEFT)));
-        moveList.add(new Move(new MoveDiagonalRight(startRow, startCol, SQUARE_MOVED),
-                new TriangleShape(startRow, startCol, TriangleShape.DIRECTION_RIGHT)));
+        moveList.add(new Move(new MoveDiagonalLeft(startRow, startCol, squaresMoved),
+                              new TriangleShape(startRow, startCol, width, TriangleShape.DIRECTION_LEFT)));
+        moveList.add(new Move(new MoveDiagonalRight(startRow, startCol, squaresMoved),
+                              new TriangleShape(startRow, startCol, width, TriangleShape.DIRECTION_RIGHT)));
     }
 }

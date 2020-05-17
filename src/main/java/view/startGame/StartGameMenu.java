@@ -50,17 +50,17 @@ public class StartGameMenu
     @Override
     public void drawGameDetails() {
         //Shark Player
-        Text sharkPlayerText = new Text("Shark Player: ");
-        sharkPlayerText.setFont(BODY);
+        Text playerNamesText = new Text("Enter Player Names: ");
+        playerNamesText.setFont(BODY);
         TextField sharkPlayerNameField = new TextField();
         sharkPlayerNameField.setFont(BODY);
         sharkPlayerNameField.setAlignment(Pos.CENTER);
+        sharkPlayerNameField.setPromptText("Shark Player");
         //Eagle Player
-        Text eaglePlayerText = new Text("Eagle Player: ");
-        eaglePlayerText.setFont(BODY);
         TextField eaglePlayerNameField = new TextField();
         eaglePlayerNameField.setFont(BODY);
         eaglePlayerNameField.setAlignment(Pos.CENTER);
+        eaglePlayerNameField.setPromptText("Eagle Player");
 
 
         //Start Game Button
@@ -94,7 +94,7 @@ public class StartGameMenu
         menuList.setSpacing(20);
         menuList.setPadding(new Insets(60, 270, 180, 270));
         menuList.getChildren()
-                .addAll(sharkPlayerText, sharkPlayerNameField, eaglePlayerText, eaglePlayerNameField, startBt,
+                .addAll(playerNamesText, sharkPlayerNameField, eaglePlayerNameField, startBt,
                         customStartBt);
 
         getRoot().setCenter(menuList);

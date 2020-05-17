@@ -1,17 +1,10 @@
 package main.java.controller;
 
-import java.util.List;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import main.java.model.Game;
-import main.java.model.board.Board;
-import main.java.model.board.BoardImpl;
-import main.java.model.board.RockDecorator;
+import main.java.model.Game.GameBuilder;
 import main.java.model.move.Move;
-import main.java.model.piece.GoldenEagle;
-import main.java.model.piece.Piece;
-import main.java.model.player.Player;
 import main.java.util.SceneManager;
 import main.java.view.BoardView;
 import main.java.view.BoardView.BoardViewEventListener;
@@ -28,7 +21,6 @@ import main.java.view.MenuView.MenuBarEventListener;
  * 1. boardView !=null
  * 1. gameInfoView !=null
  * 1. game !=null
- * 1. board !=null
  */
 public class GameViewController
         implements BoardViewEventListener,
@@ -46,36 +38,17 @@ public class GameViewController
 
     private Game game;
 
-    private Board board;
-
     @FXML
     public void initialize() {
-        board = new BoardImpl(boardView);
-        game = new Game(gameInfoView);
-
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
         menuView.setListener(this);
     }
 
-
-    public void initGameData(String sharkPlayerName, String eaglePlayerName) {
-        initGameData(sharkPlayerName, eaglePlayerName, 60, 15, 10, 3, 3);
-    }
-
-    public void initGameData(String sharkPlayerName, String eaglePlayerName, int timeLimit, int rows, int cols,
-                             int sharks, int eagles) {
-        //TODO: implement initialising each number of pieces
-        //does this happen in the board class?
-        System.out.println("No. of Piece, Sharks:" + sharks + " Eagles:" + eagles);
-
-        boardView.initBoardView(rows, cols);
-
-        board = new RockDecorator(board);
-        board.initBoard(rows, cols, sharks, eagles);
-
-        game.initialiseGame(sharkPlayerName, eaglePlayerName, timeLimit, rows, cols);
-        game.nextTurn();
+    public void initGameData(GameBuilder gameBuilder) {
+        game = gameBuilder.build();
+        game.setListener(gameInfoView, boardView);
+        game.start();
     }
 
     //region BoardView Event
@@ -87,30 +60,7 @@ public class GameViewController
      */
     @Override
     public void onSquareClicked(int row, int col) {
-        Piece piece = board.getPiece(row, col);
-        Piece prevChosenPiece = board.getChosenPiece();
-        if (piece == null || piece == prevChosenPiece) {
-            return;
-        }
-
-        if (!game.pieceBelongsToPlayer(piece)) {
-            return;
-        }
-
-        if (piece instanceof GoldenEagle) {
-            List<int[]> sharksPositions = board.getSharksPositions();
-            ((GoldenEagle) piece).setSharkList(sharksPositions);
-        }
-
-        boardView.removeMovePreview();
-        boardView.highlightSquare(row, col);
-
-        board.setChosenPiece(piece);
-        List<Move> allPossibleMoves = piece.getAllMoves(row, col);
-        allPossibleMoves = board.validatePossibleMoves(allPossibleMoves);
-
-        gameInfoView.showValidMoveList(allPossibleMoves);
-        gameInfoView.showChosenPiece(piece);
+        game.onSquareClicked(row, col, gameInfoView.isPowered());
     }
     //endregion
 
@@ -135,30 +85,29 @@ public class GameViewController
             return;
         }
 
-        // Remove preview
-        boardView.removeMovePreview();
-        boardView.removeHighlight();
+        if (game.getNextPlayer().getRemainingPowerMoves() < 1) {
+            gameInfoView.turnOffPowered();
+        } else {
+            gameInfoView.turnOnPowered();
+        }
 
-        // Update board
-        Piece piece = board.getChosenPiece();
-        Player currentPlayer = game.getCurrentPlayer();
-        board.updatePiecePosition(move, piece);
-        board.updateTerritory(move, currentPlayer);
-        boardView.updateTerritory(move, game.getTurnCount());
-
-        //the player moved their piece, change to next players turn
-        game.updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
-        game.nextTurn();
+        game.onMoveButtonClicked(move);
     }
 
     @Override
-    public void nextPlayerTurn() {
+    public void onPowerMoveToggled(boolean isPowered) {
+        game.onPowerMoveToggled(isPowered);
+        boardView.removeMovePreview();
+    }
+
+    @Override
+    public void onTimeRanOutAlertClosed() {
         //the player ran out of time, change to next players turn
         game.nextTurn();
     }
     //endregion
 
-    // region BoardView Event
+    // region MenuView Event
     @Override
     public void onNewGameClicked() {
         game.stopTimer();

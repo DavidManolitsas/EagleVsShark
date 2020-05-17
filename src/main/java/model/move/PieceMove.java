@@ -13,4 +13,5 @@ public abstract class PieceMove {
     public List<Move> getMoveList() {
         return moveList;
     }
+
 }
