@@ -61,7 +61,6 @@ public class GameViewController
     @Override
     public void onSquareClicked(int row, int col) {
         game.onSquareClicked(row, col, gameInfoView.isPowered());
-
     }
     //endregion
 
@@ -86,6 +85,12 @@ public class GameViewController
             return;
         }
 
+        if (game.getNextPlayer().getRemainingPowerMoves() < 1) {
+            gameInfoView.turnOffPowered();
+        } else {
+            gameInfoView.turnOnPowered();
+        }
+
         game.onMoveButtonClicked(move);
     }
 
@@ -93,16 +98,6 @@ public class GameViewController
     public void onPowerMoveToggled(boolean isPowered) {
         game.onPowerMoveToggled(isPowered);
         boardView.removeMovePreview();
-
-        // TODO: Hide the powered button when remainingPowerMoves is 0 so we don't need to check
-//        if (game.getCurrentPlayer().getRemainingPowerMoves() < 1 && gameInfoView.isPowered()) {
-//            boardView.removeMovePreview();
-//            boardView.removeHighlight();
-//            board.setSelectedSquare(null);
-//            gameInfoView.setIsPowered(false);
-//            gameInfoView.showError("You have no more power moves available");
-//            return;
-//        }
     }
 
     @Override

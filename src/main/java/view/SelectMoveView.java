@@ -1,5 +1,7 @@
 package main.java.view;
 
+import java.util.List;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,8 +17,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-
-import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -157,6 +157,12 @@ public class SelectMoveView
         return moveList.getSelectionModel().getSelectedItem();
     }
 
+    public void clearMoveList() {
+        moveList.getItems().clear();
+        this.getChildren().clear();
+        promptChoosePiece();
+    }
+
     public boolean isPowered() {
         return powered.isSelected();
     }
@@ -165,9 +171,12 @@ public class SelectMoveView
         powered.setSelected(isPowered);
     }
 
-    public void clearMoveList() {
-        moveList.getItems().clear();
-        this.getChildren().clear();
-        promptChoosePiece();
+    public void turnOffPowered() {
+        powered.setSelected(false);
+        powered.setDisable(true);
+    }
+
+    public void turnOnPowered() {
+        powered.setDisable(false);
     }
 }
