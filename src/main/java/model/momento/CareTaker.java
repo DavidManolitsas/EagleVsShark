@@ -9,11 +9,11 @@ public class CareTaker {
         mementos = new LinkedList<Memento>();
     }
 
-    public void addMomento(Originator originator) {
+    public void addMemento(Originator originator) {
         mementos.push(originator.create());
     }
 
-    public Memento getMomento() {
+    public Memento getMemento() {
         return mementos.pop();
     }
 
@@ -21,7 +21,7 @@ public class CareTaker {
         return mementos;
     }
 
-    public int getMomentoNumbers() {
+    public int getMementoNumbers() {
         return mementos.size();
     }
 }

@@ -30,8 +30,8 @@ public class Originator {
     }
 
     // record the move perform
-    public void setMoveAndPiece(Move currentMovemove, Piece actionPiece) {
-        this.currentMove = currentMovemove;
+    public void setMoveAndPiece(Move currentMove, Piece actionPiece) {
+        this.currentMove = currentMove;
         this.actionPiece = actionPiece;
     }
 
