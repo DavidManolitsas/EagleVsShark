@@ -1,8 +1,6 @@
 package main.java.model;
 
 
-import java.util.List;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -17,6 +15,8 @@ import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
 import main.java.model.player.SharkPlayer;
 import main.java.util.SceneManager;
+
+import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -69,8 +69,8 @@ public class Game {
         this.turnTime = gameBuilder.timeLimit;
         this.totalSquares = gameBuilder.rows * gameBuilder.cols;
         this.totalTurns = gameBuilder.turnCount;
-        this.sharkSquareCount = gameBuilder.sharkNums;
-        this.eagleSquareCount = gameBuilder.eagleNums;
+        this.sharkSquareCount = 0;
+        this.eagleSquareCount = 0;
         this.turnCount = 0;
 
         board = new BoardImpl(gameBuilder.rows, gameBuilder.cols, gameBuilder.sharkNums, gameBuilder.eagleNums);
