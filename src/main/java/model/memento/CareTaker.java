@@ -1,4 +1,4 @@
-package main.java.model.momento;
+package main.java.model.memento;
 
 import java.util.LinkedList;
 
