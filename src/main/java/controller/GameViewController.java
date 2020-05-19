@@ -46,8 +46,9 @@ public class GameViewController
     }
 
     public void initGameData(GameBuilder gameBuilder) {
-        game = gameBuilder.build();
-        game.setListener(gameInfoView, boardView);
+        game = gameBuilder.setGameEventListener(gameInfoView)
+                          .setBoardEventListener(boardView)
+                          .build();
         game.start();
     }
 

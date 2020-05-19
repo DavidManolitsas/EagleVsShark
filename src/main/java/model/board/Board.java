@@ -1,7 +1,6 @@
 package main.java.model.board;
 
 import main.java.model.Square;
-import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.model.player.Player;
@@ -23,11 +22,7 @@ public interface Board {
 
     Piece getChosenPiece();
 
-    void initBoard();
-
     List<Move> validatePossibleMoves(List<Move> moves);
-
-    void setListener(BoardModelEventListener eventListener);
 
     Square getSquareAt(int row, int col);
 

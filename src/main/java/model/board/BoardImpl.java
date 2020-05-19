@@ -1,11 +1,11 @@
 package main.java.model.board;
 
 import main.java.model.Square;
-import main.java.model.move.CustomPieceMove;
-import main.java.model.move.Move;
 import main.java.model.memento.CareTaker;
 import main.java.model.memento.Memento;
 import main.java.model.memento.Originator;
+import main.java.model.move.CustomPieceMove;
+import main.java.model.move.Move;
 import main.java.model.piece.*;
 import main.java.model.player.EaglePlayer;
 import main.java.model.player.Player;
@@ -25,6 +25,7 @@ public class BoardImpl
         implements Board {
 
     private BoardModelEventListener eventListener;
+
     private int totalRows;
     private int totalCols;
     private int sharkNums;
@@ -38,11 +39,9 @@ public class BoardImpl
     private Originator originator;
     private CareTaker careTaker;
 
-    /**
-     * Requires:
-     * listener != null
-     */
-    public BoardImpl(int rows, int cols, int sharks, int eagles) {
+    public BoardImpl(BoardModelEventListener boardListener, int rows, int cols,
+                     int sharks, int eagles) {
+        this.eventListener = boardListener;
         totalRows = rows;
         totalCols = cols;
         sharkNums = sharks;
@@ -52,17 +51,11 @@ public class BoardImpl
         isSharkUndo = false;
         originator = new Originator();
         careTaker = new CareTaker();
+
+        initBoard();
     }
 
     // region public Board methods
-    @Override
-    public void initBoard() {
-        initSquare();
-        initPieces(sharkNums, eagleNums);
-
-        eventListener.onBoardInitialised(totalRows, totalCols, squares[0], squares[totalRows - 1]);
-    }
-
     @Override
     public int getSharkSquareCount() {
         int count = 0;
@@ -110,6 +103,7 @@ public class BoardImpl
      *
      * @param steps
      * @param player
+     *
      * @return if the undo is valid
      */
     @Override
@@ -153,7 +147,7 @@ public class BoardImpl
         // Record the board info before the changes
         for (int[] paint : move.getPaintShape().getPaintInfo()) {
             paintBeforeChange.put(paint,
-                    getSquareAt(paint[0], paint[1]).getOccupiedPlayer());
+                                  getSquareAt(paint[0], paint[1]).getOccupiedPlayer());
         }
         originator.setMoveAndPiece(move, piece);
         originator.setPaintBeforeMove(paintBeforeChange);
@@ -176,14 +170,15 @@ public class BoardImpl
         }
         return validatedMoves;
     }
-
-    @Override
-    public void setListener(BoardModelEventListener eventListener) {
-        this.eventListener = eventListener;
-    }
     // endregion
 
     // region private methods
+    private void initBoard() {
+        initSquare();
+        initPieces(sharkNums, eagleNums);
+
+        eventListener.onBoardInitialised(totalRows, totalCols, squares[0], squares[totalRows - 1]);
+    }
 
     /**
      * Requires:

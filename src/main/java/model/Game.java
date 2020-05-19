@@ -63,7 +63,7 @@ public class Game {
 
     public Game(GameBuilder gameBuilder) {
         int numOfPowerMoves = (gameBuilder.turnCount / 2) / 4;
-
+        this.listener = gameBuilder.gameListener;
         this.sharkPlayer = new SharkPlayer(gameBuilder.sharkPlayerName, numOfPowerMoves);
         this.eaglePlayer = new EaglePlayer(gameBuilder.eaglePlayerName, numOfPowerMoves);
         this.turnTime = gameBuilder.timeLimit;
@@ -73,21 +73,21 @@ public class Game {
         this.eagleSquareCount = 0;
         this.turnCount = 0;
 
-        board = new BoardImpl(gameBuilder.rows, gameBuilder.cols, gameBuilder.sharkNums, gameBuilder.eagleNums);
-    }
+        board = new BoardImpl(gameBuilder.boardListener,
+                              gameBuilder.rows, gameBuilder.cols,
+                              gameBuilder.sharkNums, gameBuilder.eagleNums);
 
-    public void start() {
-        board.initBoard();
         listener.gameInitialised(sharkPlayer.getPlayerName(), eaglePlayer.getPlayerName(),
                                  turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore(),
                                  sharkPlayer.getRemainingPowerMoves(), eaglePlayer.getRemainingPowerMoves());
+    }
 
+    public void start() {
         nextTurn();
     }
 
     public void onSquareClicked(int row, int col, boolean isPowered) {
         Piece piece = board.getPiece(row, col);
-        Piece prevChosenPiece = board.getChosenPiece();
         if (piece == null) {
             return;
         }
@@ -312,13 +312,10 @@ public class Game {
         return turnCount;
     }
 
-    public void setListener(GameModelEventListener gameListener, BoardModelEventListener boardListener) {
-        this.listener = gameListener;
-        board.setListener(boardListener);
-    }
-
     public static class GameBuilder {
 
+        private GameModelEventListener gameListener;
+        private BoardModelEventListener boardListener;
         private String sharkPlayerName;
         private String eaglePlayerName;
         private int timeLimit = 60;
@@ -370,6 +367,16 @@ public class Game {
 
         public GameBuilder setEagleNums(int eagleNums) {
             this.eagleNums = eagleNums;
+            return this;
+        }
+
+        public GameBuilder setGameEventListener(GameModelEventListener listener) {
+            this.gameListener = listener;
+            return this;
+        }
+
+        public GameBuilder setBoardEventListener(BoardModelEventListener listener) {
+            this.boardListener = listener;
             return this;
         }
 
