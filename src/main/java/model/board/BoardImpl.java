@@ -423,12 +423,12 @@ public class BoardImpl
     }
 
     @Override
-    public void onMoveButtonClicked(Move move, Player currentPlayer, int turnCount) {
+    public void onMoveButtonClicked(Move move, Player currentPlayer) {
         updatePiecePosition(move, chosenPiece);
         updateTerritory(move, currentPlayer);
         chosenPiece = null;
 
-        eventListener.onPieceMoved(move, turnCount);
+        eventListener.onPieceMoved(move, currentPlayer);
     }
 
     @Override
@@ -470,7 +470,7 @@ public class BoardImpl
 
         void onPieceSelected(int row, int col);
 
-        void onPieceMoved(Move move, int turnCount);
+        void onPieceMoved(Move move, Player turnCount);
 
         void onTimeRanOut();
     }

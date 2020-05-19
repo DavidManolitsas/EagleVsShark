@@ -12,6 +12,8 @@ import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.*;
+import main.java.model.player.EaglePlayer;
+import main.java.model.player.Player;
 
 import java.util.*;
 
@@ -113,10 +115,10 @@ public class BoardView
         lastPreviewMove = null;
     }
 
-    public void updateTerritory(Move move, int turnCount) {
+    public void updateTerritory(Move move, Player currentPlayer) {
         String color;
 
-        if (turnCount % 2 == 0) {
+        if (currentPlayer instanceof EaglePlayer) {
             color = COLOUR_EAGLE;
         } else {
             color = COLOUR_SHARK;
@@ -162,14 +164,14 @@ public class BoardView
     }
 
     @Override
-    public void onPieceMoved(Move move, int turnCount) {
+    public void onPieceMoved(Move move, Player currentPlayer) {
         removeMovePreview();
         removeHighlight();
 
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
         updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
-        updateTerritory(move, turnCount);
+        updateTerritory(move, currentPlayer);
     }
 
     @Override

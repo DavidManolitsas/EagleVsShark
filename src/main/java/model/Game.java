@@ -110,7 +110,7 @@ public class Game {
             updateRemainingPowerMoves();
         }
 
-        board.onMoveButtonClicked(move, getCurrentPlayer(), turnCount);
+        board.onMoveButtonClicked(move, getCurrentPlayer());
 
         //the player moved their piece, change to next players turn
         updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
@@ -320,16 +320,6 @@ public class Game {
         public GameBuilder(String sharkPlayerName, String eaglePlayerName) {
             this.sharkPlayerName = sharkPlayerName;
             this.eaglePlayerName = eaglePlayerName;
-        }
-
-        public GameBuilder setSharkPlayerName(String sharkPlayerName) {
-            this.sharkPlayerName = sharkPlayerName;
-            return this;
-        }
-
-        public GameBuilder setEaglePlayerName(String eaglePlayerName) {
-            this.eaglePlayerName = eaglePlayerName;
-            return this;
         }
 
         public GameBuilder setTimeLimit(int timeLimit) {

@@ -28,7 +28,7 @@ public interface Board {
 
     void onPieceSelected(Piece piece, int row, int col);
 
-    void onMoveButtonClicked(Move move, Player currentPlayer, int turnCount);
+    void onMoveButtonClicked(Move move, Player currentPlayer);
 
     int[] getPiecePosition(Piece chosenPiece);
 
