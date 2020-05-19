@@ -86,12 +86,6 @@ public class GameViewController
             return;
         }
 
-        if (game.getNextPlayer().getRemainingPowerMoves() < 1) {
-            gameInfoView.turnOffPowered();
-        } else {
-            gameInfoView.turnOnPowered();
-        }
-
         game.onMoveButtonClicked(move);
     }
 

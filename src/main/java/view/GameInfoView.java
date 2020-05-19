@@ -102,6 +102,7 @@ public class GameInfoView
         if (!titleInfo.getChildren().contains(sharkPowerMoveText)) {
             titleInfo.getChildren().addAll(sharkPowerMoveText, eaglePowerMoveText);
         }
+
     }
 
     //endregion
@@ -163,11 +164,11 @@ public class GameInfoView
         selectMove.setIsPowered(isPowered);
     }
 
-    public void turnOffPowered() {
+    private void turnOffPowered() {
         selectMove.turnOffPowered();
     }
 
-    public void turnOnPowered() {
+    private void turnOnPowered() {
         selectMove.turnOnPowered();
     }
 
@@ -180,10 +181,23 @@ public class GameInfoView
         clearView();
         drawPowerMoves(sharkPowerMoves, eaglePowerMoves);
         drawPlayersTurn(turnCount);
+
+        checkRemainingPowerMoves(turnCount, sharkPowerMoves, eaglePowerMoves);
+
         scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
         selectMove.promptChoosePiece();
     }
 
+    private void checkRemainingPowerMoves(int turnCount, int sharkPowerMoves, int eaglePowerMoves) {
+        boolean hasRemainingPowerMoves = (turnCount % 2 != 0 && sharkPowerMoves == 0) ||
+                (turnCount % 2 == 0 && eaglePowerMoves == 0);
+
+        if (hasRemainingPowerMoves) {
+            turnOffPowered();
+        } else {
+            turnOnPowered();
+        }
+    }
 
     private void clearView() {
         scoreboard.getChildren().clear();

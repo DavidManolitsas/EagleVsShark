@@ -247,14 +247,6 @@ public class Game {
         }
     }
 
-    public Player getNextPlayer() {
-        if (turnCount % 2 == 0) {
-            return sharkPlayer;
-        } else {
-            return eaglePlayer;
-        }
-    }
-
     public void updateRemainingPowerMoves() {
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.setRemainingPowerMoves(currentPlayer.getRemainingPowerMoves() - 1);
