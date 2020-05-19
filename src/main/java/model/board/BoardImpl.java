@@ -1,15 +1,14 @@
 package main.java.model.board;
 
+import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.memento.CareTaker;
 import main.java.model.memento.Memento;
 import main.java.model.memento.Originator;
 import main.java.model.move.CustomPieceMove;
 import main.java.model.move.Move;
-import main.java.model.piece.*;
-import main.java.model.player.EaglePlayer;
-import main.java.model.player.Player;
-import main.java.model.player.SharkPlayer;
+import main.java.model.piece.Piece;
+import main.java.model.piece.PieceType;
 
 import java.util.*;
 
@@ -61,7 +60,7 @@ public class BoardImpl
         int count = 0;
         for (int row = 0; row < squares.length; row++) {
             for (int col = 0; col < squares[row].length; col++) {
-                if (getSquareAt(row, col).getOccupiedPlayer() instanceof SharkPlayer) {
+                if (getSquareAt(row, col).getOccupiedPlayer() == Player.SHARK) {
                     count++;
                 }
             }
@@ -74,7 +73,7 @@ public class BoardImpl
         int count = 0;
         for (int row = 0; row < squares.length; row++) {
             for (int col = 0; col < squares[row].length; col++) {
-                if (getSquareAt(row, col).getOccupiedPlayer() instanceof EaglePlayer) {
+                if (getSquareAt(row, col).getOccupiedPlayer() == Player.EAGLE) {
                     count++;
                 }
             }
@@ -115,9 +114,9 @@ public class BoardImpl
             return false;
         }
 
-        if (player instanceof EaglePlayer && !isEagleUndo) {
+        if (player == Player.EAGLE && !isEagleUndo) {
             isEagleUndo = true;
-        } else if (player instanceof SharkPlayer && !isSharkUndo) {
+        } else if (player == Player.SHARK && !isSharkUndo) {
             isSharkUndo = true;
         } else {
             // Run out of chance, undo button cannot be clicked
@@ -143,7 +142,7 @@ public class BoardImpl
      * @param piece
      */
     public void recordMoveBeforeAction(Move move, Piece piece) {
-        HashMap<int[], Player> paintBeforeChange = new HashMap<int[], Player>();
+        HashMap<int[], Player> paintBeforeChange = new HashMap<>();
         // Record the board info before the changes
         for (int[] paint : move.getPaintShape().getPaintInfo()) {
             paintBeforeChange.put(paint,
@@ -177,7 +176,7 @@ public class BoardImpl
         initSquare();
         initPieces(sharkNums, eagleNums);
 
-        eventListener.onBoardInitialised(totalRows, totalCols, squares[0], squares[totalRows - 1]);
+        eventListener.onBoardInitialised(totalRows, totalCols, pieceSquareMap.keySet());
     }
 
     /**
@@ -243,9 +242,11 @@ public class BoardImpl
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
             if (square.getPiece() != null) {
-                if (player instanceof EaglePlayer && !(square.getPiece() instanceof Eagle)) {
+                if (player == Player.EAGLE &&
+                        !(square.getPiece().isBelongTo(Player.EAGLE))) {
                     attackPiece(square.getPiece(), square);
-                } else if (player instanceof SharkPlayer && !(square.getPiece() instanceof Shark)) {
+                } else if (player == Player.SHARK &&
+                        !(square.getPiece().isBelongTo(Player.SHARK))) {
                     attackPiece(square.getPiece(), square);
                 }
             }
@@ -253,11 +254,12 @@ public class BoardImpl
         }
     }
 
-    private List<int[]> getSharksPositions() {
+    @Override
+    public List<int[]> getSharksPositions() {
         List<int[]> list = new ArrayList<>();
 
         for (Piece piece : pieceSquareMap.keySet()) {
-            if (piece instanceof Shark) {
+            if (piece.isBelongTo(Player.SHARK)) {
                 Square square = pieceSquareMap.get(piece);
                 int row = square.getRow();
                 int col = square.getCol();
@@ -360,36 +362,36 @@ public class BoardImpl
             harpyEagles = eagles / typesOfPieces + 1;
         }
 
-        ArrayList<Piece> pieces = new ArrayList<Piece>();
+        ArrayList<Piece> pieces = new ArrayList<>();
         // Initialise Sharks
         for (int i = 0; i < goblinSharks; i++) {
-            pieces.add(new GoblinShark(bottomRow, sharkSplit - 1));
+            pieces.add(PieceType.GOBLIN_SHARK.createPiece(bottomRow, sharkSplit - 1));
             sharkSplit += sharkPosCount;
         }
 
         for (int i = 0; i < hammerHeads; i++) {
-            pieces.add(new Hammerhead(bottomRow, sharkSplit - 1));
+            pieces.add(PieceType.HAMMERHEAD.createPiece(bottomRow, sharkSplit - 1));
             sharkSplit += sharkPosCount;
         }
 
         for (int i = 0; i < sawSharks; i++) {
-            pieces.add(new SawShark(bottomRow, sharkSplit - 1));
+            pieces.add(PieceType.SAW_SHARK.createPiece(bottomRow, sharkSplit - 1));
             sharkSplit += sharkPosCount;
         }
 
         // Initialise Eagles
         for (int i = 0; i < baldEagles; i++) {
-            pieces.add(new BaldEagle(topRow, eagleSplit - 1));
+            pieces.add(PieceType.BALD_EAGLE.createPiece(topRow, eagleSplit - 1));
             eagleSplit += eaglePosCount;
         }
 
         for (int i = 0; i < goldenEagles; i++) {
-            pieces.add(new GoldenEagle(topRow, eagleSplit - 1));
+            pieces.add(PieceType.GOLDEN_EAGLE.createPiece(topRow, eagleSplit - 1));
             eagleSplit += eaglePosCount;
         }
 
         for (int i = 0; i < harpyEagles; i++) {
-            pieces.add(new HarpyEagle(topRow, eagleSplit - 1));
+            pieces.add(PieceType.HARPY_EAGLE.createPiece(topRow, eagleSplit - 1));
             eagleSplit += eaglePosCount;
         }
 
@@ -413,12 +415,6 @@ public class BoardImpl
     @Override
     public void onPieceSelected(Piece piece, int row, int col) {
         chosenPiece = piece;
-
-        if (piece instanceof GoldenEagle) {
-            List<int[]> sharksPositions = getSharksPositions();
-            ((GoldenEagle) piece).setSharkList(sharksPositions);
-        }
-
         eventListener.onPieceSelected(row, col);
     }
 
@@ -464,7 +460,7 @@ public class BoardImpl
 
     // region Board Model Event Listener interface
     public interface BoardModelEventListener {
-        void onBoardInitialised(int rows, int cols, Square[] topRow, Square[] bottomRow);
+        void onBoardInitialised(int totalRows, int totalCols, Set<Piece> keySet);
 
         void updatePiecePosition(int attackedRow, int attackedCol, int resetRow, int resetCol);
 

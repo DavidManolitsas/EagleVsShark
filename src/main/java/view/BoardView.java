@@ -7,13 +7,10 @@ import javafx.scene.control.Control;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import main.java.ResPath;
-import main.java.model.Square;
+import main.java.model.Player;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
-import main.java.model.piece.*;
-import main.java.model.player.EaglePlayer;
-import main.java.model.player.Player;
+import main.java.model.piece.Piece;
 
 import java.util.*;
 
@@ -118,7 +115,7 @@ public class BoardView
     public void updateTerritory(Move move, Player currentPlayer) {
         String color;
 
-        if (currentPlayer instanceof EaglePlayer) {
+        if (currentPlayer == Player.EAGLE) {
             color = COLOUR_EAGLE;
         } else {
             color = COLOUR_SHARK;
@@ -135,7 +132,7 @@ public class BoardView
 
     //region BoardModelEvent methods
     @Override
-    public void onBoardInitialised(int rows, int cols, Square[] topRow, Square[] bottomRow) {
+    public void onBoardInitialised(int rows, int cols, Set<Piece> pieces) {
         totalRows = rows;
         totalCols = cols;
 
@@ -143,11 +140,10 @@ public class BoardView
         lastPreviewMove = null;
 
         drawBoard();
-        drawPieces(topRow, bottomRow);
+        drawPieces(pieces);
     }
 
     @Override
-//    public void onPieceAttacked(int attackedRow, int attackedCol, int resetRow, int resetCol){
     public void updatePiecePosition(int originalRow, int originalCol, int destinationRow, int destinationCol) {
         StackPane start = getSquareAt(originalRow, originalCol);
         Node piece = start.getChildren().filtered(child -> child.getId().equals(VIEW_ID_PIECE)).get(0);
@@ -210,37 +206,9 @@ public class BoardView
         }
     }
 
-    private void drawPieces(Square[] topRow, Square[] bottomRow) {
-        String baldEagleImgPath = ResPath.PIECE_BALD_EAGLE;
-        String goldenEagleImgPath = ResPath.PIECE_GOLDEN_EAGLE;
-        String harpyEagleImgPath = ResPath.PIECE_HARPY_EAGLE;
-        String goblinSharkImgPath = ResPath.PIECE_GOBLIN_SHARK;
-        String hammerheadImgPath = ResPath.PIECE_HAMMERHEAD;
-        String sawSharkImgPath = ResPath.PIECE_SAW_SHARK;
-
-
-        for (Square square : topRow) {
-            Piece piece = square.getPiece();
-
-            if (piece instanceof BaldEagle) {
-                addPiece(square.getRow(), square.getCol(), baldEagleImgPath);
-            } else if (piece instanceof HarpyEagle) {
-                addPiece(square.getRow(), square.getCol(), harpyEagleImgPath);
-            } else if (piece instanceof GoldenEagle) {
-                addPiece(square.getRow(), square.getCol(), goldenEagleImgPath);
-            }
-        }
-
-        for (Square square : bottomRow) {
-            Piece piece = square.getPiece();
-
-            if (piece instanceof Hammerhead) {
-                addPiece(square.getRow(), square.getCol(), hammerheadImgPath);
-            } else if (piece instanceof GoblinShark) {
-                addPiece(square.getRow(), square.getCol(), goblinSharkImgPath);
-            } else if (piece instanceof SawShark) {
-                addPiece(square.getRow(), square.getCol(), sawSharkImgPath);
-            }
+    private void drawPieces(Set<Piece> pieces) {
+        for (Piece piece : pieces) {
+            addPiece(piece.getStartPos()[0], piece.getStartPos()[1], piece.getImgPath());
         }
     }
 

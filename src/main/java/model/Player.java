@@ -1,16 +1,23 @@
-package main.java.model.player;
+package main.java.model;
 
-public abstract class Player {
+public enum Player {
+    EAGLE("Eagle", 0),
+    SHARK("Shark", 0);
+
     private String name;
     private int remainingPowerMoves;
 
-    public Player(String name, int remainingPowerMoves) {
+    Player(String name, int remainingPowerMoves) {
         this.name = name;
         this.remainingPowerMoves = remainingPowerMoves;
     }
 
-    public String getPlayerName(){
+    public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getRemainingPowerMoves() {

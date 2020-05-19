@@ -1,10 +1,10 @@
 package main.java.model.move;
 
+import main.java.model.Player;
 import main.java.model.piece.Piece;
-import main.java.model.player.Player;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class StoreMove {
     private Move move;

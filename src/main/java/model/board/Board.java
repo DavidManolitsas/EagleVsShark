@@ -1,9 +1,9 @@
 package main.java.model.board;
 
+import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-import main.java.model.player.Player;
 
 import java.util.List;
 
@@ -33,4 +33,6 @@ public interface Board {
     int[] getPiecePosition(Piece chosenPiece);
 
     void timeRantOut();
+
+    List<int[]> getSharksPositions();
 }

@@ -1,7 +1,6 @@
 package main.java.model;
 
 import main.java.model.piece.Piece;
-import main.java.model.player.Player;
 
 /**
  * Invariant:

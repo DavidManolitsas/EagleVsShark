@@ -1,22 +1,22 @@
 package main.java.model.move;
 
+import main.java.model.board.Board;
 import main.java.model.move.movements.MoveDown;
 import main.java.model.move.movements.MoveLeft;
 import main.java.model.move.movements.MoveRight;
 import main.java.model.move.movements.Movements;
 import main.java.model.move.shape.SquareShape;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BaldEagleMove
         extends PieceMove {
 
-    private int squaresMoved = 1;
-
-    /*
-     * Precondition: none
-     *              Starting point of the piece
-     * Postcondition: a list of move
-     */
-    public BaldEagleMove(int startRow, int startCol, boolean isPowered) {
+    @Override
+    public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {
+        int squaresMoved = 1;
+        List<Move> moveList = new ArrayList<>();
         if (isPowered) {
             squaresMoved = squaresMoved * 3;
         }
@@ -36,5 +36,6 @@ public class BaldEagleMove
         for (Movements movement : movements) {
             moveList.add(new Move(movement, new SquareShape(movement.getDestination(), false)));
         }
+        return moveList;
     }
 }

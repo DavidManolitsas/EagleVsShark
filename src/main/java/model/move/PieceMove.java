@@ -1,17 +1,12 @@
 package main.java.model.move;
 
-import java.util.ArrayList;
+import main.java.model.board.Board;
+
 import java.util.List;
 
 public abstract class PieceMove {
-    protected List<Move> moveList;
 
-    public PieceMove() {
-        moveList = new ArrayList<>();
-    }
-
-    public List<Move> getMoveList() {
-        return moveList;
-    }
+    public abstract List<Move> generateMoves(int startRow, int startCol, boolean isPowered,
+                                             Board board);
 
 }

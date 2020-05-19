@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import main.java.model.Game.GameModelEventListener;
+import main.java.model.Player;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
@@ -176,18 +177,6 @@ public class GameInfoView
         selectMove.showChosenPiece(piece);
     }
 
-    private void updateGameInfo(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
-                                int eaglePowerMoves) {
-        clearView();
-        drawPowerMoves(sharkPowerMoves, eaglePowerMoves);
-        drawPlayersTurn(turnCount);
-
-        checkRemainingPowerMoves(turnCount, sharkPowerMoves, eaglePowerMoves);
-
-        scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
-        selectMove.promptChoosePiece();
-    }
-
     private void checkRemainingPowerMoves(int turnCount, int sharkPowerMoves, int eaglePowerMoves) {
         boolean hasRemainingPowerMoves = (turnCount % 2 != 0 && sharkPowerMoves == 0) ||
                 (turnCount % 2 == 0 && eaglePowerMoves == 0);
@@ -228,22 +217,28 @@ public class GameInfoView
 
     //region Game Event
     @Override
-    public void gameInitialised(String sharkPlayerName, String eaglePlayerName,
-                                int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore,
-                                int sharkPowerMoves, int eaglePowerMoves) {
+    public void gameInitialised(int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore) {
 
         //initialise game information
-        initTitleInfo(sharkPlayerName, eaglePlayerName);
-        drawPowerMoves(sharkPowerMoves, eaglePowerMoves);
+        initTitleInfo(Player.SHARK.getName(), Player.EAGLE.getName());
+        drawPowerMoves(Player.SHARK.getRemainingPowerMoves(), Player.EAGLE.getRemainingPowerMoves());
         initWhoseTurn(turnCount);
         initScoreboard(turnCount, totalTurns, sharkScore, eagleScore);
         initSelectMoveView();
     }
 
     @Override
-    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore, int sharkPowerMoves,
-                                int eaglePowerMoves) {
-        updateGameInfo(turnCount, sharkScore, eagleScore, sharkPowerMoves, eaglePowerMoves);
+    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
+        clearView();
+        drawPowerMoves(Player.SHARK.getRemainingPowerMoves(), Player.EAGLE.getRemainingPowerMoves());
+        drawPlayersTurn(turnCount);
+
+        checkRemainingPowerMoves(turnCount,
+                                 Player.SHARK.getRemainingPowerMoves(),
+                                 Player.EAGLE.getRemainingPowerMoves());
+
+        scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
+        selectMove.promptChoosePiece();
     }
 
     @Override

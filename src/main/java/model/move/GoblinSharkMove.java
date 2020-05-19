@@ -1,7 +1,11 @@
 package main.java.model.move;
 
+import main.java.model.board.Board;
 import main.java.model.move.movements.*;
 import main.java.model.move.shape.SquareShape;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Precondition: none
@@ -11,9 +15,10 @@ import main.java.model.move.shape.SquareShape;
 public class GoblinSharkMove
         extends PieceMove {
 
-    private int squaresMoved = 1;
-
-    public GoblinSharkMove(int startRow, int startCol, boolean isPowered) {
+    @Override
+    public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {
+        int squaresMoved = 1;
+        List<Move> moveList = new ArrayList<>();
         if (isPowered) {
             squaresMoved = squaresMoved * 2;
         }
@@ -28,5 +33,6 @@ public class GoblinSharkMove
         for (Movements movement : movements) {
             moveList.add(new Move(movement, new SquareShape(movement.getDestination(), isPowered)));
         }
+        return moveList;
     }
 }
