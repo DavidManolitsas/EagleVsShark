@@ -19,4 +19,6 @@ public class ResPath {
     public static final String PIECE_SAW_SHARK = "main/res/image/SawShark.png";
     public static final String START_MENU_BACKGROUND = "main/res/image/StartMenuBackground.png";
     public static final String ROCKS = "main/res/image/rocks.png";
+    public static final String TREE = "main/res/image/tree.png";
+    public static final String FOREST = "main/res/image/forest.png";
 }
