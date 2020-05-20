@@ -1,28 +1,35 @@
 package main.java.model.piece;
 
+import main.java.model.Player;
+import main.java.model.board.Board;
 import main.java.model.move.Move;
 
 import java.util.List;
 
 
-public abstract class Piece {
+public class Piece {
 
     // Initial position of piece
     private int[] startPos;
 
-    public Piece(int startRow, int startCol) {
+    private PieceType pieceType;
+
+    public Piece(PieceType pieceType, int startRow, int startCol) {
+        this.pieceType = pieceType;
         startPos = new int[] {startRow, startCol};
     }
 
-    /**
-     * Requires:
-     * 1. startRow >= 0 && < BOARD.ROW (15)
-     * 2. startCol >= 0 && < BOARD.COLUMN (10)
-     * <p>
-     * Ensures:
-     * 1. moveList !null
-     */
-    public abstract List<Move> getAllMoves(int startRow, int startCol, boolean isPowered);
+    public List<Move> availableMoves(int startRow, int startCol, boolean isPowered, Board board) {
+        return pieceType.availableMoves(startRow, startCol, isPowered, board);
+    }
+
+    public boolean isBelongTo(Player player) {
+        return pieceType.isBelongTo(player);
+    }
+
+    public String getImgPath() {
+        return pieceType.getImgPath();
+    }
 
     /**
      * @return Initial position of the piece

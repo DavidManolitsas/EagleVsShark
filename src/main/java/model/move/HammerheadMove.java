@@ -1,10 +1,14 @@
 package main.java.model.move;
 
+import main.java.model.board.Board;
 import main.java.model.move.movements.MoveDiagonalLeft;
 import main.java.model.move.movements.MoveDiagonalRight;
 import main.java.model.move.movements.MoveUp;
 import main.java.model.move.movements.Movements;
 import main.java.model.move.shape.TShape;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Precondition: none
@@ -14,11 +18,13 @@ import main.java.model.move.shape.TShape;
 public class HammerheadMove
         extends PieceMove {
 
-    private int squaresMoved = 1;
-    private int length = 3;
-    private int width = 1;
+    @Override
+    public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {
+        int squaresMoved = 1;
+        int length = 3;
+        int width = 1;
 
-    public HammerheadMove(int startRow, int startCol, boolean isPowered) {
+        List<Move> moveList = new ArrayList<>();
         if (isPowered) {
             squaresMoved = squaresMoved * 3;
             squaresMoved += 1;
@@ -34,6 +40,7 @@ public class HammerheadMove
         for (Movements movement : movements) {
             moveList.add(new Move(movement, new TShape(movement.getDestination(), length, width)));
         }
+        return moveList;
     }
 
 }

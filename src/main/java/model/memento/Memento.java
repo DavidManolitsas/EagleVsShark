@@ -1,12 +1,10 @@
 package main.java.model.memento;
 
+import main.java.model.Player;
 import main.java.model.move.CustomPieceMove;
 import main.java.model.move.Move;
 import main.java.model.move.shape.CustomShape;
 import main.java.model.piece.Piece;
-import main.java.model.player.EaglePlayer;
-import main.java.model.player.Player;
-import main.java.model.player.SharkPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,9 +50,9 @@ public class Memento {
         for (int[] key : paintBeforeChange.keySet()) {
             if (paintBeforeChange.get(key) == null) {
                 emptyPaint.add(key);
-            } else if (paintBeforeChange.get(key).getClass() == EaglePlayer.class) {
+            } else if (paintBeforeChange.get(key) == Player.EAGLE) {
                 eaglePaint.add(key);
-            } else if (paintBeforeChange.get(key).getClass() == SharkPlayer.class) {
+            } else if (paintBeforeChange.get(key) == Player.SHARK) {
                 sharkPaint.add(key);
             }
         }

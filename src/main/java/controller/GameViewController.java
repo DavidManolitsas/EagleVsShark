@@ -46,8 +46,9 @@ public class GameViewController
     }
 
     public void initGameData(GameBuilder gameBuilder) {
-        game = gameBuilder.build();
-        game.setListener(gameInfoView, boardView);
+        game = gameBuilder.setGameEventListener(gameInfoView)
+                          .setBoardEventListener(boardView)
+                          .build();
         game.start();
     }
 
@@ -83,12 +84,6 @@ public class GameViewController
         if (move == null) {
             gameInfoView.showError("No move was selected");
             return;
-        }
-
-        if (game.getNextPlayer().getRemainingPowerMoves() < 1) {
-            gameInfoView.turnOffPowered();
-        } else {
-            gameInfoView.turnOnPowered();
         }
 
         game.onMoveButtonClicked(move);

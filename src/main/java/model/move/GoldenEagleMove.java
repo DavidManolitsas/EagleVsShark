@@ -1,8 +1,10 @@
 package main.java.model.move;
 
+import main.java.model.board.Board;
 import main.java.model.move.movements.MoveBehindPiece;
 import main.java.model.move.shape.CrossShape;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -13,13 +15,17 @@ import java.util.List;
 public class GoldenEagleMove
         extends PieceMove {
 
-    public GoldenEagleMove(int startRow, int startCol, List<int[]> piecePositionList, boolean isPowered) {
+    @Override
+    public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {
+        List<Move> moveList = new ArrayList<>();
+
         MoveBehindPiece move;
 
-        for (int[] positions : piecePositionList) {
+        for (int[] positions : board.getSharksPositions()) {
             move = new MoveBehindPiece(startRow, startCol, positions[0], positions[1]);
             moveList.add(new Move(move, new CrossShape(move.getDestination(), isPowered)));
         }
 
+        return moveList;
     }
 }

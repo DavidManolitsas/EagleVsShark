@@ -1,8 +1,8 @@
 package main.java.model.memento;
 
+import main.java.model.Player;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-import main.java.model.player.Player;
 
 import java.util.HashMap;
 import java.util.LinkedList;

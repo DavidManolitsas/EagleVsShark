@@ -1,10 +1,9 @@
 package main.java.model.board;
 
+import main.java.model.Player;
 import main.java.model.Square;
-import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-import main.java.model.player.Player;
 
 import java.util.List;
 
@@ -23,19 +22,17 @@ public interface Board {
 
     Piece getChosenPiece();
 
-    void initBoard();
-
     List<Move> validatePossibleMoves(List<Move> moves);
-
-    void setListener(BoardModelEventListener eventListener);
 
     Square getSquareAt(int row, int col);
 
     void onPieceSelected(Piece piece, int row, int col);
 
-    void onMoveButtonClicked(Move move, Player currentPlayer, int turnCount);
+    void onMoveButtonClicked(Move move, Player currentPlayer);
 
     int[] getPiecePosition(Piece chosenPiece);
 
     void timeRantOut();
+
+    List<int[]> getSharksPositions();
 }

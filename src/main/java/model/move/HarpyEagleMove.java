@@ -1,10 +1,14 @@
 package main.java.model.move;
 
+import main.java.model.board.Board;
 import main.java.model.move.movements.MoveDown;
 import main.java.model.move.movements.MoveLeft;
 import main.java.model.move.movements.MoveRight;
 import main.java.model.move.movements.MoveUp;
 import main.java.model.move.shape.VShape;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Precondition: none
@@ -14,9 +18,10 @@ import main.java.model.move.shape.VShape;
 public class HarpyEagleMove
         extends PieceMove {
 
-    private int squaresMoved = 3;
-
-    public HarpyEagleMove(int startRow, int startCol, boolean isPowered) {
+    @Override
+    public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {
+        int squaresMoved = 3;
+        List<Move> moveList = new ArrayList<>();
         if (isPowered) {
             squaresMoved = 1;
         }
@@ -34,6 +39,7 @@ public class HarpyEagleMove
                               new VShape(up.getDestination(), VShape.DIRECTION_UP, isPowered)));
         moveList.add(new Move(down,
                               new VShape(down.getDestination(), VShape.DIRECTION_DOWN, isPowered)));
-    }
 
+        return moveList;
+    }
 }

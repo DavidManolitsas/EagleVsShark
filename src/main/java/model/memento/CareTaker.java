@@ -9,8 +9,8 @@ public class CareTaker {
         mementos = new LinkedList<Memento>();
     }
 
-    public void addMemento(Originator originator) {
-        mementos.push(originator.create());
+    public void addMemento(Memento memento) {
+        mementos.push(memento);
     }
 
     public Memento getMemento() {
