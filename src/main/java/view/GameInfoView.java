@@ -38,6 +38,8 @@ public class GameInfoView
         void onPowerMoveToggled(boolean isPowered);
 
         void onTimeRanOutAlertClosed();
+
+        void onUndoButtonClicked(int undoMoves);
     }
 
     private GameInfoViewEventListener gameInfoViewEventListener;
@@ -116,7 +118,7 @@ public class GameInfoView
         undoBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
 
         undoBt.setOnAction(event -> {
-            Stage undoStage = new UndoStage();
+            Stage undoStage = new UndoStage(getGameInfoViewEventListener());
             undoStage.show();
         });
 

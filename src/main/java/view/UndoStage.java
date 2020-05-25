@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.java.view.GameInfoView.GameInfoViewEventListener;
 
 /**
  * @author David Manolitsas
@@ -24,8 +25,11 @@ public class UndoStage
     private final static String STAGE_NAME = "Undo Move";
     private static final Font BODY = Font.font("Helvetica", 14);
     private BorderPane root = new BorderPane();
+    private GameInfoViewEventListener listener;
 
-    public UndoStage() {
+
+    public UndoStage(GameInfoViewEventListener listener) {
+        this.listener = listener;
         initStage();
         drawStage();
     }
@@ -54,13 +58,17 @@ public class UndoStage
         undoSlider.setBlockIncrement(1);
         undoSlider.setOnMouseReleased(event -> {
             undoSlider.setValue(Math.round(undoSlider.getValue()));
-            System.out.println(undoSlider.getValue());
         });
 
         Button undoBt = new Button("Undo Moves");
         undoBt.setWrapText(true);
         undoBt.setFont(BODY);
         undoBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+
+        undoBt.setOnAction(event -> {
+            listener.onUndoButtonClicked((int) undoSlider.getValue());
+            this.close();
+        });
 
         undoRoot.getChildren().addAll(selectUndoText, undoSlider, undoBt);
         root.setCenter(undoRoot);

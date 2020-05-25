@@ -100,6 +100,12 @@ public class GameViewController
         //the player ran out of time, change to next players turn
         game.nextTurn();
     }
+
+    @Override
+    public void onUndoButtonClicked(int undoMoves) {
+        //TODO: implement me
+        System.out.println("Undo " + undoMoves + " moves");
+    }
     //endregion
 
     // region MenuView Event
