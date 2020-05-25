@@ -1,9 +1,13 @@
 package main.java.view;
 
+import java.util.List;
+import java.util.Objects;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
@@ -11,13 +15,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.Player;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author David Manolitsas
@@ -80,6 +82,7 @@ public class GameInfoView
         sharkPowerMoveText.setFont(BODY);
         eaglePowerMoveText = new Text();
         eaglePowerMoveText.setFont(BODY);
+        drawUndoMoveButton();
         root.getChildren().add(titleInfo);
     }
 
@@ -106,6 +109,19 @@ public class GameInfoView
 
     }
 
+    public void drawUndoMoveButton() {
+        Button undoBt = new Button("Undo Move");
+        undoBt.setWrapText(true);
+        undoBt.setFont(BODY);
+        undoBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+
+        undoBt.setOnAction(event -> {
+            Stage undoStage = new UndoStage();
+            undoStage.show();
+        });
+
+        titleInfo.getChildren().add(undoBt);
+    }
     //endregion
 
     //region whose turn and timer
