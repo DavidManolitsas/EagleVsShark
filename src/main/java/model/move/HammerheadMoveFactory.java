@@ -15,8 +15,8 @@ import java.util.List;
  *              Starting point of the piece
  * Postcondition: a list of move
  */
-public class HammerheadMove
-        extends PieceMove {
+public class HammerheadMoveFactory
+        implements MoveFactory {
 
     @Override
     public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {

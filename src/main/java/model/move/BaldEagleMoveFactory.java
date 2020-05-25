@@ -10,8 +10,8 @@ import main.java.model.move.shape.SquareShape;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaldEagleMove
-        extends PieceMove {
+public class BaldEagleMoveFactory
+        implements MoveFactory {
 
     @Override
     public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {
