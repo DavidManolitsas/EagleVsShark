@@ -1,8 +1,6 @@
 package main.java.model;
 
 
-import java.util.List;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -13,6 +11,8 @@ import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.util.SceneManager;
 import main.java.util.SimpleAI;
+
+import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -52,7 +52,7 @@ public class Game {
     private Timeline timer;
     private int timeRemaining;
 
-    private boolean isAiMode = false;
+    private boolean isAiMode;
 
     public Game(GameBuilder gameBuilder) {
         initPlayers(gameBuilder);
@@ -61,7 +61,7 @@ public class Game {
         this.turnTime = gameBuilder.timeLimit;
         this.totalSquares = gameBuilder.rows * gameBuilder.cols;
         this.totalTurns = gameBuilder.turnCount;
-        this.isAiMode = true;
+        this.isAiMode = gameBuilder.isAiMode;
         this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
         this.turnCount = 0;
@@ -317,6 +317,7 @@ public class Game {
         private int cols = 10;
         private int sharkNums = 3;
         private int eagleNums = 3;
+        private boolean isAiMode = false;
 
         public GameBuilder(String sharkPlayerName, String eaglePlayerName) {
             this.sharkPlayerName = sharkPlayerName;
@@ -360,6 +361,11 @@ public class Game {
 
         public GameBuilder setBoardEventListener(BoardModelEventListener listener) {
             this.boardListener = listener;
+            return this;
+        }
+
+        public GameBuilder setAiMode(boolean aiMode) {
+            isAiMode = aiMode;
             return this;
         }
 

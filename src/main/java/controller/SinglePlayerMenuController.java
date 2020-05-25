@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
+import main.java.util.SceneManager;
 import main.java.view.startGame.SinglePlayerMenu;
 import main.java.view.startGame.SinglePlayerMenu.SinglePlayerMenuListener;
 
@@ -25,8 +26,7 @@ public class SinglePlayerMenuController
         if (playerName.trim().isEmpty()) {
             singlePlayerMenu.showError("Please enter a name");
         } else {
-            //TODO: Implement me
-            System.out.println("Single Player Game Started! as " + playerName);
+            SceneManager.getInstance().showGameView(playerName, "Computer", true);
         }
     }
 
