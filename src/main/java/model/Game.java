@@ -1,6 +1,8 @@
 package main.java.model;
 
 
+import java.util.List;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -11,8 +13,6 @@ import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.util.SceneManager;
 import main.java.util.SimpleAI;
-
-import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -75,11 +75,15 @@ public class Game {
 
     private void initPlayers(GameBuilder gameBuilder) {
         int numOfPowerMoves = (gameBuilder.turnCount / 2) / 4;
+        int numOfUndoMoves = 1;
+
         Player.SHARK.setName(gameBuilder.sharkPlayerName);
         Player.SHARK.setRemainingPowerMoves(numOfPowerMoves);
+        Player.SHARK.setUndoMoves(numOfUndoMoves);
 
         Player.EAGLE.setName(gameBuilder.eaglePlayerName);
         Player.EAGLE.setRemainingPowerMoves(numOfPowerMoves);
+        Player.EAGLE.setUndoMoves(numOfUndoMoves);
     }
 
     public void start() {

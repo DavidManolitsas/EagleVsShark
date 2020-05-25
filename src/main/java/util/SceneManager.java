@@ -1,5 +1,7 @@
 package main.java.util;
 
+import java.io.IOException;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -8,8 +10,6 @@ import main.java.ResPath;
 import main.java.controller.GameViewController;
 import main.java.model.Game.GameBuilder;
 import main.java.view.EndGameView;
-
-import java.io.IOException;
 
 /**
  * @author David Manolitsas
@@ -68,6 +68,16 @@ public class SceneManager {
         }
     }
 
+    public void showSinglePlayerMenu() {
+        FXMLLoader singlePlayerMenu =
+                new FXMLLoader(getClass().getClassLoader().getResource(ResPath.SINGLE_PLAYER_MENU));
+        try {
+            root.setCenter(singlePlayerMenu.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void showGameView(String sharkPlayerName, String eaglePlayerName) {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
@@ -101,6 +111,7 @@ public class SceneManager {
             e.printStackTrace();
         }
     }
+
 
     public void showEndGame(String winner, double sharkScore, double eagleScore) {
         Stage endGameStage = new EndGameView(winner, sharkScore, eagleScore);

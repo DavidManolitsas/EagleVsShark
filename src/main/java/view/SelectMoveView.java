@@ -45,8 +45,8 @@ public class SelectMoveView
 
     private void initMoveList() {
         moveList = new ListView<>();
-        moveList.setPrefHeight(220);
-        moveList.setFixedCellSize(35);
+        moveList.setPrefHeight(185);
+        moveList.setFixedCellSize(25);
     }
 
 

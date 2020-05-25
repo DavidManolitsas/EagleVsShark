@@ -1,0 +1,5 @@
+<?import main.java.view.startGame.SinglePlayerMenu?>
+<SinglePlayerMenu fx:controller="main.java.controller.SinglePlayerMenuController"
+    fx:id="singlePlayerMenu"
+    xmlns:fx="http://javafx.com/fxml">
+</SinglePlayerMenu>

@@ -26,11 +26,18 @@ public class StartGameMenu
         void onStartBtClick(String sharkPlayerName, String eaglePlayerName);
 
         void onCreateCustomGameBtClick();
+
+        void onSinglePlayerClicked();
     }
 
     private StartGameMenuListener startMenuListener;
+    private VBox menuList;
 
     public StartGameMenu() {
+        menuList = new VBox();
+        menuList.setSpacing(20);
+        menuList.setPadding(new Insets(60, 270, 180, 270));
+        menuList.setAlignment(Pos.CENTER);
         setCenter(drawMenu());
     }
 
@@ -77,6 +84,18 @@ public class StartGameMenu
             getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName);
         });
 
+        //Menu
+        menuList.getChildren()
+                .addAll(playerNamesText, sharkPlayerNameField, eaglePlayerNameField, startBt);
+
+        drawCustomGameStartButton();
+        drawSinglePlayerButton();
+
+        getRoot().setCenter(menuList);
+
+    }
+
+    private void drawCustomGameStartButton() {
         //Custom Game Start Button
         Button customStartBt = new Button("Create Custom Game");
         customStartBt.setFont(BODY);
@@ -88,18 +107,24 @@ public class StartGameMenu
             getStartMenuListener().onCreateCustomGameBtClick();
         });
 
-
-        //Menu
-        VBox menuList = new VBox();
-        menuList.setSpacing(20);
-        menuList.setPadding(new Insets(60, 270, 180, 270));
-        menuList.getChildren()
-                .addAll(playerNamesText, sharkPlayerNameField, eaglePlayerNameField, startBt,
-                        customStartBt);
-
-        getRoot().setCenter(menuList);
-        menuList.setAlignment(Pos.CENTER);
+        menuList.getChildren().add(customStartBt);
     }
+
+    private void drawSinglePlayerButton() {
+        Button singlePlayerBt = new Button("Single Player");
+        singlePlayerBt.setFont(BODY);
+        singlePlayerBt.setCursor(Cursor.HAND);
+        singlePlayerBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        singlePlayerBt.setPrefWidth(180);
+
+        singlePlayerBt.setOnAction(event -> {
+            getStartMenuListener().onSinglePlayerClicked();
+        });
+
+        menuList.getChildren().add(singlePlayerBt);
+    }
+
+
 
 
     public StartGameMenuListener getStartMenuListener() {
