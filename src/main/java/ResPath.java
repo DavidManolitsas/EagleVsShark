@@ -9,6 +9,7 @@ public class ResPath {
     public static final String VIEW_GAME = "main/res/layout/view_game.fxml";
     public static final String START_MENU = "main/res/layout/start_menu.fxml";
     public static final String CUSTOM_GAME_MENU = "main/res/layout/custom_game_menu.fxml";
+    public static final String SINGLE_PLAYER_MENU = "main/res/layout/single_player_menu.fxml";
 
     // Image
     public static final String PIECE_BALD_EAGLE = "main/res/image/BaldEagle.png";

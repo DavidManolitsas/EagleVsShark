@@ -53,4 +53,10 @@ public class StartMenuController
     public void onCreateCustomGameBtClick() {
         SceneManager.getInstance().showCustomGameMenu();
     }
+
+
+    @Override
+    public void onSinglePlayerClicked() {
+        SceneManager.getInstance().showSinglePlayerMenu();
+    }
 }
