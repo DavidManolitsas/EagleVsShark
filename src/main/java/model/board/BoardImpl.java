@@ -322,85 +322,45 @@ public class BoardImpl
     private void initPieces(int sharks, int eagles) {
         pieceSquareMap = new HashMap<>();
 
-        int typesOfPieces = 3;
-        int topRow = 0;
-        int bottomRow = totalRows - 1;
+        addPlayerPieces(eagles, 0, Player.EAGLE);
+        addPlayerPieces(sharks, totalRows - 1, Player.SHARK);
+    }
+
+    private void addPlayerPieces(int totalPieces, int row, Player player) {
         // Gaps between each piece
-        int sharkSplit = totalCols / sharks;
-        int sharkPosCount = sharkSplit;
-        int eagleSplit = totalCols / eagles;
-        int eaglePosCount = eagleSplit;
+        int split = totalCols / totalPieces;
+        int typesOfPieces = 3;
+        int[] numOfEachTypePiece = calculateNumOfPieces(totalPieces, typesOfPieces);
 
-        // Get each number of sharks
-        int goblinSharks, sawSharks, hammerHeads, goldenEagles, baldEagles, harpyEagles;
-        if (sharks % typesOfPieces == 0) {
-            goblinSharks = sharks / typesOfPieces;
-            sawSharks = sharks / typesOfPieces;
-            hammerHeads = sharks / typesOfPieces;
-        } else if (sharks % typesOfPieces == 1) {
-            goblinSharks = sharks / typesOfPieces;
-            sawSharks = sharks / typesOfPieces;
-            hammerHeads = sharks / typesOfPieces + 1;
-        } else {
-            goblinSharks = sharks / typesOfPieces;
-            sawSharks = sharks / typesOfPieces + 1;
-            hammerHeads = sharks / typesOfPieces + 1;
+        int index = 0;
+        int col = totalCols / totalPieces;
+        for (PieceType pieceType : PieceType.values()) {
+            if (pieceType.isBelongTo(player)) {
+                for (int i = 0; i < numOfEachTypePiece[index % typesOfPieces]; i++) {
+                    Piece piece = pieceType.createPiece(row, col - 1);
+                    col += split;
+                    addPieceIntoSquare(piece);
+                }
+            }
+            index++;
         }
+    }
 
-        //  Get each number of eagles
-        if (eagles % typesOfPieces == 0) {
-            goldenEagles = eagles / typesOfPieces;
-            baldEagles = eagles / typesOfPieces;
-            harpyEagles = eagles / typesOfPieces;
-        } else if (eagles % typesOfPieces == 1) {
-            goldenEagles = eagles / typesOfPieces;
-            baldEagles = eagles / typesOfPieces;
-            harpyEagles = eagles / typesOfPieces + 1;
-        } else {
-            goldenEagles = eagles / typesOfPieces;
-            baldEagles = eagles / typesOfPieces + 1;
-            harpyEagles = eagles / typesOfPieces + 1;
-        }
+    private void addPieceIntoSquare(Piece piece) {
+        int[] pos = piece.getStartPos();
+        Square square = getSquareAt(pos[0], pos[1]);
+        square.setPiece(piece);
+        pieceSquareMap.put(piece, square);
+    }
 
-        ArrayList<Piece> pieces = new ArrayList<>();
-        // Initialise Sharks
-        for (int i = 0; i < goblinSharks; i++) {
-            pieces.add(PieceType.GOBLIN_SHARK.createPiece(bottomRow, sharkSplit - 1));
-            sharkSplit += sharkPosCount;
-        }
+    private int[] calculateNumOfPieces(int totalPieces, int typesOfPieces) {
+        int[] piecesNums = new int[typesOfPieces];
+        Arrays.fill(piecesNums, totalPieces / typesOfPieces);
 
-        for (int i = 0; i < hammerHeads; i++) {
-            pieces.add(PieceType.HAMMERHEAD.createPiece(bottomRow, sharkSplit - 1));
-            sharkSplit += sharkPosCount;
+        for (int i = 0; i < totalPieces % typesOfPieces; i++) {
+            piecesNums[typesOfPieces - 1 - i] += 1;
         }
-
-        for (int i = 0; i < sawSharks; i++) {
-            pieces.add(PieceType.SAW_SHARK.createPiece(bottomRow, sharkSplit - 1));
-            sharkSplit += sharkPosCount;
-        }
-
-        // Initialise Eagles
-        for (int i = 0; i < baldEagles; i++) {
-            pieces.add(PieceType.BALD_EAGLE.createPiece(topRow, eagleSplit - 1));
-            eagleSplit += eaglePosCount;
-        }
-
-        for (int i = 0; i < goldenEagles; i++) {
-            pieces.add(PieceType.GOLDEN_EAGLE.createPiece(topRow, eagleSplit - 1));
-            eagleSplit += eaglePosCount;
-        }
-
-        for (int i = 0; i < harpyEagles; i++) {
-            pieces.add(PieceType.HARPY_EAGLE.createPiece(topRow, eagleSplit - 1));
-            eagleSplit += eaglePosCount;
-        }
-
-        for (Piece piece : pieces) {
-            int[] pos = piece.getStartPos();
-            Square square = getSquareAt(pos[0], pos[1]);
-            square.setPiece(piece);
-            pieceSquareMap.put(piece, square);
-        }
+        return piecesNums;
     }
 
     /**

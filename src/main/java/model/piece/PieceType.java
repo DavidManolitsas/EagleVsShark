@@ -12,20 +12,20 @@ import java.util.List;
  * @date 2020-05-19
  */
 public enum PieceType {
-    BALD_EAGLE(new BaldEagleMove(), Player.EAGLE, ResPath.PIECE_BALD_EAGLE),
-    GOLDEN_EAGLE(new GoldenEagleMove(), Player.EAGLE, ResPath.PIECE_GOLDEN_EAGLE),
-    HARPY_EAGLE(new HarpyEagleMove(), Player.EAGLE, ResPath.PIECE_HARPY_EAGLE),
-    GOBLIN_SHARK(new GoblinSharkMove(), Player.SHARK, ResPath.PIECE_GOBLIN_SHARK),
-    HAMMERHEAD(new HammerheadMove(), Player.SHARK, ResPath.PIECE_HAMMERHEAD),
-    SAW_SHARK(new SawSharkMove(), Player.SHARK, ResPath.PIECE_SAW_SHARK);
+    BALD_EAGLE(new BaldEagleMoveFactory(), Player.EAGLE, ResPath.PIECE_BALD_EAGLE),
+    GOLDEN_EAGLE(new GoldenEagleMoveFactory(), Player.EAGLE, ResPath.PIECE_GOLDEN_EAGLE),
+    HARPY_EAGLE(new HarpyEagleMoveFactory(), Player.EAGLE, ResPath.PIECE_HARPY_EAGLE),
+    GOBLIN_SHARK(new GoblinSharkMoveFactory(), Player.SHARK, ResPath.PIECE_GOBLIN_SHARK),
+    HAMMERHEAD(new HammerheadMoveFactory(), Player.SHARK, ResPath.PIECE_HAMMERHEAD),
+    SAW_SHARK(new SawSharkMoveFactory(), Player.SHARK, ResPath.PIECE_SAW_SHARK);
 
     private Player team;
-    private PieceMove moveGenerator;
+    private MoveFactory moveFactory;
     private String imgPath;
 
-    PieceType(PieceMove moveGenerator, Player team, String imgPath) {
+    PieceType(MoveFactory moveFactory, Player team, String imgPath) {
         this.team = team;
-        this.moveGenerator = moveGenerator;
+        this.moveFactory = moveFactory;
         this.imgPath = imgPath;
     }
 
@@ -34,7 +34,7 @@ public enum PieceType {
     }
 
     public List<Move> availableMoves(int startRow, int startCol, boolean isPowered, Board board) {
-        List<Move> moves = moveGenerator.generateMoves(startRow, startCol, isPowered, board);
+        List<Move> moves = moveFactory.generateMoves(startRow, startCol, isPowered, board);
         return board.validatePossibleMoves(moves);
     }
 
