@@ -10,6 +10,7 @@ import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.util.SceneManager;
+import main.java.util.SimpleAI;
 
 import java.util.List;
 
@@ -51,6 +52,8 @@ public class Game {
     private Timeline timer;
     private int timeRemaining;
 
+    private boolean isAiMode = false;
+
     public Game(GameBuilder gameBuilder) {
         initPlayers(gameBuilder);
 
@@ -58,6 +61,7 @@ public class Game {
         this.turnTime = gameBuilder.timeLimit;
         this.totalSquares = gameBuilder.rows * gameBuilder.cols;
         this.totalTurns = gameBuilder.turnCount;
+        this.isAiMode = true;
         this.sharkSquareCount = 0;
         this.eagleSquareCount = 0;
         this.turnCount = 0;
@@ -137,8 +141,12 @@ public class Game {
         } else {
             incrementTurnCount();
             startTimer();
-            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore()
-            );
+            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore());
+
+            // In AI mode, the Eagle will be the computer
+            if (isAiMode && getCurrentPlayer() == Player.EAGLE) {
+                AiMove();
+            }
         }
     }
 
@@ -286,6 +294,11 @@ public class Game {
 
     public int getTurnCount() {
         return turnCount;
+    }
+
+    private void AiMove() {
+        Move move = SimpleAI.getBestMove(board);
+        onMoveButtonClicked(move);
     }
 
     public static class GameBuilder {

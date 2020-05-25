@@ -6,6 +6,7 @@ import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author WeiYi Yu
@@ -33,6 +34,14 @@ public interface Board {
     int[] getPiecePosition(Piece chosenPiece);
 
     void timeRantOut();
+
+    Map<Piece, Square> getPieceSquareMap();
+
+    Square[][] getSquares();
+
+    int getTotalRows();
+
+    int getTotalCols();
 
     List<int[]> getSharksPositions();
 }

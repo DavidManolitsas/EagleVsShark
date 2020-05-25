@@ -169,6 +169,27 @@ public class BoardImpl
         }
         return validatedMoves;
     }
+
+    @Override
+    public Map<Piece, Square> getPieceSquareMap() {
+        return pieceSquareMap;
+    }
+
+    @Override
+    public Square[][] getSquares() {
+        return squares;
+    }
+
+    @Override
+    public int getTotalRows() {
+        return totalRows;
+    }
+
+    @Override
+    public int getTotalCols() {
+        return totalCols;
+    }
+
     // endregion
 
     // region private methods
