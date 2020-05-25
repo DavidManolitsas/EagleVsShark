@@ -23,8 +23,6 @@ public interface Board {
 
     Piece getChosenPiece();
 
-    List<Move> validatePossibleMoves(List<Move> moves);
-
     Square getSquareAt(int row, int col);
 
     void onPieceSelected(Piece piece, int row, int col);
@@ -43,5 +41,9 @@ public interface Board {
 
     int getTotalCols();
 
+    boolean isSquareValid(int[] position, Piece movingPiece);
+
     List<int[]> getSharksPositions();
+
+    boolean isPositionOutOfBound(int[] position);
 }

@@ -152,24 +152,6 @@ public class BoardImpl
         originator.setPaintBeforeMove(paintBeforeChange);
     }
 
-    /**
-     * Requires:
-     * 1. moves != null
-     */
-    @Override
-    public List<Move> validatePossibleMoves(List<Move> moves) {
-        List<Move> validatedMoves = new ArrayList<>();
-        for (Move move : moves) {
-            int[] finalPos = move.getFinalPosition();
-
-            if (isSquareValid(finalPos)) {
-                removeInvalidPaintSquare(move);
-                validatedMoves.add(move);
-            }
-        }
-        return validatedMoves;
-    }
-
     @Override
     public Map<Piece, Square> getPieceSquareMap() {
         return pieceSquareMap;
@@ -211,16 +193,22 @@ public class BoardImpl
      * 1. destination square is on the board
      * 2. destination square has no piece which belongs to the same player
      */
-    private boolean isSquareValid(int[] position) {
+    @Override
+    public boolean isSquareValid(int[] position, Piece movingPiece) {
         if (isPositionOutOfBound(position)) {
             return false;
         }
 
-        // Check if the square already has piece on it
-        Piece piece = getSquareAt(position[0], position[1]).getPiece();
-        return piece == null ||
-                (chosenPiece != null &&
-                        !piece.getClass().getSuperclass().equals(chosenPiece.getClass().getSuperclass()));
+        return !isOccupiedBySameTeam(position, movingPiece);
+    }
+
+    private boolean isOccupiedBySameTeam(int[] position, Piece movingPiece) {
+        Piece pieceOnSquare = getSquareAt(position[0], position[1]).getPiece();
+
+        if (pieceOnSquare == null || movingPiece == null) {
+            return false;
+        }
+        return movingPiece.isBelongTo(pieceOnSquare.getTeam());
     }
 
 
@@ -313,7 +301,7 @@ public class BoardImpl
         do {
             newPos[1] = genRandomCol();
             // TODO: record the startPosition
-        } while (!isSquareValid(newPos));
+        } while (!isSquareValid(newPos, attackedPiece));
 
         Square startSquare = getSquareAt(newPos[0], newPos[1]);
         startSquare.setPiece(attackedPiece);
@@ -424,18 +412,10 @@ public class BoardImpl
      * Requires:
      * 1. position != null
      */
-    private boolean isPositionOutOfBound(int[] position) {
+    @Override
+    public boolean isPositionOutOfBound(int[] position) {
         return position[0] < 0 || position[0] >= totalRows ||
                 position[1] < 0 || position[1] >= totalCols;
-    }
-
-    /**
-     * Requires:
-     * 1. move != null
-     */
-    private void removeInvalidPaintSquare(Move move) {
-        List<int[]> paintInfo = move.getPaintShape().getPaintInfo();
-        paintInfo.removeIf(this::isPositionOutOfBound);
     }
     // endregion
 

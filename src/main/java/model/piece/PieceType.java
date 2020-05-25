@@ -4,6 +4,7 @@ import main.java.ResPath;
 import main.java.model.Player;
 import main.java.model.board.Board;
 import main.java.model.move.*;
+import main.java.util.MoveValidator;
 
 import java.util.List;
 
@@ -33,9 +34,9 @@ public enum PieceType {
         return new Piece(this, row, col);
     }
 
-    public List<Move> availableMoves(int startRow, int startCol, boolean isPowered, Board board) {
+    public List<Move> availableMoves(int startRow, int startCol, boolean isPowered, Piece movingPiece, Board board) {
         List<Move> moves = moveFactory.generateMoves(startRow, startCol, isPowered, board);
-        return board.validatePossibleMoves(moves);
+        return MoveValidator.validateMoves(moves, movingPiece, board);
     }
 
     public String getImgPath() {
@@ -44,6 +45,10 @@ public enum PieceType {
 
     public boolean isBelongTo(Player player) {
         return team == player;
+    }
+
+    public Player getTeam() {
+        return team;
     }
 }
 

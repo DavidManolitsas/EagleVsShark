@@ -20,7 +20,7 @@ public class Piece {
     }
 
     public List<Move> availableMoves(int startRow, int startCol, boolean isPowered, Board board) {
-        return pieceType.availableMoves(startRow, startCol, isPowered, board);
+        return pieceType.availableMoves(startRow, startCol, isPowered, this, board);
     }
 
     public boolean isBelongTo(Player player) {
@@ -36,6 +36,10 @@ public class Piece {
      */
     public int[] getStartPos() {
         return startPos;
+    }
+
+    public Player getTeam() {
+        return pieceType.getTeam();
     }
 
     @Override
