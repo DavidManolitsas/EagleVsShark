@@ -1,7 +1,5 @@
 package main.java.util;
 
-import java.io.IOException;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -10,6 +8,8 @@ import main.java.ResPath;
 import main.java.controller.GameViewController;
 import main.java.model.Game.GameBuilder;
 import main.java.view.EndGameView;
+
+import java.io.IOException;
 
 /**
  * @author David Manolitsas
@@ -80,12 +80,17 @@ public class SceneManager {
 
 
     public void showGameView(String sharkPlayerName, String eaglePlayerName) {
+        showGameView(sharkPlayerName, eaglePlayerName, false);
+    }
+
+    public void showGameView(String sharkPlayerName, String eaglePlayerName, boolean isAiMode) {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
         try {
             root.setCenter(gameLoader.load());
 
             GameViewController controller = gameLoader.getController();
-            controller.initGameData(new GameBuilder(sharkPlayerName, eaglePlayerName));
+            controller.initGameData(new GameBuilder(sharkPlayerName, eaglePlayerName)
+                                            .setAiMode(isAiMode));
         } catch (IOException e) {
             e.printStackTrace();
         }
