@@ -1,5 +1,6 @@
 package main.java.model;
 
+import main.java.model.obstacles.ObstacleType;
 import main.java.model.piece.Piece;
 
 /**
@@ -16,6 +17,8 @@ public class Square {
     private Piece piece;
 
     private Player occupiedPlayer;
+
+    private ObstacleType obstacle;
 
     /**
      * Requires:
@@ -50,5 +53,36 @@ public class Square {
 
     public void setOccupiedPlayer(Player occupiedPlayer) {
         this.occupiedPlayer = occupiedPlayer;
+    }
+
+    public void setObstacle(ObstacleType obstacle) {
+        this.obstacle = obstacle;
+    }
+
+    public ObstacleType getObstacle() {
+        return obstacle;
+    }
+
+    public boolean hasObstacle() {
+        return obstacle != null;
+    }
+
+    public boolean isBlocked(Piece piece) {
+        if (obstacle == null || piece == null) {
+            return false;
+        }
+
+        switch (obstacle) {
+            case ROCK -> {
+                return piece.isBelongTo(Player.SHARK);
+            }
+            case TREE -> {
+                return piece.isBelongTo(Player.EAGLE);
+            }
+            case FOREST -> {
+                return true;
+            }
+        }
+        return false;
     }
 }

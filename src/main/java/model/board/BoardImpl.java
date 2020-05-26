@@ -7,8 +7,10 @@ import main.java.model.memento.Memento;
 import main.java.model.memento.Originator;
 import main.java.model.move.CustomPieceMove;
 import main.java.model.move.Move;
+import main.java.model.obstacles.ObstacleType;
 import main.java.model.piece.Piece;
 import main.java.model.piece.PieceType;
+import main.java.util.BoardHelper;
 
 import java.util.*;
 
@@ -37,6 +39,8 @@ public class BoardImpl
     private boolean isSharkUndo;
     private Originator originator;
     private CareTaker careTaker;
+
+    private List<Square> obstacleList;
 
     public BoardImpl(BoardModelEventListener boardListener, int rows, int cols,
                      int sharks, int eagles) {
@@ -178,8 +182,9 @@ public class BoardImpl
     private void initBoard() {
         initSquare();
         initPieces(sharkNums, eagleNums);
+        initObstacles();
 
-        eventListener.onBoardInitialised(totalRows, totalCols, pieceSquareMap.keySet());
+        eventListener.onBoardInitialised(totalRows, totalCols, pieceSquareMap.keySet(), obstacleList);
     }
 
     /**
@@ -199,7 +204,8 @@ public class BoardImpl
             return false;
         }
 
-        return !isOccupiedBySameTeam(position, movingPiece);
+        Square square = getSquareAt(position[0], position[1]);
+        return !isOccupiedBySameTeam(position, movingPiece) && !square.isBlocked(movingPiece);
     }
 
     private boolean isOccupiedBySameTeam(int[] position, Piece movingPiece) {
@@ -210,7 +216,6 @@ public class BoardImpl
         }
         return movingPiece.isBelongTo(pieceOnSquare.getTeam());
     }
-
 
     /**
      * Requires:
@@ -335,6 +340,13 @@ public class BoardImpl
         addPlayerPieces(sharks, totalRows - 1, Player.SHARK);
     }
 
+    private void initObstacles() {
+        obstacleList = new ArrayList<>();
+        obstacleList.addAll(BoardHelper.generateObstacles(ObstacleType.ROCK, 0.05, this));
+        obstacleList.addAll(BoardHelper.generateObstacles(ObstacleType.TREE, 0.10, this));
+        obstacleList.addAll(BoardHelper.generateObstacles(ObstacleType.FOREST, 0.05, this));
+    }
+
     private void addPlayerPieces(int totalPieces, int row, Player player) {
         // Gaps between each piece
         int split = totalCols / totalPieces;
@@ -421,7 +433,8 @@ public class BoardImpl
 
     // region Board Model Event Listener interface
     public interface BoardModelEventListener {
-        void onBoardInitialised(int totalRows, int totalCols, Set<Piece> keySet);
+        void onBoardInitialised(int totalRows, int totalCols, Set<Piece> keySet,
+                                List<Square> obstacleList);
 
         void updatePiecePosition(int attackedRow, int attackedCol, int resetRow, int resetCol);
 

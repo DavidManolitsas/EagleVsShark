@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.model.Player;
+import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
@@ -35,7 +36,7 @@ public class BoardView
 
     public static final int SQUARE_SIZE = 40;
     public static final int PIECE_SIZE = 38;
-    public static final int ROCKS_SIZE = 38;
+    public static final int OBSTACLES_SIZE = 38;
 
     private int totalRows;
     private int totalCols;
@@ -132,7 +133,8 @@ public class BoardView
 
     //region BoardModelEvent methods
     @Override
-    public void onBoardInitialised(int rows, int cols, Set<Piece> pieces) {
+    public void onBoardInitialised(int rows, int cols, Set<Piece> pieces,
+                                   List<Square> obstacleList) {
         totalRows = rows;
         totalCols = cols;
 
@@ -141,6 +143,7 @@ public class BoardView
 
         drawBoard();
         drawPieces(pieces);
+        drawObstacles(obstacleList);
     }
 
     @Override
@@ -212,6 +215,12 @@ public class BoardView
         }
     }
 
+    private void drawObstacles(List<Square> obstacleList) {
+        for (Square square : obstacleList) {
+            addObstacles(square.getRow(), square.getCol(), square.getObstacle().getImgPath());
+        }
+    }
+
     private StackPane getSquare(int row, int col) {
         StackPane square = new StackPane();
         square.setStyle("-fx-border-color: black; -fx-background-color: " + COLOUR_NEUTRAL + ";");
@@ -251,14 +260,14 @@ public class BoardView
         }
     }
 
-    private void addRocks(int row, int col, String rockImgPath) {
+    private void addObstacles(int row, int col, String imgPath) {
         StackPane square = getSquareAt(row, col);
 
         if (square == null) {
             return;
         }
 
-        Image image = new Image(rockImgPath, ROCKS_SIZE, ROCKS_SIZE, true, false);
+        Image image = new Image(imgPath, OBSTACLES_SIZE, OBSTACLES_SIZE, true, false);
         ImageView imageView = new ImageView(image);
         imageView.setId(VIEW_ID_ROCKS);
         square.getChildren().add(imageView);
