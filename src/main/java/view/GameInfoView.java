@@ -58,6 +58,7 @@ public class GameInfoView
     private Text eaglePowerMoveText;
     private Scoreboard scoreboard;
     private SelectMoveView selectMove;
+    private Button undoBt;
 
 
     public GameInfoView() {
@@ -112,7 +113,7 @@ public class GameInfoView
     }
 
     public void drawUndoMoveButton() {
-        Button undoBt = new Button("Undo Move");
+        undoBt = new Button("Undo Move");
         undoBt.setWrapText(true);
         undoBt.setFont(BODY);
         undoBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
@@ -206,6 +207,26 @@ public class GameInfoView
         }
     }
 
+    private void checkRemainingUndoMoves(int turnCount, int sharkUndoMoves, int eagleUndoMoves) {
+
+        if (turnCount % 2 == 0 && eagleUndoMoves < 1) {
+            disableUndoButton();
+        } else if (turnCount % 2 != 0 && sharkUndoMoves < 1) {
+            disableUndoButton();
+        } else {
+            enableUndoButton();
+        }
+
+    }
+
+    public void disableUndoButton() {
+        undoBt.setDisable(true);
+    }
+
+    public void enableUndoButton() {
+        undoBt.setDisable(false);
+    }
+
     private void clearView() {
         scoreboard.getChildren().clear();
         selectMove.clearMoveList();
@@ -254,6 +275,7 @@ public class GameInfoView
         checkRemainingPowerMoves(turnCount,
                                  Player.SHARK.getRemainingPowerMoves(),
                                  Player.EAGLE.getRemainingPowerMoves());
+        checkRemainingUndoMoves(turnCount, Player.SHARK.getUndoMoves(), Player.EAGLE.getUndoMoves());
 
         scoreboard.updateScoreboard(turnCount, sharkScore, eagleScore);
         selectMove.promptChoosePiece();
