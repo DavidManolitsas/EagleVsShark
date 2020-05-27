@@ -13,10 +13,6 @@ import java.util.Map;
  * @date 2020-05-06
  */
 public interface Board {
-    int getSharkSquareCount();
-
-    int getEagleSquareCount();
-
     boolean retrieveSteps(int steps, Player player);
 
     Piece getPiece(int row, int col);
@@ -41,9 +37,5 @@ public interface Board {
 
     int getTotalCols();
 
-    boolean isSquareValid(int[] position, Piece movingPiece);
-
     List<int[]> getSharksPositions();
-
-    boolean isPositionOutOfBound(int[] position);
 }

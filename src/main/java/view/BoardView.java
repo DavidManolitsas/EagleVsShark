@@ -36,7 +36,7 @@ public class BoardView
 
     public static final int SQUARE_SIZE = 40;
     public static final int PIECE_SIZE = 38;
-    public static final int OBSTACLES_SIZE = 38;
+    public static final int OBSTACLES_SIZE = 28;
 
     private int totalRows;
     private int totalCols;

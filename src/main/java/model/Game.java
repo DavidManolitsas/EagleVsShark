@@ -9,6 +9,7 @@ import main.java.model.board.BoardImpl;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
+import main.java.util.BoardHelper;
 import main.java.util.SceneManager;
 import main.java.util.SimpleAI;
 
@@ -115,7 +116,8 @@ public class Game {
         board.onMoveButtonClicked(move, getCurrentPlayer());
 
         //the player moved their piece, change to next players turn
-        updateSquareCount(board.getSharkSquareCount(), board.getEagleSquareCount());
+        updateSquareCount(BoardHelper.getPlayerScore(Player.SHARK, board),
+                          BoardHelper.getPlayerScore(Player.EAGLE, board));
         nextTurn();
     }
 

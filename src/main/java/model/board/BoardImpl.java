@@ -59,32 +59,6 @@ public class BoardImpl
     }
 
     // region public Board methods
-    @Override
-    public int getSharkSquareCount() {
-        int count = 0;
-        for (int row = 0; row < squares.length; row++) {
-            for (int col = 0; col < squares[row].length; col++) {
-                if (getSquareAt(row, col).getOccupiedPlayer() == Player.SHARK) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
-    @Override
-    public int getEagleSquareCount() {
-        int count = 0;
-        for (int row = 0; row < squares.length; row++) {
-            for (int col = 0; col < squares[row].length; col++) {
-                if (getSquareAt(row, col).getOccupiedPlayer() == Player.EAGLE) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
     /**
      * Requires:
      * 1. row >= 0 && col >= 0
@@ -98,6 +72,44 @@ public class BoardImpl
     @Override
     public Piece getChosenPiece() {
         return chosenPiece;
+    }
+
+
+    /**
+     * Requires:
+     * 1. row >= 0 && col >= 0
+     * 2. row < ROW && col < COL
+     */
+    @Override
+    public Square getSquareAt(int row, int col) {
+        return squares[row][col];
+    }
+
+    @Override
+    public void onPieceSelected(Piece piece, int row, int col) {
+        chosenPiece = piece;
+        eventListener.onPieceSelected(row, col);
+    }
+
+    @Override
+    public void onMoveButtonClicked(Move move, Player currentPlayer) {
+        updatePiecePosition(move, chosenPiece);
+        updateTerritory(move, currentPlayer);
+        chosenPiece = null;
+
+        eventListener.onPieceMoved(move, currentPlayer);
+    }
+
+    @Override
+    public int[] getPiecePosition(Piece chosenPiece) {
+        Square square = pieceSquareMap.get(chosenPiece);
+        return new int[] {square.getRow(), square.getCol()};
+    }
+
+    @Override
+    public void timeRantOut() {
+        chosenPiece = null;
+        eventListener.onTimeRanOut();
     }
 
     /**
@@ -176,6 +188,20 @@ public class BoardImpl
         return totalCols;
     }
 
+    @Override
+    public List<int[]> getSharksPositions() {
+        List<int[]> list = new ArrayList<>();
+
+        for (Piece piece : pieceSquareMap.keySet()) {
+            if (piece.isBelongTo(Player.SHARK)) {
+                Square square = pieceSquareMap.get(piece);
+                int row = square.getRow();
+                int col = square.getCol();
+                list.add(new int[] {row, col});
+            }
+        }
+        return list;
+    }
     // endregion
 
     // region private methods
@@ -185,36 +211,6 @@ public class BoardImpl
         initObstacles();
 
         eventListener.onBoardInitialised(totalRows, totalCols, pieceSquareMap.keySet(), obstacleList);
-    }
-
-    /**
-     * Requires:
-     * 1. position != null
-     *
-     * @param position
-     *         Destination position
-     *
-     * @return true when:
-     * 1. destination square is on the board
-     * 2. destination square has no piece which belongs to the same player
-     */
-    @Override
-    public boolean isSquareValid(int[] position, Piece movingPiece) {
-        if (isPositionOutOfBound(position)) {
-            return false;
-        }
-
-        Square square = getSquareAt(position[0], position[1]);
-        return !isOccupiedBySameTeam(position, movingPiece) && !square.isBlocked(movingPiece);
-    }
-
-    private boolean isOccupiedBySameTeam(int[] position, Piece movingPiece) {
-        Piece pieceOnSquare = getSquareAt(position[0], position[1]).getPiece();
-
-        if (pieceOnSquare == null || movingPiece == null) {
-            return false;
-        }
-        return movingPiece.isBelongTo(pieceOnSquare.getTeam());
     }
 
     /**
@@ -268,21 +264,6 @@ public class BoardImpl
         }
     }
 
-    @Override
-    public List<int[]> getSharksPositions() {
-        List<int[]> list = new ArrayList<>();
-
-        for (Piece piece : pieceSquareMap.keySet()) {
-            if (piece.isBelongTo(Player.SHARK)) {
-                Square square = pieceSquareMap.get(piece);
-                int row = square.getRow();
-                int col = square.getCol();
-                list.add(new int[] {row, col});
-            }
-        }
-        return list;
-    }
-
     private void restoreFromMomento(Memento memento) {
         LinkedList<CustomPieceMove> reversePieceMove;
         // shark paint
@@ -306,7 +287,7 @@ public class BoardImpl
         do {
             newPos[1] = genRandomCol();
             // TODO: record the startPosition
-        } while (!isSquareValid(newPos, attackedPiece));
+        } while (!BoardHelper.isSquareValid(newPos, attackedPiece, this));
 
         Square startSquare = getSquareAt(newPos[0], newPos[1]);
         startSquare.setPiece(attackedPiece);
@@ -351,7 +332,7 @@ public class BoardImpl
         // Gaps between each piece
         int split = totalCols / totalPieces;
         int typesOfPieces = 3;
-        int[] numOfEachTypePiece = calculateNumOfPieces(totalPieces, typesOfPieces);
+        int[] numOfEachTypePiece = BoardHelper.calculateNumOfPieces(totalPieces, typesOfPieces);
 
         int index = 0;
         int col = totalCols / totalPieces;
@@ -373,62 +354,6 @@ public class BoardImpl
         square.setPiece(piece);
         pieceSquareMap.put(piece, square);
     }
-
-    private int[] calculateNumOfPieces(int totalPieces, int typesOfPieces) {
-        int[] piecesNums = new int[typesOfPieces];
-        Arrays.fill(piecesNums, totalPieces / typesOfPieces);
-
-        for (int i = 0; i < totalPieces % typesOfPieces; i++) {
-            piecesNums[typesOfPieces - 1 - i] += 1;
-        }
-        return piecesNums;
-    }
-
-    /**
-     * Requires:
-     * 1. row >= 0 && col >= 0
-     * 2. row < ROW && col < COL
-     */
-    public Square getSquareAt(int row, int col) {
-        return squares[row][col];
-    }
-
-    @Override
-    public void onPieceSelected(Piece piece, int row, int col) {
-        chosenPiece = piece;
-        eventListener.onPieceSelected(row, col);
-    }
-
-    @Override
-    public void onMoveButtonClicked(Move move, Player currentPlayer) {
-        updatePiecePosition(move, chosenPiece);
-        updateTerritory(move, currentPlayer);
-        chosenPiece = null;
-
-        eventListener.onPieceMoved(move, currentPlayer);
-    }
-
-    @Override
-    public int[] getPiecePosition(Piece chosenPiece) {
-        Square square = pieceSquareMap.get(chosenPiece);
-        return new int[] {square.getRow(), square.getCol()};
-    }
-
-    @Override
-    public void timeRantOut() {
-        chosenPiece = null;
-        eventListener.onTimeRanOut();
-    }
-
-    /**
-     * Requires:
-     * 1. position != null
-     */
-    @Override
-    public boolean isPositionOutOfBound(int[] position) {
-        return position[0] < 0 || position[0] >= totalRows ||
-                position[1] < 0 || position[1] >= totalCols;
-    }
     // endregion
 
     // region Board Model Event Listener interface
@@ -445,5 +370,4 @@ public class BoardImpl
         void onTimeRanOut();
     }
     // endregion
-
 }

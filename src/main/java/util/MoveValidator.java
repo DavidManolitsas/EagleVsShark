@@ -18,7 +18,7 @@ public class MoveValidator {
         for (Move move : moves) {
             int[] finalPos = move.getFinalPosition();
 
-            if (board.isSquareValid(finalPos, movingPiece)) {
+            if (BoardHelper.isSquareValid(finalPos, movingPiece, board)) {
                 validatePaintInfo(move, board);
                 validatedMoves.add(move);
             }
@@ -28,6 +28,6 @@ public class MoveValidator {
 
     public static void validatePaintInfo(Move move, Board board) {
         List<int[]> paintInfo = move.getPaintShape().getPaintInfo();
-        paintInfo.removeIf(board::isPositionOutOfBound);
+        paintInfo.removeIf(it -> BoardHelper.isPositionOutOfBound(it, board));
     }
 }
