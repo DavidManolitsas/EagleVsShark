@@ -1,5 +1,8 @@
 package main.java.model.board;
 
+import com.google.java.contract.Ensures;
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
 import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.memento.CareTaker;
@@ -19,9 +22,9 @@ import java.util.*;
  * @date 2020-03-23
  * <p>
  * Invariant:
- * 1. square != null
- * 2. pieceSquareMap != null && pieceSquareMap.size == 6
+ * pieceSquareMap.size == 6
  */
+@Invariant("square != null && pieceSquareMap != null")
 public class BoardImpl
         implements Board {
 
@@ -64,6 +67,7 @@ public class BoardImpl
      * 1. row >= 0 && col >= 0
      * 2. row < ROW && col < COL
      */
+    @Requires("row >= 0 && row < totalRows && col >= 0 && col < totalCols")
     @Override
     public Piece getPiece(int row, int col) {
         return getSquareAt(row, col).getPiece();
@@ -80,6 +84,7 @@ public class BoardImpl
      * 1. row >= 0 && col >= 0
      * 2. row < ROW && col < COL
      */
+    @Requires("row >= 0 && row < totalRows && col >= 0 && col < totalCols")
     @Override
     public Square getSquareAt(int row, int col) {
         return squares[row][col];
@@ -121,6 +126,7 @@ public class BoardImpl
      *
      * @return if the undo is valid
      */
+    @Requires("steps >= 1 && steps <= 3")
     @Override
     public boolean retrieveSteps(int steps, Player player) {
         // All conditions checking can be moved to somewhere else in the future
@@ -157,6 +163,7 @@ public class BoardImpl
      * @param move
      * @param piece
      */
+
     public void recordMoveBeforeAction(Move move, Piece piece) {
         HashMap<int[], Player> paintBeforeChange = new HashMap<>();
         // Record the board info before the changes
@@ -222,6 +229,8 @@ public class BoardImpl
      * 1. pieceSquareMap.get(piece) == destination
      * 2. start.getPiece == null
      */
+    @Requires("move != null && piece != null")
+    @Ensures("pieceSquareMap.get(piece) == destination && start.getPiece() == null")
     private void updatePiecePosition(Move move, Piece piece) {
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
@@ -248,6 +257,9 @@ public class BoardImpl
      * Ensures:
      * 1. squares of PaintInfo are occupied by the player
      */
+
+    @Requires("move != null && player != null")
+    @Ensures("square.getOccupiedPlayer() == player")
     private void updateTerritory(Move move, Player player) {
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
@@ -280,6 +292,8 @@ public class BoardImpl
         }
     }
 
+    @Requires("attackedPiece != null && attackedSquare != null")
+    @Ensures("pieceSquareMap.get(attackedPiece) == startSquare && attackedSquare.getPiece() == null")
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
         int[] newPos = new int[2];
         newPos[0] = attackedPiece.getStartPos()[0];
@@ -303,6 +317,7 @@ public class BoardImpl
         return new Random().nextInt(totalCols - 0) + 0;
     }
 
+    @Ensures("squares != null")
     private void initSquare() {
         squares = new Square[totalRows][totalCols];
 
@@ -348,6 +363,8 @@ public class BoardImpl
         }
     }
 
+    @Requires("piece != null")
+    @Ensures("pieceSquareMap.size() = (old(pieceSquareMap.size()) + 1) && square.getPiece() == piece")
     private void addPieceIntoSquare(Piece piece) {
         int[] pos = piece.getStartPos();
         Square square = getSquareAt(pos[0], pos[1]);

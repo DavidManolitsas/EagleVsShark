@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import com.google.java.contract.Ensures;
+import com.google.java.contract.Requires;
 import javafx.fxml.FXML;
 import main.java.util.SceneManager;
 import main.java.view.startGame.StartGameMenu;
@@ -39,6 +41,8 @@ public class StartMenuController
      * 2. timeLimit >= 10
      * 3. !eaglePlayerName.trim().isEmpty() && !sharkPlayerName.trim().isEmpty()
      */
+    @Requires("sharkPlayerName != null && eaglePlayerName != null && timeLimit != null")
+    @Ensures("!timeLimit.trim().isEmpty() && timeLimit >= 10 && !eaglePlayerName.trim().isEmpty() && !sharkPlayerName.trim().isEmpty()")
     @Override
     public void onStartBtClick(String sharkPlayerName, String eaglePlayerName) {
         //check all game details are correct
