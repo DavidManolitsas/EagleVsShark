@@ -10,7 +10,8 @@ import java.util.List;
  *              starting point of the piece, step that need to move
  * Postcondition: an int array of the destination
  */
-public class Movements {
+public abstract class Movements
+        implements MovementI {
 
     protected int[] startPosition = new int[2];
     protected int[] destination = new int[2];
