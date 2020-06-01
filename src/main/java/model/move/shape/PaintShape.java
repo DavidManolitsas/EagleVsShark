@@ -12,6 +12,7 @@ public abstract class PaintShape
 
     protected List<int[]> paintInfo = new ArrayList<>();
 
+    @Override
     public List<int[]> getPaintInfo() {
         return paintInfo;
     }
