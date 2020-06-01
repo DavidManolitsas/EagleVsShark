@@ -15,7 +15,6 @@ public abstract class Movements
 
     protected int[] startPosition = new int[2];
     protected int[] destination = new int[2];
-    protected List<int[]> route = new ArrayList<>();
 
     protected int squaresMoved;
 
@@ -25,15 +24,18 @@ public abstract class Movements
         this.squaresMoved = squaresMoved;
     }
 
+    @Override
     public int[] getDestination() {
         return destination;
     }
 
+    @Override
     public int[] getStartPosition() {
         return startPosition;
     }
 
     @Ensures("route.size() == 2")
+    @Override
     public List<int[]> getRoute() {
         List<int[]> route = new ArrayList<>();
         int[] startPosition = getStartPosition();

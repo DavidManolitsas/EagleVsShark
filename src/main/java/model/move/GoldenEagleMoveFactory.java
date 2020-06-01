@@ -2,6 +2,7 @@ package main.java.model.move;
 
 import main.java.model.board.Board;
 import main.java.model.move.movements.MoveBehindPiece;
+import main.java.model.move.movements.Movements;
 import main.java.model.move.shape.CrossShape;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class GoldenEagleMoveFactory
     public List<Move> generateMoves(int startRow, int startCol, boolean isPowered, Board board) {
         List<Move> moveList = new ArrayList<>();
 
-        MoveBehindPiece move;
+        Movements move;
 
         for (int[] positions : board.getSharksPositions()) {
             move = new MoveBehindPiece(startRow, startCol, positions[0], positions[1]);
