@@ -3,7 +3,6 @@ package main.java.model.commands;
 import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.board.Board;
-import main.java.model.board.BoardImpl;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
@@ -48,7 +47,7 @@ public class MovePiece
             player.setRemainingPowerMoves(player.getRemainingPowerMoves() + 1);
         }
 
-        ((BoardImpl) board).undoMove(move, piece, player, occupiedPlayerHistory);
+        board.undoMove(move, piece, player, occupiedPlayerHistory);
     }
 
 

@@ -25,6 +25,8 @@ public interface Board {
 
     void onMoveButtonClicked(Move move, Player currentPlayer);
 
+    void undoMove(Move move, Piece piece, Player currentPlayer, List<Player> occupiedPlayerHistory);
+
     int[] getPiecePosition(Piece chosenPiece);
 
     void timeRantOut();

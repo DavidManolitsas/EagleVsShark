@@ -106,6 +106,7 @@ public class BoardImpl
         eventListener.onPieceMoved(move, currentPlayer);
     }
 
+    @Override
     public void undoMove(Move move, Piece piece, Player currentPlayer, List<Player> occupiedPlayerHistory) {
         revertPiecePosition(move, piece);
         revertTerritory(move, occupiedPlayerHistory);
