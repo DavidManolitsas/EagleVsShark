@@ -54,16 +54,16 @@ public class VShape
         }
     }
 
-    void powerShape(int[] destination, int[] direction) {
+    private void powerShape(int[] destination, int[] direction) {
 
         if (direction == DIRECTION_UP) {
-            paintInfo.add(new int[] {destination[0] - 1, destination[1]});
-            paintInfo.add(new int[] {destination[0] - 2, destination[1]});
-            paintInfo.add(new int[] {destination[0] - 3, destination[1]});
+            paintInfo.add(new int[]{destination[0] - 1, destination[1]});
+            paintInfo.add(new int[]{destination[0] - 2, destination[1]});
+            paintInfo.add(new int[]{destination[0] - 3, destination[1]});
         } else if (direction == DIRECTION_DOWN) {
-            paintInfo.add(new int[] {destination[0] + 1, destination[1]});
-            paintInfo.add(new int[] {destination[0] + 2, destination[1]});
-            paintInfo.add(new int[] {destination[0] + 3, destination[1]});
+            paintInfo.add(new int[]{destination[0] + 1, destination[1]});
+            paintInfo.add(new int[]{destination[0] + 2, destination[1]});
+            paintInfo.add(new int[]{destination[0] + 3, destination[1]});
         } else if (direction == DIRECTION_LEFT) {
             paintInfo.add(new int[] {destination[0], destination[1] - 1});
             paintInfo.add(new int[] {destination[0], destination[1] - 2});
