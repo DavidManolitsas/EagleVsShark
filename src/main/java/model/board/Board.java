@@ -2,6 +2,7 @@ package main.java.model.board;
 
 import main.java.model.Player;
 import main.java.model.Square;
+import main.java.model.commands.AttackPieceInfo;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
@@ -13,7 +14,6 @@ import java.util.Map;
  * @date 2020-05-06
  */
 public interface Board {
-    boolean retrieveSteps(int steps, Player player);
 
     Piece getPiece(int row, int col);
 
@@ -23,9 +23,9 @@ public interface Board {
 
     void onPieceSelected(Piece piece, int row, int col);
 
-    void onMoveButtonClicked(Move move, Player currentPlayer);
+    AttackPieceInfo onMoveButtonClicked(Move move, Player currentPlayer);
 
-    void undoMove(Move move, Piece piece, Player currentPlayer, List<Player> occupiedPlayerHistory);
+    void undoMove(Move move, Piece piece, Player currentPlayer, List<Player> occupiedPlayerHistory, AttackPieceInfo attackPieceInfo);
 
     int[] getPiecePosition(Piece chosenPiece);
 

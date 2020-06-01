@@ -20,6 +20,7 @@ public class MovePiece
     private Move move;
     private Piece piece;
     private Player player;
+    private AttackPieceInfo attackPieceInfo;
 
     private List<Player> occupiedPlayerHistory;
 
@@ -38,7 +39,7 @@ public class MovePiece
         }
 
         saveSquareOccupiedHistory();
-        board.onMoveButtonClicked(move, player);
+        attackPieceInfo = board.onMoveButtonClicked(move, player);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MovePiece
             player.setRemainingPowerMoves(player.getRemainingPowerMoves() + 1);
         }
 
-        board.undoMove(move, piece, player, occupiedPlayerHistory);
+        board.undoMove(move, piece, player, occupiedPlayerHistory, attackPieceInfo);
     }
 
 

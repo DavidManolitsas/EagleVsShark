@@ -10,6 +10,7 @@ import javafx.scene.layout.*;
 import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
+import main.java.model.commands.AttackPieceInfo;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
@@ -199,13 +200,17 @@ public class BoardView
     }
 
     @Override
-    public void onUndoMove(Move move, List<Player> occupiedHistory) {
+    public void onUndoMove(Move move, List<Player> occupiedHistory, AttackPieceInfo attackPieceInfo) {
         removeMovePreview();
         removeHighlight();
 
         int[] startPos = move.getReverseRoute().get(0);
         int[] destinationPos = move.getReverseRoute().get(1);
         updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
+        if (!attackPieceInfo.getAttackedPieces().isEmpty()) {
+            undoAttackedPiecePosition(attackPieceInfo);
+        }
+
         removeTerritory(move, occupiedHistory);
     }
     //endregion
@@ -301,6 +306,15 @@ public class BoardView
         ImageView imageView = new ImageView(image);
         imageView.setId(VIEW_ID_ROCKS);
         square.getChildren().add(imageView);
+    }
+
+    private void undoAttackedPiecePosition(AttackPieceInfo attackPieceInfo) {
+        for (int i = 0; i < attackPieceInfo.getAttackedPieces().size(); ++i) {
+            updatePiecePosition(attackPieceInfo.getNewPositions().get(i)[0],
+                    attackPieceInfo.getNewPositions().get(i)[1],
+                    attackPieceInfo.getPreviousPositions().get(i)[0],
+                    attackPieceInfo.getPreviousPositions().get(i)[1]);
+        }
     }
     //endregion
 

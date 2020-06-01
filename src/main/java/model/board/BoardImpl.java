@@ -5,10 +5,7 @@ import com.google.java.contract.Invariant;
 import com.google.java.contract.Requires;
 import main.java.model.Player;
 import main.java.model.Square;
-import main.java.model.memento.CareTaker;
-import main.java.model.memento.Memento;
-import main.java.model.memento.Originator;
-import main.java.model.move.CustomPieceMove;
+import main.java.model.commands.AttackPieceInfo;
 import main.java.model.move.Move;
 import main.java.model.obstacles.ObstacleType;
 import main.java.model.piece.Piece;
@@ -38,12 +35,9 @@ public class BoardImpl
     private Map<Piece, Square> pieceSquareMap;
     private Piece chosenPiece;
 
-    private boolean isEagleUndo;
-    private boolean isSharkUndo;
-    private Originator originator;
-    private CareTaker careTaker;
-
     private List<Square> obstacleList;
+
+    private AttackPieceInfo attackPieceInfo;
 
     public BoardImpl(BoardModelEventListener boardListener, int rows, int cols,
                      int sharks, int eagles) {
@@ -53,10 +47,6 @@ public class BoardImpl
         sharkNums = sharks;
         eagleNums = eagles;
         chosenPiece = null;
-        isEagleUndo = false;
-        isSharkUndo = false;
-        originator = new Originator();
-        careTaker = new CareTaker();
 
         initBoard();
     }
@@ -98,20 +88,25 @@ public class BoardImpl
     }
 
     @Override
-    public void onMoveButtonClicked(Move move, Player currentPlayer) {
+    public AttackPieceInfo onMoveButtonClicked(Move move, Player currentPlayer) {
+        attackPieceInfo = new AttackPieceInfo();
         updatePiecePosition(move, chosenPiece);
         updateTerritory(move, currentPlayer);
         chosenPiece = null;
-
         eventListener.onPieceMoved(move, currentPlayer);
+        return attackPieceInfo;
     }
 
     @Override
-    public void undoMove(Move move, Piece piece, Player currentPlayer, List<Player> occupiedPlayerHistory) {
+    public void undoMove(Move move, Piece piece, Player currentPlayer, List<Player> occupiedPlayerHistory, AttackPieceInfo attackPieceInfo) {
         revertPiecePosition(move, piece);
         revertTerritory(move, occupiedPlayerHistory);
+        if (!attackPieceInfo.getAttackedPieces().isEmpty()) {
+            revertAttackedPiece(attackPieceInfo);
+        }
         // TODO: revert attacking
-        eventListener.onUndoMove(move, occupiedPlayerHistory);
+        eventListener.onUndoMove(move, occupiedPlayerHistory, attackPieceInfo);
+
     }
 
     @Override
@@ -124,64 +119,6 @@ public class BoardImpl
     public void timeRantOut() {
         chosenPiece = null;
         eventListener.onTimeRanOut();
-    }
-
-    /**
-     * Requires:
-     * 1. steps >= 1 && steps <= 3
-     *
-     * @param steps
-     * @param player
-     *
-     * @return if the undo is valid
-     */
-    @Requires("steps >= 1 && steps <= 3")
-    @Override
-    public boolean retrieveSteps(int steps, Player player) {
-        // All conditions checking can be moved to somewhere else in the future
-        // like controllers
-        if (careTaker.getMementoNumbers() < 2 * steps) {
-            // The require steps is exceed the maximum history record
-            return false;
-        }
-
-        if (player == Player.EAGLE && !isEagleUndo) {
-            isEagleUndo = true;
-        } else if (player == Player.SHARK && !isSharkUndo) {
-            isSharkUndo = true;
-        } else {
-            // Run out of chance, undo button cannot be clicked
-            return false;
-        }
-
-        Memento moveRecord;
-        // Undo both sides move
-        for (int i = 0; i < 2 * steps; ++i) {
-            moveRecord = careTaker.getMemento();
-            restoreFromMomento(moveRecord);
-
-        }
-        return true;
-    }
-
-    /**
-     * Requires:
-     * 1. Call before the move actually happened, but after the user confirmed
-     * 2. Move should be valid
-     *
-     * @param move
-     * @param piece
-     */
-
-    public void recordMoveBeforeAction(Move move, Piece piece) {
-        HashMap<int[], Player> paintBeforeChange = new HashMap<>();
-        // Record the board info before the changes
-        for (int[] paint : move.getPaintShape().getPaintInfo()) {
-            paintBeforeChange.put(paint,
-                                  getSquareAt(paint[0], paint[1]).getOccupiedPlayer());
-        }
-        originator.setMoveAndPiece(move, piece);
-        originator.setPaintBeforeMove(paintBeforeChange);
     }
 
     @Override
@@ -285,22 +222,6 @@ public class BoardImpl
         }
     }
 
-    private void restoreFromMomento(Memento memento) {
-        LinkedList<CustomPieceMove> reversePieceMove;
-        // shark paint
-        memento.getReversePaint().pop();
-        // TODO: a better way to restore colour
-
-        CustomPieceMove reversePiece;
-
-        if (!memento.getPieceReverseInfo().isEmpty()) {
-            reversePieceMove = memento.getPieceReverseInfo();
-            while (reversePieceMove.size() != 0) {
-                reversePiece = reversePieceMove.pop();
-            }
-        }
-    }
-
     @Requires("attackedPiece != null && attackedSquare != null")
     @Ensures("pieceSquareMap.get(attackedPiece) == startSquare && attackedSquare.getPiece() == null")
     private void attackPiece(Piece attackedPiece, Square attackedSquare) {
@@ -309,13 +230,16 @@ public class BoardImpl
 
         do {
             newPos[1] = genRandomCol();
-            // TODO: record the startPosition
         } while (!BoardHelper.isSquareValid(newPos, attackedPiece, this));
 
         Square startSquare = getSquareAt(newPos[0], newPos[1]);
         startSquare.setPiece(attackedPiece);
 
         attackedSquare.setPiece(null);
+
+        attackPieceInfo.addAttackedPiece(attackedPiece,
+                new int[]{attackedSquare.getRow(), attackedSquare.getCol()},
+                newPos);
 
         pieceSquareMap.put(attackedPiece, startSquare);
 
@@ -375,15 +299,14 @@ public class BoardImpl
     private void revertPiecePosition(Move move, Piece piece) {
         int[] startPos = move.getReverseRoute().get(0);
         int[] destinationPos = move.getReverseRoute().get(1);
+        setPieceToSquare(startPos, destinationPos, piece);
+    }
 
+    private void setPieceToSquare(int[] startPos, int[] destinationPos, Piece piece) {
         Square start = getSquareAt(startPos[0], startPos[1]);
         start.setPiece(null);
 
         Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
-
-        if (destination.getPiece() != null) {
-            attackPiece(destination.getPiece(), destination);
-        }
 
         destination.setPiece(piece);
 
@@ -395,6 +318,14 @@ public class BoardImpl
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             Square square = getSquareAt(position[0], position[1]);
             square.setOccupiedPlayer(occupiedPlayerHistory.get(i++));
+        }
+    }
+
+    private void revertAttackedPiece(AttackPieceInfo attackPieceInfo) {
+        for (int i = 0; i < attackPieceInfo.getAttackedPieces().size(); ++i) {
+            setPieceToSquare(attackPieceInfo.getNewPositions().get(i),
+                    attackPieceInfo.getPreviousPositions().get(i),
+                    attackPieceInfo.getAttackedPieces().get(i));
         }
     }
 
@@ -421,7 +352,7 @@ public class BoardImpl
 
         void onTimeRanOut();
 
-        void onUndoMove(Move move, List<Player> turnCount);
+        void onUndoMove(Move move, List<Player> turnCount, AttackPieceInfo attackPieceInfo);
     }
     // endregion
 }
