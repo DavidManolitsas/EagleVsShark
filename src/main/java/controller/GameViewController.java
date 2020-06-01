@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import main.java.model.Game;
@@ -23,6 +25,7 @@ import main.java.view.UndoStage;
  * 1. gameInfoView !=null
  * 1. game !=null
  */
+@Invariant("boardView != null && gameInfoView != null && game != null")
 public class GameViewController
         implements BoardViewEventListener,
                    GameInfoViewEventListener,
@@ -84,6 +87,7 @@ public class GameViewController
      * Requires:
      * 1. move != null
      */
+    @Requires("move != null")
     @Override
     public void onMoveButtonClicked(Move move) {
         if (move == null) {

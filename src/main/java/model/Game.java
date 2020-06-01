@@ -4,6 +4,8 @@ package main.java.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -23,6 +25,7 @@ import main.java.util.SimpleAI;
  * @invariant 1. turnCount >= 1
  * 2. eagleSquareCount >= 0 && sharkSquareCount >= 0
  */
+@Invariant("turnCount >= 1 && eagleSquareCount >= 0 && sharkSquareCount >= 0")
 public class Game {
 
     public interface GameModelEventListener {
@@ -153,6 +156,7 @@ public class Game {
      * @ensure 1. if game is not over, turn is incremented by 1
      * 2. otherwise, the game is ended
      */
+
     public void nextTurn() {
         if (turnCount >= totalTurns || isWinner()) {
             stopTimer();
@@ -179,11 +183,8 @@ public class Game {
      * @return true if a player has captured more than 60% of the territory, other wise return false
      */
     public boolean isWinner() {
-        if (sharkSquareCount / totalSquares > WIN_PERCENTAGE || eagleSquareCount / totalSquares > WIN_PERCENTAGE) {
-            //sharks or eagle win
-            return true;
-        }
-        return false;
+        //sharks or eagle win
+        return sharkSquareCount / totalSquares > WIN_PERCENTAGE || eagleSquareCount / totalSquares > WIN_PERCENTAGE;
     }
 
     /**
@@ -211,9 +212,9 @@ public class Game {
      * @param eagleSquareCount
      *         number of squares the eagle player controls
      *
-     * @require 1. int sharkSquareCount >= 0 && sharkSquareCount >= 0
-     * @ensure 1. the sharkSquareCount and eagleSquareCount are updated
+     *
      */
+    @Requires("sharkSquareCount >= 0 && sharkSquareCount >= 0")
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
         this.sharkSquareCount = sharkSquareCount;
         this.eagleSquareCount = eagleSquareCount;
@@ -244,6 +245,7 @@ public class Game {
      * @require 1. piece != null
      * @ensure 1. Determines whether the piece parsed in belongs to the current player or not
      */
+    @Requires("piece != null")
     public boolean pieceBelongsToPlayer(Piece piece) {
         if (turnCount % 2 == 0) {
             //eagles turn

@@ -1,5 +1,7 @@
 package main.java.util;
 
+import com.google.java.contract.Ensures;
+import com.google.java.contract.Requires;
 import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.board.Board;
@@ -43,6 +45,8 @@ public class BoardHelper {
         return obstacleList;
     }
 
+    @Requires("totalPieces >= 3 && typesOfPieces >= 3")
+    @Ensures("piecesNums.length == typesOfPieces")
     public static int[] calculateNumOfPieces(int totalPieces, int typesOfPieces) {
         int[] piecesNums = new int[typesOfPieces];
         Arrays.fill(piecesNums, totalPieces / typesOfPieces);

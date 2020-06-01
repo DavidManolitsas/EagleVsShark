@@ -1,5 +1,7 @@
 package main.java.model.move.movements;
 
+import com.google.java.contract.Ensures;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class Movements {
         return startPosition;
     }
 
+    @Ensures("route.size() == 2")
     public List<int[]> getRoute() {
         List<int[]> route = new ArrayList<>();
         int[] startPosition = getStartPosition();
