@@ -137,7 +137,7 @@ public class Game {
     }
 
     public void onUndoButtonClicked(int undoMoves) {
-//        getCurrentPlayer().setUndoMoves(0);
+        getCurrentPlayer().setUndoMoves(0);
 
         moveController.undo(undoMoves);
         updateSquareCount(BoardHelper.getPlayerScore(Player.SHARK, board),
