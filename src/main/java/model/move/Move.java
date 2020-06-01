@@ -1,9 +1,10 @@
 package main.java.model.move;
 
-import java.util.List;
-
 import main.java.model.move.movements.Movements;
 import main.java.model.move.shape.PaintShape;
+
+import java.util.Collections;
+import java.util.List;
 
 /*
  * Precondition: valid movement and paintShape
@@ -30,6 +31,12 @@ public class Move {
 
     public List<int[]> getRoute() {
         return movements.getRoute();
+    }
+
+    public List<int[]> getReverseRoute() {
+        List<int[]> route = movements.getRoute();
+        Collections.reverse(route);
+        return route;
     }
 
     public Movements getMovements() {

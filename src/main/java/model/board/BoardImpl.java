@@ -62,6 +62,7 @@ public class BoardImpl
     }
 
     // region public Board methods
+
     /**
      * Requires:
      * 1. row >= 0 && col >= 0
@@ -103,6 +104,13 @@ public class BoardImpl
         chosenPiece = null;
 
         eventListener.onPieceMoved(move, currentPlayer);
+    }
+
+    public void undoMove(Move move, Piece piece, Player currentPlayer, List<Player> occupiedPlayerHistory) {
+        revertPiecePosition(move, piece);
+        revertTerritory(move, occupiedPlayerHistory);
+        // TODO: revert attacking
+        eventListener.onUndoMove(move, occupiedPlayerHistory);
     }
 
     @Override
@@ -363,6 +371,32 @@ public class BoardImpl
         }
     }
 
+    private void revertPiecePosition(Move move, Piece piece) {
+        int[] startPos = move.getReverseRoute().get(0);
+        int[] destinationPos = move.getReverseRoute().get(1);
+
+        Square start = getSquareAt(startPos[0], startPos[1]);
+        start.setPiece(null);
+
+        Square destination = getSquareAt(destinationPos[0], destinationPos[1]);
+
+        if (destination.getPiece() != null) {
+            attackPiece(destination.getPiece(), destination);
+        }
+
+        destination.setPiece(piece);
+
+        pieceSquareMap.put(piece, destination);
+    }
+
+    private void revertTerritory(Move move, List<Player> occupiedPlayerHistory) {
+        int i = 0;
+        for (int[] position : move.getPaintShape().getPaintInfo()) {
+            Square square = getSquareAt(position[0], position[1]);
+            square.setOccupiedPlayer(occupiedPlayerHistory.get(i++));
+        }
+    }
+
     @Requires("piece != null")
     @Ensures("pieceSquareMap.size() = (old(pieceSquareMap.size()) + 1) && square.getPiece() == piece")
     private void addPieceIntoSquare(Piece piece) {
@@ -385,6 +419,8 @@ public class BoardImpl
         void onPieceMoved(Move move, Player turnCount);
 
         void onTimeRanOut();
+
+        void onUndoMove(Move move, List<Player> turnCount);
     }
     // endregion
 }

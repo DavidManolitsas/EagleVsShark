@@ -129,6 +129,25 @@ public class BoardView
             }
         }
     }
+
+    public void removeTerritory(Move move, List<Player> occupiedHistory) {
+        int i = 0;
+        for (int[] position : move.getPaintShape().getPaintInfo()) {
+            StackPane square = getSquareAt(position[0], position[1]);
+            String color = COLOUR_NEUTRAL;
+
+            Player player = occupiedHistory.get(i++);
+            if (player == Player.EAGLE) {
+                color = COLOUR_EAGLE;
+            } else if (player == Player.SHARK) {
+                color = COLOUR_SHARK;
+            }
+
+            if (square != null) {
+                square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
+            }
+        }
+    }
     //endregion
 
     //region BoardModelEvent methods
@@ -177,6 +196,17 @@ public class BoardView
     public void onTimeRanOut() {
         removeMovePreview();
         removeHighlight();
+    }
+
+    @Override
+    public void onUndoMove(Move move, List<Player> occupiedHistory) {
+        removeMovePreview();
+        removeHighlight();
+
+        int[] startPos = move.getReverseRoute().get(0);
+        int[] destinationPos = move.getReverseRoute().get(1);
+        updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
+        removeTerritory(move, occupiedHistory);
     }
     //endregion
 

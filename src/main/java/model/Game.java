@@ -1,9 +1,6 @@
 package main.java.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.java.contract.Invariant;
 import com.google.java.contract.Requires;
 import javafx.animation.KeyFrame;
@@ -12,11 +9,17 @@ import javafx.util.Duration;
 import main.java.model.board.Board;
 import main.java.model.board.BoardImpl;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
+import main.java.model.commands.Command;
+import main.java.model.commands.MoveController;
+import main.java.model.commands.MovePiece;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.util.BoardHelper;
 import main.java.util.SceneManager;
 import main.java.util.SimpleAI;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -42,7 +45,6 @@ public class Game {
     }
 
     //listener
-//    private GameModelEventListener listener;
     private List<GameModelEventListener> listeners;
 
     private Board board;
@@ -59,6 +61,8 @@ public class Game {
     private int timeRemaining;
 
     private boolean isAiMode;
+
+    private MoveController moveController;
 
     public Game(GameBuilder gameBuilder) {
         initPlayers(gameBuilder);
@@ -80,6 +84,7 @@ public class Game {
             listener.gameInitialised(turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore());
         }
 
+        moveController = new MoveController();
     }
 
     private void initPlayers(GameBuilder gameBuilder) {
@@ -120,16 +125,27 @@ public class Game {
     }
 
     public void onMoveButtonClicked(Move move) {
-        // update power move count
-        if (move.isPowered()) {
-            updateRemainingPowerMoves();
-        }
+        Command movePiece = new MovePiece(board, move, board.getChosenPiece(), getCurrentPlayer());
+        moveController.submit(movePiece);
 
-        board.onMoveButtonClicked(move, getCurrentPlayer());
+//        board.onMoveButtonClicked(move, getCurrentPlayer());
 
         //the player moved their piece, change to next players turn
         updateSquareCount(BoardHelper.getPlayerScore(Player.SHARK, board),
                           BoardHelper.getPlayerScore(Player.EAGLE, board));
+        nextTurn();
+    }
+
+    public void onUndoButtonClicked(int undoMoves) {
+//        getCurrentPlayer().setUndoMoves(0);
+
+        moveController.undo(undoMoves);
+        updateSquareCount(BoardHelper.getPlayerScore(Player.SHARK, board),
+                          BoardHelper.getPlayerScore(Player.EAGLE, board));
+        turnCount -= 2 * undoMoves;
+        if (turnCount < 0) {
+            turnCount = 0;
+        }
         nextTurn();
     }
 
@@ -211,8 +227,6 @@ public class Game {
      *         number of squares the shark player controls
      * @param eagleSquareCount
      *         number of squares the eagle player controls
-     *
-     *
      */
     @Requires("sharkSquareCount >= 0 && sharkSquareCount >= 0")
     public void updateSquareCount(int sharkSquareCount, int eagleSquareCount) {
@@ -270,11 +284,6 @@ public class Game {
         } else {
             return Player.SHARK;
         }
-    }
-
-    public void updateRemainingPowerMoves() {
-        Player currentPlayer = getCurrentPlayer();
-        currentPlayer.setRemainingPowerMoves(currentPlayer.getRemainingPowerMoves() - 1);
     }
 
     public void startTimer() {

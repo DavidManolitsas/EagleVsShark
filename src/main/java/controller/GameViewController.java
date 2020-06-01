@@ -112,9 +112,7 @@ public class GameViewController
 
     @Override
     public void onUndoButtonClicked(int undoMoves) {
-        game.getCurrentPlayer().setUndoMoves(0);
-        //TODO: implement me
-        System.out.println("Undo " + undoMoves + " moves");
+        game.onUndoButtonClicked(undoMoves);
     }
 
     @Override
