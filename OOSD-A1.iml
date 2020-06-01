@@ -10,6 +10,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="module" module-name="OOSD-A1/src" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="Internal Libraries" level="project" />
+    <orderEntry type="library" name="cofoja-1.3" level="project" />
   </component>
 </module>
