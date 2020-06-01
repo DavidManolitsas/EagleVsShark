@@ -1,6 +1,9 @@
 package main.java.model;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.java.contract.Invariant;
 import com.google.java.contract.Requires;
 import javafx.animation.KeyFrame;
@@ -14,8 +17,6 @@ import main.java.model.piece.Piece;
 import main.java.util.BoardHelper;
 import main.java.util.SceneManager;
 import main.java.util.SimpleAI;
-
-import java.util.List;
 
 /**
  * @author David Manolitsas
@@ -41,7 +42,8 @@ public class Game {
     }
 
     //listener
-    private GameModelEventListener listener;
+//    private GameModelEventListener listener;
+    private List<GameModelEventListener> listeners;
 
     private Board board;
 
@@ -61,7 +63,7 @@ public class Game {
     public Game(GameBuilder gameBuilder) {
         initPlayers(gameBuilder);
 
-        this.listener = gameBuilder.gameListener;
+        this.listeners = gameBuilder.listeners;
         this.turnTime = gameBuilder.timeLimit;
         this.totalSquares = gameBuilder.rows * gameBuilder.cols;
         this.totalTurns = gameBuilder.turnCount;
@@ -74,7 +76,10 @@ public class Game {
                               gameBuilder.rows, gameBuilder.cols,
                               gameBuilder.sharkNums, gameBuilder.eagleNums);
 
-        listener.gameInitialised(turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore());
+        for (GameModelEventListener listener : listeners) {
+            listener.gameInitialised(turnCount, totalTurns, turnTime, getSharkScore(), getEagleScore());
+        }
+
     }
 
     private void initPlayers(GameBuilder gameBuilder) {
@@ -107,7 +112,11 @@ public class Game {
         board.onPieceSelected(piece, row, col);
 
         List<Move> allPossibleMoves = piece.availableMoves(row, col, isPowered, board);
-        listener.onPieceSelected(piece, allPossibleMoves);
+
+        for (GameModelEventListener listener : listeners) {
+            listener.onPieceSelected(piece, allPossibleMoves);
+        }
+
     }
 
     public void onMoveButtonClicked(Move move) {
@@ -134,7 +143,11 @@ public class Game {
         int[] position = board.getPiecePosition(chosenPiece);
 
         List<Move> allPossibleMoves = chosenPiece.availableMoves(position[0], position[1], isPowered, board);
-        listener.onPieceSelected(chosenPiece, allPossibleMoves);
+
+        for (GameModelEventListener listener : listeners) {
+            listener.onPieceSelected(chosenPiece, allPossibleMoves);
+        }
+
     }
 
     /**
@@ -151,7 +164,11 @@ public class Game {
         } else {
             incrementTurnCount();
             startTimer();
-            listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore());
+
+            for (GameModelEventListener listener : listeners) {
+                listener.gameInfoUpdated(turnCount, getSharkScore(), getEagleScore());
+            }
+
 
             // In AI mode, the Eagle will be the computer
             if (isAiMode && getCurrentPlayer() == Player.EAGLE) {
@@ -266,12 +283,18 @@ public class Game {
                 //decrement time
                 timeRemaining--;
 
-                listener.timeRemainingChanged(timeRemaining);
+                for (GameModelEventListener listener : listeners) {
+                    listener.timeRemainingChanged(timeRemaining);
+                }
+
 
                 if (timeRemaining <= 0) {
                     timer.stop();
                     board.timeRantOut();
-                    listener.timeRanOut();
+                    for (GameModelEventListener listener : listeners) {
+                        listener.timeRanOut();
+                    }
+
                 }
             }));
         }
@@ -281,7 +304,10 @@ public class Game {
         timer.setCycleCount(turnTime);
         timer.playFromStart();
 
-        listener.timeRemainingChanged(timeRemaining);
+        for (GameModelEventListener listener : listeners) {
+            listener.timeRemainingChanged(timeRemaining);
+        }
+
     }
 
     public void pauseTimer() {
@@ -311,7 +337,7 @@ public class Game {
 
     public static class GameBuilder {
 
-        private GameModelEventListener gameListener;
+        private List<GameModelEventListener> listeners;
         private BoardModelEventListener boardListener;
         private String sharkPlayerName;
         private String eaglePlayerName;
@@ -324,6 +350,7 @@ public class Game {
         private boolean isAiMode = false;
 
         public GameBuilder(String sharkPlayerName, String eaglePlayerName) {
+            listeners = new ArrayList<GameModelEventListener>();
             this.sharkPlayerName = sharkPlayerName;
             this.eaglePlayerName = eaglePlayerName;
         }
@@ -358,8 +385,8 @@ public class Game {
             return this;
         }
 
-        public GameBuilder setGameEventListener(GameModelEventListener listener) {
-            this.gameListener = listener;
+        public GameBuilder addGameEventListener(GameModelEventListener listener) {
+            listeners.add(listener);
             return this;
         }
 

@@ -14,6 +14,7 @@ import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 import main.java.view.MenuView;
 import main.java.view.MenuView.MenuBarEventListener;
+import main.java.view.UndoStage;
 
 /**
  * @author WeiYi Yu
@@ -39,6 +40,8 @@ public class GameViewController
     @FXML
     private MenuView menuView;
 
+    private UndoStage undoStage;
+
     private Game game;
 
     @FXML
@@ -46,10 +49,12 @@ public class GameViewController
         boardView.setBoardViewEventListener(this);
         gameInfoView.setGameInfoViewEventListener(this);
         menuView.setListener(this);
+        undoStage = new UndoStage(this);
     }
 
     public void initGameData(GameBuilder gameBuilder) {
-        game = gameBuilder.setGameEventListener(gameInfoView)
+        game = gameBuilder.addGameEventListener(gameInfoView)
+                          .addGameEventListener(undoStage)
                           .setBoardEventListener(boardView)
                           .build();
         game.start();
@@ -110,6 +115,11 @@ public class GameViewController
         game.getCurrentPlayer().setUndoMoves(0);
         //TODO: implement me
         System.out.println("Undo " + undoMoves + " moves");
+    }
+
+    @Override
+    public void onStartUndoMove() {
+        undoStage.show();
     }
     //endregion
 
