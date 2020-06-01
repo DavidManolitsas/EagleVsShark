@@ -1,5 +1,7 @@
 package main.java.view;
 
+import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,6 +12,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.java.model.Game.GameModelEventListener;
+import main.java.model.move.Move;
+import main.java.model.piece.Piece;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 
 /**
@@ -18,13 +23,15 @@ import main.java.view.GameInfoView.GameInfoViewEventListener;
  * @date 2020-05-25
  */
 public class UndoStage
-        extends Stage {
+        extends Stage
+        implements GameModelEventListener {
 
     private final static int WIDTH = 350;
     private final static int HEIGHT = 350;
     private final static String STAGE_NAME = "Undo Move";
     private static final Font BODY = Font.font("Helvetica", 14);
     private BorderPane root = new BorderPane();
+
     private GameInfoViewEventListener listener;
 
 
@@ -72,5 +79,30 @@ public class UndoStage
 
         undoRoot.getChildren().addAll(selectUndoText, undoSlider, undoBt);
         root.setCenter(undoRoot);
+    }
+
+    @Override
+    public void gameInitialised(int turnCount, int totalTurns, int turnTime, double sharkScore, double eagleScore) {
+
+    }
+
+    @Override
+    public void gameInfoUpdated(int turnCount, double sharkScore, double eagleScore) {
+
+    }
+
+    @Override
+    public void timeRemainingChanged(int timeRemaining) {
+
+    }
+
+    @Override
+    public void timeRanOut() {
+        this.close();
+    }
+
+    @Override
+    public void onPieceSelected(Piece piece, List<Move> allPossibleMoves) {
+
     }
 }

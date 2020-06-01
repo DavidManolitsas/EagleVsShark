@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import main.java.model.Game.GameModelEventListener;
 import main.java.model.Player;
 import main.java.model.move.Move;
@@ -40,6 +39,8 @@ public class GameInfoView
         void onTimeRanOutAlertClosed();
 
         void onUndoButtonClicked(int undoMoves);
+
+        void onStartUndoMove();
     }
 
     private GameInfoViewEventListener gameInfoViewEventListener;
@@ -119,8 +120,7 @@ public class GameInfoView
         undoBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
 
         undoBt.setOnAction(event -> {
-            Stage undoStage = new UndoStage(getGameInfoViewEventListener());
-            undoStage.show();
+            getGameInfoViewEventListener().onStartUndoMove();
         });
 
         titleInfo.getChildren().add(undoBt);
