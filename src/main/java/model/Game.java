@@ -22,8 +22,6 @@ import main.java.util.BoardHelper;
 import main.java.util.SceneManager;
 import main.java.util.SimpleAI;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author David Manolitsas
