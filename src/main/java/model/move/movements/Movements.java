@@ -10,11 +10,11 @@ import java.util.List;
  *              starting point of the piece, step that need to move
  * Postcondition: an int array of the destination
  */
-public class Movements {
+public abstract class Movements
+        implements MovementI {
 
     protected int[] startPosition = new int[2];
     protected int[] destination = new int[2];
-    protected List<int[]> route = new ArrayList<>();
 
     protected int squaresMoved;
 
@@ -24,15 +24,18 @@ public class Movements {
         this.squaresMoved = squaresMoved;
     }
 
+    @Override
     public int[] getDestination() {
         return destination;
     }
 
+    @Override
     public int[] getStartPosition() {
         return startPosition;
     }
 
     @Ensures("route.size() == 2")
+    @Override
     public List<int[]> getRoute() {
         List<int[]> route = new ArrayList<>();
         int[] startPosition = getStartPosition();

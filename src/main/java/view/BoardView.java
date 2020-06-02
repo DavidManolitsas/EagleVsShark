@@ -20,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
+import main.java.model.commands.AttackPieceInfo;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
@@ -137,6 +138,25 @@ public class BoardView
             }
         }
     }
+
+    public void removeTerritory(Move move, List<Player> occupiedHistory) {
+        int i = 0;
+        for (int[] position : move.getPaintShape().getPaintInfo()) {
+            StackPane square = getSquareAt(position[0], position[1]);
+            String color = COLOUR_NEUTRAL;
+
+            Player player = occupiedHistory.get(i++);
+            if (player == Player.EAGLE) {
+                color = COLOUR_EAGLE;
+            } else if (player == Player.SHARK) {
+                color = COLOUR_SHARK;
+            }
+
+            if (square != null) {
+                square.setStyle("-fx-border-color: black; -fx-background-color: " + color + ";");
+            }
+        }
+    }
     //endregion
 
     //region BoardModelEvent methods
@@ -186,6 +206,21 @@ public class BoardView
     public void onTimeRanOut() {
         removeMovePreview();
         removeHighlight();
+    }
+
+    @Override
+    public void onUndoMove(Move move, List<Player> occupiedHistory, AttackPieceInfo attackPieceInfo) {
+        removeMovePreview();
+        removeHighlight();
+
+        int[] startPos = move.getReverseRoute().get(0);
+        int[] destinationPos = move.getReverseRoute().get(1);
+        updatePiecePosition(startPos[0], startPos[1], destinationPos[0], destinationPos[1]);
+        if (!attackPieceInfo.getAttackedPieces().isEmpty()) {
+            undoAttackedPiecePosition(attackPieceInfo);
+        }
+
+        removeTerritory(move, occupiedHistory);
     }
     //endregion
 
@@ -280,6 +315,15 @@ public class BoardView
         ImageView imageView = new ImageView(image);
         imageView.setId(VIEW_ID_ROCKS);
         square.getChildren().add(imageView);
+    }
+
+    private void undoAttackedPiecePosition(AttackPieceInfo attackPieceInfo) {
+        for (int i = 0; i < attackPieceInfo.getAttackedPieces().size(); ++i) {
+            updatePiecePosition(attackPieceInfo.getNewPositions().get(i)[0],
+                    attackPieceInfo.getNewPositions().get(i)[1],
+                    attackPieceInfo.getPreviousPositions().get(i)[0],
+                    attackPieceInfo.getPreviousPositions().get(i)[1]);
+        }
     }
     //endregion
 
