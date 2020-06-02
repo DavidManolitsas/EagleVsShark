@@ -142,7 +142,7 @@ public class Game {
         moveController.undo(undoMoves);
         updateSquareCount(BoardHelper.getPlayerScore(Player.SHARK, board),
                           BoardHelper.getPlayerScore(Player.EAGLE, board));
-        turnCount -= 2 * undoMoves;
+        turnCount -= (2 * undoMoves) + 1;
         if (turnCount < 0) {
             turnCount = 0;
         }
