@@ -47,7 +47,6 @@ public class SelectMoveView
     private void initMoveList() {
         moveList = new ListView<>();
         double height = SceneManager.getInstance().getStage().getHeight();
-        System.out.println(height);
         moveList.setPrefHeight(height - 466);
         moveList.setFixedCellSize(25);
     }
@@ -83,13 +82,7 @@ public class SelectMoveView
     }
 
     public void showChosenPiece(Piece piece) {
-        choosePieceText.setText(getPieceName(piece) + " selected");
-    }
-
-    public String getPieceName(Piece piece) {
-        String pieceName = piece.getClass().getSimpleName();
-        return pieceName.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2");
-
+        choosePieceText.setText(piece.getPieceType().getName() + " selected");
     }
 
     public void showValidMoveList(List<Move> moves) {
