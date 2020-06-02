@@ -50,7 +50,9 @@ public class CustomGameMenuController
                 } else if (turnCount < 10) {
                     customGameMenu.showError("Turn count must be 10 or more");
                 } else if (row < 6 || col < 6) {
-                    customGameMenu.showError("Enter a row or column of 6 or higher");
+                    customGameMenu.showError("Minimum board size is 6x6. Maximum board size is 18x25");
+                } else if (row > 18 || col > 25) {
+                    customGameMenu.showError("Minimum board size is 6x6. Maximum board size is 18x25");
                 } else if (sharks < 3 || eagles < 3) {
                     customGameMenu.showError("Minimum number of each piece type is 3");
                 } else if (sharks > col / 2 || eagles > col / 2) {

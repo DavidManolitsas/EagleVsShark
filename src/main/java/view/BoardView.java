@@ -1,19 +1,27 @@
 package main.java.view;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import main.java.model.Player;
 import main.java.model.Square;
 import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
-
-import java.util.*;
 
 public class BoardView
         extends GridPane
@@ -135,6 +143,7 @@ public class BoardView
     @Override
     public void onBoardInitialised(int rows, int cols, Set<Piece> pieces,
                                    List<Square> obstacleList) {
+
         totalRows = rows;
         totalCols = cols;
 

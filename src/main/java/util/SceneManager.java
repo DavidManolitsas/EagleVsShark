@@ -1,15 +1,17 @@
 package main.java.util;
 
+import java.io.IOException;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import main.java.ResPath;
+import main.java.SharkVsEagle;
 import main.java.controller.GameViewController;
 import main.java.model.Game.GameBuilder;
+import main.java.view.BoardView;
 import main.java.view.EndGameView;
-
-import java.io.IOException;
 
 /**
  * @author David Manolitsas
@@ -46,6 +48,7 @@ public class SceneManager {
     private void initRoot() {
         root = new BorderPane();
         stage.setScene(new Scene(root));
+
     }
 
     public void showStartMenu() {
@@ -98,13 +101,25 @@ public class SceneManager {
 
     public void showCustomGameView(String sharkPlayerName, String eaglePlayerName,
                                    int timeLimit, int turnCount,
-                                   int cols, int rows,
+                                   int rows, int cols,
                                    int sharks, int eagles) {
         FXMLLoader gameLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.VIEW_GAME));
         try {
+            double height = (BoardView.SQUARE_SIZE * rows) + 51;
+            double width = (BoardView.SQUARE_SIZE * cols) + 250;
+
+            if (height < SharkVsEagle.WINDOW_HEIGHT || width < SharkVsEagle.WINDOW_WIDTH) {
+                height = SharkVsEagle.WINDOW_HEIGHT;
+                width = SharkVsEagle.WINDOW_WIDTH;
+            }
+
+            this.stage.setHeight(height);
+            this.stage.setWidth(width);
+
             root.setCenter(gameLoader.load());
 
             GameViewController controller = gameLoader.getController();
+
             controller.initGameData(new GameBuilder(sharkPlayerName, eaglePlayerName)
                                             .setTimeLimit(timeLimit)
                                             .setTurnCount(turnCount)
@@ -123,4 +138,7 @@ public class SceneManager {
         endGameStage.show();
     }
 
+    public Stage getStage() {
+        return stage;
+    }
 }

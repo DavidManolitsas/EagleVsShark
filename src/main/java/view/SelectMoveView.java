@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
+import main.java.util.SceneManager;
 
 /**
  * @author David Manolitsas
@@ -45,7 +46,9 @@ public class SelectMoveView
 
     private void initMoveList() {
         moveList = new ListView<>();
-        moveList.setPrefHeight(185);
+        double height = SceneManager.getInstance().getStage().getHeight();
+        System.out.println(height);
+        moveList.setPrefHeight(height - 466);
         moveList.setFixedCellSize(25);
     }
 

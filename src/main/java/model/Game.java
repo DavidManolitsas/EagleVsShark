@@ -1,11 +1,12 @@
 package main.java.model;
 
 
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.java.contract.Invariant;
-import com.google.java.contract.Requires;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -42,7 +43,6 @@ public class Game {
     }
 
     //listener
-//    private GameModelEventListener listener;
     private List<GameModelEventListener> listeners;
 
     private Board board;
