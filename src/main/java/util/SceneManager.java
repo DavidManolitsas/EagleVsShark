@@ -54,6 +54,8 @@ public class SceneManager {
     public void showStartMenu() {
         FXMLLoader startMenuLoader = new FXMLLoader(getClass().getClassLoader().getResource(ResPath.START_MENU));
         try {
+            this.stage.setWidth(SharkVsEagle.WINDOW_WIDTH);
+            this.stage.setHeight(SharkVsEagle.WINDOW_HEIGHT);
             root.setCenter(startMenuLoader.load());
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,8 +110,9 @@ public class SceneManager {
             double height = (BoardView.SQUARE_SIZE * rows) + 51;
             double width = (BoardView.SQUARE_SIZE * cols) + 250;
 
-            if (height < SharkVsEagle.WINDOW_HEIGHT || width < SharkVsEagle.WINDOW_WIDTH) {
+            if (height < SharkVsEagle.WINDOW_HEIGHT) {
                 height = SharkVsEagle.WINDOW_HEIGHT;
+            } else if (width < SharkVsEagle.WINDOW_WIDTH) {
                 width = SharkVsEagle.WINDOW_WIDTH;
             }
 
