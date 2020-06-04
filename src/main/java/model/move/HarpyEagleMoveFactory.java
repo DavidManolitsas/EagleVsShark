@@ -7,11 +7,6 @@ import main.java.model.move.shape.VShape;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Precondition: none
- *              Starting point of the piece
- * Postcondition: a list of move
- */
 public class HarpyEagleMoveFactory
         implements MoveFactory {
 

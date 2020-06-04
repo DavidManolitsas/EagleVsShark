@@ -1,5 +1,7 @@
 package main.java.model.commands;
 
+import com.google.java.contract.Ensures;
+import com.google.java.contract.Requires;
 import main.java.model.piece.Piece;
 
 import java.util.LinkedList;
@@ -15,6 +17,8 @@ public class AttackPieceInfo {
         newPositions = new LinkedList<>();
     }
 
+    @Requires("piece != null && previousPosition.length() == 2 && newPosition.length() == 2")
+    @Ensures("attackedPiece.size() == previousPositions.size() == newPositions.size()")
     public void addAttackedPiece(Piece piece, int[] previousPosition, int[] newPosition) {
         attackedPieces.push(piece);
         previousPositions.push(previousPosition);

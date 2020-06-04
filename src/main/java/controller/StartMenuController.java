@@ -25,22 +25,6 @@ public class StartMenuController
         startGameMenu.setStartMenuListener(this);
     }
 
-    /**
-     * When the player clicks the "start game" button. Set the player names and the amount of time
-     * per turn that the player selected
-     *
-     * @param sharkPlayerName
-     *         the shark players name
-     * @param eaglePlayerName
-     *         the eagle players name
-     *
-     * @require 1. sharkPlayerName != null
-     * 2. eaglePlayerName != null
-     * 3. timeLimit != null
-     * @ensures 1. !timeLimit.trim().isEmpty()
-     * 2. timeLimit >= 10
-     * 3. !eaglePlayerName.trim().isEmpty() && !sharkPlayerName.trim().isEmpty()
-     */
     @Requires("sharkPlayerName != null && eaglePlayerName != null && timeLimit != null")
     @Ensures("!timeLimit.trim().isEmpty() && timeLimit >= 10 && !eaglePlayerName.trim().isEmpty() && !sharkPlayerName.trim().isEmpty()")
     @Override

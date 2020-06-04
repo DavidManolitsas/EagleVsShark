@@ -1,5 +1,6 @@
 package main.java.model.board;
 
+
 import com.google.java.contract.Ensures;
 import com.google.java.contract.Invariant;
 import com.google.java.contract.Requires;
@@ -52,12 +53,6 @@ public class BoardImpl
     }
 
     // region public Board methods
-
-    /**
-     * Requires:
-     * 1. row >= 0 && col >= 0
-     * 2. row < ROW && col < COL
-     */
     @Requires("row >= 0 && row < totalRows && col >= 0 && col < totalCols")
     @Override
     public Piece getPiece(int row, int col) {
@@ -69,12 +64,6 @@ public class BoardImpl
         return chosenPiece;
     }
 
-
-    /**
-     * Requires:
-     * 1. row >= 0 && col >= 0
-     * 2. row < ROW && col < COL
-     */
     @Requires("row >= 0 && row < totalRows && col >= 0 && col < totalCols")
     @Override
     public Square getSquareAt(int row, int col) {
@@ -104,7 +93,6 @@ public class BoardImpl
         if (!attackPieceInfo.getAttackedPieces().isEmpty()) {
             revertAttackedPiece(attackPieceInfo);
         }
-        // TODO: revert attacking
         eventListener.onUndoMove(move, occupiedPlayerHistory, attackPieceInfo);
 
     }
@@ -166,15 +154,6 @@ public class BoardImpl
         eventListener.onBoardInitialised(totalRows, totalCols, pieceSquareMap.keySet(), obstacleList);
     }
 
-    /**
-     * Requires:
-     * 1. move != null
-     * 2. piece != null
-     * <p>
-     * Ensures:
-     * 1. pieceSquareMap.get(piece) == destination
-     * 2. start.getPiece == null
-     */
     @Requires("move != null && piece != null")
     @Ensures("pieceSquareMap.get(piece) == destination && start.getPiece() == null")
     private void updatePiecePosition(Move move, Piece piece) {
@@ -194,15 +173,6 @@ public class BoardImpl
 
         pieceSquareMap.put(piece, destination);
     }
-
-    /**
-     * Requires:
-     * 1. move != null
-     * 2. player != null
-     * <p>
-     * Ensures:
-     * 1. squares of PaintInfo are occupied by the player
-     */
 
     @Requires("move != null && player != null")
     @Ensures("square.getOccupiedPlayer() == player")

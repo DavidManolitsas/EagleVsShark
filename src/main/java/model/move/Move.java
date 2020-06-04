@@ -6,10 +6,6 @@ import main.java.model.move.shape.PaintShape;
 import java.util.Collections;
 import java.util.List;
 
-/*
- * Precondition: valid movement and paintShape
- * Postcondition: valid move information
- */
 public class Move {
     private Movements movements;
     private PaintShape paintShape;
