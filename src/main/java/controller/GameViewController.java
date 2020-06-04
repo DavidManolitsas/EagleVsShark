@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import com.google.java.contract.Ensures;
 import com.google.java.contract.Invariant;
 import com.google.java.contract.Requires;
 import javafx.application.Platform;
@@ -96,6 +97,7 @@ public class GameViewController
         game.nextTurn();
     }
 
+    @Requires("undoMoves < 3 && undoMoves > 0")
     @Override
     public void onUndoButtonClicked(int undoMoves) {
         game.onUndoButtonClicked(undoMoves);

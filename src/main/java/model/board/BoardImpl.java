@@ -93,7 +93,6 @@ public class BoardImpl
         if (!attackPieceInfo.getAttackedPieces().isEmpty()) {
             revertAttackedPiece(attackPieceInfo);
         }
-        // TODO: revert attacking
         eventListener.onUndoMove(move, occupiedPlayerHistory, attackPieceInfo);
 
     }
