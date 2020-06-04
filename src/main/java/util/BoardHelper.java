@@ -57,17 +57,6 @@ public class BoardHelper {
         return piecesNums;
     }
 
-    /**
-     * Requires:
-     * 1. position != null
-     *
-     * @param position
-     *         Destination position
-     *
-     * @return true when:
-     * 1. destination square is on the board
-     * 2. destination square has no piece which belongs to the same player
-     */
     public static boolean isSquareValid(int[] position, Piece movingPiece, Board board) {
         if (isPositionOutOfBound(position, board)) {
             return false;

@@ -8,11 +8,6 @@ import main.java.model.move.shape.TriangleShape;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Precondition: none
- *              Starting point of the piece
- * Postcondition: a list of move
- */
 public class SawSharkMoveFactory
         implements MoveFactory {
 

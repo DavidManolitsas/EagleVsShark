@@ -19,11 +19,6 @@ import main.java.view.UndoStage;
 /**
  * @author WeiYi Yu
  * @date 2020-03-23
- * <p>
- * Invariant:
- * 1. boardView !=null
- * 1. gameInfoView !=null
- * 1. game !=null
  */
 @Invariant("boardView != null && gameInfoView != null && game != null")
 public class GameViewController
@@ -62,11 +57,6 @@ public class GameViewController
 
     //region BoardView Event
 
-    /**
-     * Requires:
-     * 1. row >= 0 && col >= 0
-     * 2. row < ROW && col < COL
-     */
     @Override
     public void onSquareClicked(int row, int col) {
         game.onSquareClicked(row, col, gameInfoView.isPowered());
@@ -83,10 +73,6 @@ public class GameViewController
         boardView.showMovePreview(move);
     }
 
-    /**
-     * Requires:
-     * 1. move != null
-     */
     @Requires("move != null")
     @Override
     public void onMoveButtonClicked(Move move) {

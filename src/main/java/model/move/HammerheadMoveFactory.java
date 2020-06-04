@@ -10,11 +10,6 @@ import main.java.model.move.shape.TShape;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Precondition: none
- *              Starting point of the piece
- * Postcondition: a list of move
- */
 public class HammerheadMoveFactory
         implements MoveFactory {
 
