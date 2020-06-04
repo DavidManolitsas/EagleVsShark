@@ -14,59 +14,59 @@ import java.util.Set;
 public class AbstractBoardViewDecorator
         implements BoardViewI {
 
-    protected final BoardViewI boardView;
+    protected final BoardViewI BOARD_VIEW;
 
     public AbstractBoardViewDecorator(BoardViewI boardView) {
-        this.boardView = boardView;
+        this.BOARD_VIEW = boardView;
     }
 
     @Override
     public void onBoardInitialised(int totalRows, int totalCols, Set<Piece> keySet, List<Square> obstacleList) {
-        boardView.onBoardInitialised(totalRows, totalCols, keySet, obstacleList);
+        BOARD_VIEW.onBoardInitialised(totalRows, totalCols, keySet, obstacleList);
     }
 
     @Override
     public void updatePiecePosition(int attackedRow, int attackedCol, int resetRow, int resetCol) {
-        boardView.updatePiecePosition(attackedRow, attackedCol, resetRow, resetCol);
+        BOARD_VIEW.updatePiecePosition(attackedRow, attackedCol, resetRow, resetCol);
     }
 
     @Override
     public void onPieceSelected(int row, int col) {
-        boardView.onPieceSelected(row, col);
+        BOARD_VIEW.onPieceSelected(row, col);
     }
 
     @Override
     public void onPieceMoved(Move move, Player turnCount) {
-        boardView.onPieceMoved(move, turnCount);
+        BOARD_VIEW.onPieceMoved(move, turnCount);
     }
 
     @Override
     public void onTimeRanOut() {
-        boardView.onTimeRanOut();
+        BOARD_VIEW.onTimeRanOut();
     }
 
     @Override
     public void onUndoMove(Move move, List<Player> turnCount, AttackPieceInfo attackPieceInfo) {
-        boardView.onUndoMove(move, turnCount, attackPieceInfo);
+        BOARD_VIEW.onUndoMove(move, turnCount, attackPieceInfo);
     }
 
     public StackPane getSquareAt(int row, int col) {
-        return boardView.getSquareAt(row, col);
+        return BOARD_VIEW.getSquareAt(row, col);
     }
 
     @Override
     public void setBoardViewEventListener(BoardViewEventListener boardViewEventListener) {
-        boardView.setBoardViewEventListener(boardViewEventListener);
+        BOARD_VIEW.setBoardViewEventListener(boardViewEventListener);
     }
 
     @Override
     public void showMovePreview(Move move) {
-        boardView.showMovePreview(move);
+        BOARD_VIEW.showMovePreview(move);
     }
 
     @Override
     public void removeMovePreview() {
-        boardView.removeMovePreview();
+        BOARD_VIEW.removeMovePreview();
 
     }
 }
