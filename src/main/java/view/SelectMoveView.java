@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import main.java.model.Player;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 import main.java.util.SceneManager;
@@ -55,7 +56,6 @@ public class SelectMoveView
     public void initChoosePiece() {
         choosePieceText = new Text("Choose a piece to move");
         choosePieceText.setFont(HEADING);
-        choosePieceText.setFill(Color.ORANGERED);
         this.getChildren().add(choosePieceText);
     }
 
@@ -76,6 +76,7 @@ public class SelectMoveView
 
     public void promptChoosePiece() {
         choosePieceText.setText("Choose a piece to move");
+        choosePieceText.setFill(Color.BLACK);
         if (!this.getChildren().contains(choosePieceText)) {
             this.getChildren().addAll(choosePieceText, powered);
         }
@@ -83,6 +84,11 @@ public class SelectMoveView
 
     public void showChosenPiece(Piece piece) {
         choosePieceText.setText(piece.getPieceType().getName() + " selected");
+        if (piece.getTeam().getName().equalsIgnoreCase(Player.EAGLE.getName())) {
+            choosePieceText.setFill(Color.ORANGE);
+        } else {
+            choosePieceText.setFill(Color.valueOf("#3282b8"));
+        }
     }
 
     public void showValidMoveList(List<Move> moves) {
@@ -130,7 +136,7 @@ public class SelectMoveView
             Button moveBt = new Button("Move Piece");
             moveBt.setWrapText(true);
             moveBt.setFont(HEADING);
-            moveBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+            moveBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
             moveBt.setPrefWidth(WIDTH);
 
             moveBt.setOnAction(event -> {

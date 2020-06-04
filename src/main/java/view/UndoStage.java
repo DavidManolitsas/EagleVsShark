@@ -70,7 +70,7 @@ public class UndoStage
         Button undoBt = new Button("Undo Moves");
         undoBt.setWrapText(true);
         undoBt.setFont(BODY);
-        undoBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        undoBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
 
         undoBt.setOnAction(event -> {
             listener.onUndoButtonClicked((int) undoSlider.getValue());

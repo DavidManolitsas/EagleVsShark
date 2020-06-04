@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -92,10 +93,22 @@ public class GameInfoView
 
     public void drawTitleAndPlayerNames(String sharkPlayerName, String eaglePlayerName) {
         // title
-        Text title = new Text("Eagle vs. Shark");
-        title.setFont(TITLE);
-        title.setFill(Color.ORANGERED);
-        titleInfo.getChildren().add(title);
+        HBox eagleVsShark = new HBox();
+        eagleVsShark.setSpacing(5);
+        eagleVsShark.setAlignment(Pos.CENTER);
+        Text eagleText = new Text("Eagle");
+        eagleText.setFont(TITLE);
+        eagleText.setFill(Color.ORANGE);
+        Text vsText = new Text("vs.");
+        vsText.setFont(TITLE);
+        vsText.setFill(Color.BLACK);
+        Text sharkText = new Text("Shark");
+        sharkText.setFont(TITLE);
+        sharkText.setFill(Color.valueOf("#3282b8"));
+        eagleVsShark.getChildren().addAll(eagleText, vsText, sharkText);
+        titleInfo.getChildren().add(eagleVsShark);
+
+
         // player names
         Text sharkPlayer = new Text(sharkPlayerName + " is the Shark Player");
         sharkPlayer.setFont(BODY);
@@ -117,7 +130,7 @@ public class GameInfoView
         undoBt = new Button("Undo Move");
         undoBt.setWrapText(true);
         undoBt.setFont(BODY);
-        undoBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        undoBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
 
         undoBt.setOnAction(event -> {
             getGameInfoViewEventListener().onStartUndoMove();
@@ -136,20 +149,28 @@ public class GameInfoView
         // Player turn text
         playersTurnText = new Text(getPlayerTurnText(turnCount));
         playersTurnText.setFont(HEADING);
-        playersTurnText.setFill(Color.ORANGERED);
-        whoseTurn.getChildren().add(playersTurnText);
 
         // Timer text
         timeRemainingText = new Text("Time remaining");
         timeRemainingText.setFont(HEADING);
-        timeRemainingText.setFill(Color.ORANGERED);
-        whoseTurn.getChildren().add(timeRemainingText);
 
+        if (turnCount % 2 == 0) {
+            playersTurnText.setFill(Color.ORANGE);
+        } else {
+            playersTurnText.setFill(Color.valueOf("#3282b8"));
+        }
+
+        whoseTurn.getChildren().addAll(playersTurnText, timeRemainingText);
         root.getChildren().add(whoseTurn);
     }
 
     private void drawPlayersTurn(int turnCount) {
         playersTurnText.setText(getPlayerTurnText(turnCount));
+        if (turnCount % 2 == 0) {
+            playersTurnText.setFill(Color.ORANGE);
+        } else {
+            playersTurnText.setFill(Color.valueOf("#3282b8"));
+        }
     }
 
     private String getPlayerTurnText(int turnCount) {

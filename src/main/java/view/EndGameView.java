@@ -51,7 +51,15 @@ public class EndGameView
         //winner
         Text winner = new Text("The " + this.winner + " Win!");
         winner.setFont(TITLE);
-        winner.setFill(Color.ORANGERED);
+
+        if (this.winner.equalsIgnoreCase("Sharks")) {
+            winner.setFill(Color.valueOf("#3282b8"));
+        } else if (this.winner.equalsIgnoreCase("Eagles")) {
+            winner.setFill(Color.ORANGE);
+        } else {
+            winner.setFill(Color.BLACK);
+        }
+
         details.getChildren().add(winner);
 
         if (sharkScore == eagleScore) {
@@ -74,7 +82,7 @@ public class EndGameView
         Button playAgainBt = new Button("Play Again");
         playAgainBt.setFont(BODY);
         playAgainBt.setCursor(Cursor.HAND);
-        playAgainBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        playAgainBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
         playAgainBt.setPrefWidth(100);
 
         playAgainBt.setOnAction(event -> {
@@ -86,7 +94,7 @@ public class EndGameView
         Button quitBt = new Button("Quit");
         quitBt.setFont(BODY);
         quitBt.setCursor(Cursor.HAND);
-        quitBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        quitBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
         quitBt.setPrefWidth(100);
 
         quitBt.setOnAction(event -> {

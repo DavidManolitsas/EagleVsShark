@@ -11,6 +11,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -45,13 +46,25 @@ public abstract class StartMenu
 
     void drawTitle() {
         VBox titleBox = new VBox();
-        Text title = new Text("Eagle vs. Shark");
-        title.setFont(TITLE);
-        title.setFill(Color.ORANGERED);
+
+        HBox eagleVsShark = new HBox();
+        eagleVsShark.setSpacing(10);
+        eagleVsShark.setAlignment(Pos.CENTER);
+        Text eagleText = new Text("Eagle");
+        eagleText.setFont(TITLE);
+        eagleText.setFill(Color.ORANGE);
+        Text vsText = new Text("vs.");
+        vsText.setFont(TITLE);
+        vsText.setFill(Color.BLACK);
+        Text sharkText = new Text("Shark");
+        sharkText.setFont(TITLE);
+        sharkText.setFill(Color.valueOf("#3282b8"));
+        eagleVsShark.getChildren().addAll(eagleText, vsText, sharkText);
+
+
         Text mango = new Text("Created by Mango");
         mango.setFont(BODY);
-        mango.setFill(Color.ORANGERED);
-        titleBox.getChildren().addAll(title, mango);
+        titleBox.getChildren().addAll(eagleVsShark, mango);
         titleBox.setAlignment(Pos.CENTER);
         titleBox.setPadding(new Insets(30, 0, 0, 0));
         titleBox.setSpacing(10);

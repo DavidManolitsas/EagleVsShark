@@ -116,7 +116,7 @@ public class StartCustomGameMenu
         Button startBt = new Button("Start Game");
         startBt.setFont(BODY);
         startBt.setCursor(Cursor.HAND);
-        startBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        startBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
         startBt.setPrefWidth(175);
 
         startBt.setOnAction(event -> {

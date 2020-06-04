@@ -62,7 +62,6 @@ public class Square {
             return false;
         }
 
-
         switch (obstacle) {
         case ROCK -> {
                 return piece.isBelongTo(Player.SHARK);

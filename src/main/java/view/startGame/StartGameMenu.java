@@ -1,6 +1,7 @@
 package main.java.view.startGame;
 
 
+import java.io.FileNotFoundException;
 import java.util.Objects;
 
 import javafx.geometry.Insets;
@@ -11,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import main.java.view.HowToPlay;
 
 /**
  * @author David Manolitsas
@@ -74,34 +77,34 @@ public class StartGameMenu
         Button startBt = new Button("Start Game");
         startBt.setFont(BODY);
         startBt.setCursor(Cursor.HAND);
-        startBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
-        startBt.setPrefWidth(180);
-        startBt.setOnAction(event -> {
+        startBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
+        startBt.setPrefWidth(270);
 
+        startBt.setOnAction(event -> {
             String eaglePlayerName = eaglePlayerNameField.getText();
             String sharkPlayerName = sharkPlayerNameField.getText();
-
             getStartMenuListener().onStartBtClick(sharkPlayerName, eaglePlayerName);
         });
 
         //Menu
-        menuList.getChildren()
-                .addAll(playerNamesText, sharkPlayerNameField, eaglePlayerNameField, startBt);
+        menuList.getChildren().addAll(playerNamesText, sharkPlayerNameField, eaglePlayerNameField, startBt);
 
         drawCustomGameStartButton();
         drawSinglePlayerButton();
+        drawHowToPlayButton();
 
         getRoot().setCenter(menuList);
 
     }
+
 
     private void drawCustomGameStartButton() {
         //Custom Game Start Button
         Button customStartBt = new Button("Create Custom Game");
         customStartBt.setFont(BODY);
         customStartBt.setCursor(Cursor.HAND);
-        customStartBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
-        customStartBt.setPrefWidth(180);
+        customStartBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
+        customStartBt.setPrefWidth(270);
 
         customStartBt.setOnAction(event -> {
             getStartMenuListener().onCreateCustomGameBtClick();
@@ -111,11 +114,12 @@ public class StartGameMenu
     }
 
     private void drawSinglePlayerButton() {
+
         Button singlePlayerBt = new Button("Single Player");
         singlePlayerBt.setFont(BODY);
         singlePlayerBt.setCursor(Cursor.HAND);
-        singlePlayerBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
-        singlePlayerBt.setPrefWidth(180);
+        singlePlayerBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
+        singlePlayerBt.setPrefWidth(270);
 
         singlePlayerBt.setOnAction(event -> {
             getStartMenuListener().onSinglePlayerClicked();
@@ -124,6 +128,25 @@ public class StartGameMenu
         menuList.getChildren().add(singlePlayerBt);
     }
 
+    private void drawHowToPlayButton() {
+        Button howToBt = new Button("How to Play");
+        howToBt.setFont(BODY);
+        howToBt.setCursor(Cursor.HAND);
+        howToBt.setStyle("-fx-background-color: #1EB600; -fx-text-fill: WHITE");
+        howToBt.setPrefWidth(270);
+
+        howToBt.setOnAction(event -> {
+            try {
+                Stage howToStage = new HowToPlay();
+                howToStage.show();
+            } catch (FileNotFoundException e) {
+                System.err.println("File Not Found");
+            }
+
+        });
+
+        menuList.getChildren().add(howToBt);
+    }
 
 
 

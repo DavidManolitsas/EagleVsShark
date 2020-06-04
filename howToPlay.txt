@@ -1,24 +1,40 @@
 Welcome to Eagle vs. Shark
 
 Game Setup:
-Enter both player names and amount of time for each turn. 60 seconds is
-recommended for the turn time limit. However, if you’re looking for a
-challenge, 20 seconds will lead to some fast-paced action
+Eagle vs. Shark has 3 different ways to play. From the home screen you
+will see 3 buttons Start Game, Create Custom Game, Single Player.
+Start Game will commence a standard game of Eagle vs. Shark using our
+preset rules. Create Custom Game will allow you to customise the
+parameters of the game, such as time per turn, number of turns,
+board size and number of pieces. Finally, Single Player will start a
+game between you and an AI controlled player.
 
 How To Win:
 To win Eagle vs. Shark capture more territory than your opponent before
-the 40th turn or capture 60% of the total board area.
+the final turn or capture over 60% of the total board area.
 
 How To Move Your Pieces:
 When its your turn select one of your pieces on the board. On the right
 you will see a list of potential moves. Select one of these to see
 the movement path of that piece. Once you have chosen a move, click
-the "Move Piece" button in the bottom right.
+the "Move Piece" button in the bottom right to move your piece.
+
+Power Moves:
+To use your pieces power move. Select the Power Move toggle above the
+move list. This will provide your piece with additional movement
+capabilities. Make sure not to over use your Power Moves! You only have
+a limited amount!
 
 How to Capture Territory:
 To capture territory move your pieces around the board. Each piece
 moves in their own unique way. Explore the different movements options
 of each piece to see which method works for you.
+
+Obstacles:
+Various obstacles are scattered throughout the board. These objects will
+limit the movement of pieces by preventing pieces from landing on those
+squares. Trees block Eagles, rocks prevent Sharks and Forests stop both
+Eagles and Sharks.
 
 Attacking the Enemy Pieces:
 Each piece has a way of hindering the opposing pieces. For example,
@@ -27,5 +43,9 @@ ground. Any opposing piece that is caught in the line of fire will
 find its way back to its starting line. Like with movement, each piece
 attacks differently. Experiment with the different pieces to find the
 best mode of offense.
+
+Undo a Move:
+Each player is granted 1 undo move. The undo button allows you to undo
+1 to 3 moves. Be sure to use this wisely!
 
 The team at Mango hope you enjoy Eagle vs. Shark
