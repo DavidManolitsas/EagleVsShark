@@ -1,10 +1,4 @@
-package main.java.view;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+package main.java.view.board;
 
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -12,21 +6,18 @@ import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import main.java.model.Player;
 import main.java.model.Square;
-import main.java.model.board.BoardImpl.BoardModelEventListener;
 import main.java.model.commands.AttackPieceInfo;
 import main.java.model.move.Move;
 import main.java.model.piece.Piece;
 
+import java.util.*;
+
 public class BoardView
         extends GridPane
-        implements BoardModelEventListener {
+        implements BoardViewI {
 
     public interface BoardViewEventListener {
         void onSquareClicked(int row, int col);
@@ -35,7 +26,6 @@ public class BoardView
     public static final String VIEW_ID_PIECE = "piece";
     public static final String VIEW_ID_ROCKS = "rocks";
     public static final String VIEW_ID_PREVIEW = "preview";
-    public static final String VIEW_ID_HIGHLIGHT = "highlight";
 
     public static final String COLOUR_EAGLE = "#ffebd9";
     public static final String COLOUR_SHARK = "#3282b8";
@@ -50,7 +40,6 @@ public class BoardView
     private int totalRows;
     private int totalCols;
 
-    private int[] lastHighlightPos = null;
     private Move lastPreviewMove = null;
 
     private BoardViewEventListener boardViewEventListener;
@@ -60,34 +49,7 @@ public class BoardView
     }
 
     //region public BoardView methods
-    public void highlightSquare(int row, int col) {
-        if (lastHighlightPos != null) {
-            removeHighlight();
-        }
-
-        StackPane square = getSquareAt(row, col);
-        Node highlight = new StackPane();
-        highlight.setId(VIEW_ID_HIGHLIGHT);
-        highlight.setStyle("-fx-background-color: " + COLOUR_ROUTE_PREVIEW + ";");
-        square.getChildren().add(highlight);
-
-        lastHighlightPos = new int[] {row, col};
-
-        removeMovePreview();
-    }
-
-    public void removeHighlight() {
-        if (lastHighlightPos == null) {
-            return;
-        }
-
-        StackPane square = getSquareAt(lastHighlightPos[0], lastHighlightPos[1]);
-        if (square != null) {
-            square.getChildren().removeIf(child -> child.getId().equals(VIEW_ID_HIGHLIGHT));
-        }
-        lastHighlightPos = null;
-    }
-
+    @Override
     public void showMovePreview(Move move) {
         if (lastPreviewMove != null) {
             removeMovePreview();
@@ -103,6 +65,7 @@ public class BoardView
         lastPreviewMove = move;
     }
 
+    @Override
     public void removeMovePreview() {
         if (lastPreviewMove == null) {
             return;
@@ -122,7 +85,7 @@ public class BoardView
         lastPreviewMove = null;
     }
 
-    public void updateTerritory(Move move, Player currentPlayer) {
+    private void updateTerritory(Move move, Player currentPlayer) {
         String color;
 
         if (currentPlayer == Player.EAGLE) {
@@ -139,7 +102,7 @@ public class BoardView
         }
     }
 
-    public void removeTerritory(Move move, List<Player> occupiedHistory) {
+    private void removeTerritory(Move move, List<Player> occupiedHistory) {
         int i = 0;
         for (int[] position : move.getPaintShape().getPaintInfo()) {
             StackPane square = getSquareAt(position[0], position[1]);
@@ -167,7 +130,6 @@ public class BoardView
         totalRows = rows;
         totalCols = cols;
 
-        lastHighlightPos = null;
         lastPreviewMove = null;
 
         drawBoard();
@@ -188,13 +150,11 @@ public class BoardView
     @Override
     public void onPieceSelected(int row, int col) {
         removeMovePreview();
-        highlightSquare(row, col);
     }
 
     @Override
     public void onPieceMoved(Move move, Player currentPlayer) {
         removeMovePreview();
-        removeHighlight();
 
         int[] startPos = move.getRoute().get(0);
         int[] destinationPos = move.getFinalPosition();
@@ -205,13 +165,11 @@ public class BoardView
     @Override
     public void onTimeRanOut() {
         removeMovePreview();
-        removeHighlight();
     }
 
     @Override
     public void onUndoMove(Move move, List<Player> occupiedHistory, AttackPieceInfo attackPieceInfo) {
         removeMovePreview();
-        removeHighlight();
 
         int[] startPos = move.getReverseRoute().get(0);
         int[] destinationPos = move.getReverseRoute().get(1);
@@ -272,7 +230,7 @@ public class BoardView
         return square;
     }
 
-    private StackPane getSquareAt(int row, int col) {
+    public StackPane getSquareAt(int row, int col) {
         for (Node child : getChildren()) {
             if (GridPane.getRowIndex(child) == row && GridPane.getColumnIndex(child) == col) {
                 return (StackPane) child;
@@ -320,9 +278,9 @@ public class BoardView
     private void undoAttackedPiecePosition(AttackPieceInfo attackPieceInfo) {
         for (int i = 0; i < attackPieceInfo.getAttackedPieces().size(); ++i) {
             updatePiecePosition(attackPieceInfo.getNewPositions().get(i)[0],
-                    attackPieceInfo.getNewPositions().get(i)[1],
-                    attackPieceInfo.getPreviousPositions().get(i)[0],
-                    attackPieceInfo.getPreviousPositions().get(i)[1]);
+                                attackPieceInfo.getNewPositions().get(i)[1],
+                                attackPieceInfo.getPreviousPositions().get(i)[0],
+                                attackPieceInfo.getPreviousPositions().get(i)[1]);
         }
     }
     //endregion
@@ -331,6 +289,7 @@ public class BoardView
         return Objects.requireNonNull(boardViewEventListener);
     }
 
+    @Override
     public void setBoardViewEventListener(BoardViewEventListener boardViewEventListener) {
         if (boardViewEventListener == null) {
             throw new NullPointerException("Must provide a non-null listener.");

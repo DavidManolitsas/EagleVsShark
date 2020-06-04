@@ -8,13 +8,14 @@ import main.java.model.Game;
 import main.java.model.Game.GameBuilder;
 import main.java.model.move.Move;
 import main.java.util.SceneManager;
-import main.java.view.BoardView;
-import main.java.view.BoardView.BoardViewEventListener;
 import main.java.view.GameInfoView;
 import main.java.view.GameInfoView.GameInfoViewEventListener;
 import main.java.view.MenuView;
 import main.java.view.MenuView.MenuBarEventListener;
 import main.java.view.UndoStage;
+import main.java.view.board.BoardView.BoardViewEventListener;
+import main.java.view.board.BoardViewI;
+import main.java.view.board.HighlightDecorator;
 
 /**
  * @author WeiYi Yu
@@ -32,7 +33,7 @@ public class GameViewController
                    MenuBarEventListener {
 
     @FXML
-    private BoardView boardView;
+    private BoardViewI boardView;
 
     @FXML
     private GameInfoView gameInfoView;
@@ -50,6 +51,8 @@ public class GameViewController
         gameInfoView.setGameInfoViewEventListener(this);
         menuView.setListener(this);
         undoStage = new UndoStage(this);
+
+        boardView = new HighlightDecorator(boardView);
     }
 
     public void initGameData(GameBuilder gameBuilder) {

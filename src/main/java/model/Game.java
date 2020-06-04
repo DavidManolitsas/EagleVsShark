@@ -3,10 +3,6 @@ package main.java.model;
 
 import com.google.java.contract.Invariant;
 import com.google.java.contract.Requires;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -21,6 +17,9 @@ import main.java.model.piece.Piece;
 import main.java.util.BoardHelper;
 import main.java.util.SceneManager;
 import main.java.util.SimpleAI;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -361,7 +360,7 @@ public class Game {
         private boolean isAiMode = false;
 
         public GameBuilder(String sharkPlayerName, String eaglePlayerName) {
-            listeners = new ArrayList<GameModelEventListener>();
+            listeners = new ArrayList<>();
             this.sharkPlayerName = sharkPlayerName;
             this.eaglePlayerName = eaglePlayerName;
         }

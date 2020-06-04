@@ -1,7 +1,5 @@
 package main.java.util;
 
-import java.io.IOException;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -10,8 +8,10 @@ import main.java.ResPath;
 import main.java.SharkVsEagle;
 import main.java.controller.GameViewController;
 import main.java.model.Game.GameBuilder;
-import main.java.view.BoardView;
 import main.java.view.EndGameView;
+import main.java.view.board.BoardView;
+
+import java.io.IOException;
 
 /**
  * @author David Manolitsas
