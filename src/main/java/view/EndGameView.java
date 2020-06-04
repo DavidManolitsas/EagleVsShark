@@ -49,9 +49,20 @@ public class EndGameView
         details.setAlignment(Pos.CENTER);
 
         //winner
-        Text winner = new Text(this.winner);
+        Text winner = new Text("The " + this.winner + " Win!");
         winner.setFont(TITLE);
         winner.setFill(Color.ORANGERED);
+        details.getChildren().add(winner);
+
+        if (sharkScore == eagleScore) {
+            winner.setText("It was a " + this.winner + "!");
+        }
+
+        if (sharkScore > 0.6 || eagleScore > 0.6) {
+            Text winConditionText = new Text("The " + this.winner + " captured over 60%");
+            winConditionText.setFont(BODY);
+            details.getChildren().add(winConditionText);
+        }
 
         //score
         Text sharkPercentage = new Text("Shark Score: " + decimalFormat.format(sharkScore));
@@ -64,6 +75,7 @@ public class EndGameView
         playAgainBt.setFont(BODY);
         playAgainBt.setCursor(Cursor.HAND);
         playAgainBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        playAgainBt.setPrefWidth(100);
 
         playAgainBt.setOnAction(event -> {
             SceneManager.getInstance().showStartMenu();
@@ -75,13 +87,14 @@ public class EndGameView
         quitBt.setFont(BODY);
         quitBt.setCursor(Cursor.HAND);
         quitBt.setStyle("-fx-background-color: ORANGERED; -fx-text-fill: WHITE");
+        quitBt.setPrefWidth(100);
 
         quitBt.setOnAction(event -> {
             Platform.exit();
             System.exit(0);
         });
 
-        details.getChildren().addAll(winner, sharkPercentage, eaglePercentage, playAgainBt, quitBt);
+        details.getChildren().addAll(sharkPercentage, eaglePercentage, playAgainBt, quitBt);
 
         root.setCenter(details);
     }

@@ -20,7 +20,6 @@ public class SharkVsEagle
     @Override
     public void start(Stage primaryStage) throws Exception {
         initGameWindow(primaryStage);
-
         primaryStage.show();
     }
 

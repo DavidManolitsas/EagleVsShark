@@ -1,10 +1,10 @@
 package main.java.model.piece;
 
+import java.util.List;
+
 import main.java.model.Player;
 import main.java.model.board.Board;
 import main.java.model.move.Move;
-
-import java.util.List;
 
 
 public class Piece {
@@ -47,4 +47,7 @@ public class Piece {
         return getClass().getSimpleName() + " " + getStartPos()[0] + " " + getStartPos()[1];
     }
 
+    public PieceType getPieceType() {
+        return pieceType;
+    }
 }
